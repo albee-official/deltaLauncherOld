@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    text-decoration: none;
+    list-style: none;
+    font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, Arial, sans-serif,apple color emoji, segoe ui emoji, segoe ui symbol;
+}
+
+body{
+    color: var(--text);
+    overflow: hidden;
+
+    background: rgba(var(--bg-rgb), 1);
+
+    /* transition: backdrop-filter .8s cubic-bezier(0.23, 1, 0.320, 1); */
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Opera and Firefox */
+}
+
+.app-frame{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: none;
+    width: 100%;
+    height: 32px;
+    display: flex;
+    justify-content: space-between;
+
+    z-index: 10;
+}
+
+.app-frame > *:not(.drag) {
+    cursor: pointer;
+}
+
+.app-frame > .drag {
+    -webkit-app-region: drag;
+    flex: 1;
+}
+
+.app-frame > .exit {
+    width: 47px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(var(--clr-rgb), 0);
+
+    transition: background-color .2s;
+}
+
+.app-frame > .exit:hover {
+    background: rgba(var(--clr-rgb), 1);
+
+    transition: background-color .2s;
+}
+
+.app-frame > .reload {
+    width: 47px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(var(--text-rgb), 0);
+
+    transition: background-color .2s;
+}
+
+.app-frame > .reload:hover {
+    background: rgba(var(--text-rgb), .16);
+
+    transition: background-color .2s;
+}
+
+.app-frame > .minimize {
+    width: 47px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(var(--text-rgb), 0);
+
+    transition: background-color .2s;
+}
+
+.app-frame > .minimize:hover {
+    background: rgba(var(--text-rgb), .08);
+
+    transition: background-color .2s;
+}

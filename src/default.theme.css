@@ -1,0 +1,15 @@
+:root {
+    --bg: #1C1924;
+    --bg-accent: #4B4753;
+    --clr: #6754E2;
+    --clr-accent: #705CF2;
+    --text: #FFFFFF;
+    --text-accent: #E5E5E5;
+
+    --bg-rgb: 28, 25, 36;
+    --bg-accent-rgb: 75, 71, 83;
+    --clr-rgb: 103, 84, 226;
+    --clr-accent-rgb: 112, 92, 242;
+    --text-rgb: 255, 255, 255;
+    --text-accent-rgb: 229, 229, 229;
+}
