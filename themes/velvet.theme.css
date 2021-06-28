@@ -1,0 +1,34 @@
+:root {
+    --bg: #1C1924;
+    --bg-accent: #4B4753;
+    --clr: #705CF2;
+    --clr-accent: #8668FF;
+    --clr-secondary: #6754E2;
+    --text: #FFFFFF;
+    --text-accent: #E5E5E5;
+
+    --bg-rgb: 28, 25, 36;
+    --bg-accent-rgb: 75, 71, 83;
+    --clr-rgb: 112, 92, 242;
+    --clr-accent-rgb: 134, 104, 255;
+    --clr-secondary-rgb: 103, 84, 226;
+    --text-rgb: 255, 255, 255;
+    --text-accent-rgb: 229, 229, 229;
+}
+
+:root {
+    --app-icon-clr: var(--text); 
+
+    --app-bg: var(--bg);
+    --app-text: var(--text);
+
+    --profile-bg: var(--clr);
+    --profile-text: var(--text);
+
+    --main-button-bg-rgb: var(--clr-rgb);                   /** Must be rgb. Example: "123, 69, 42" */
+    --main-button-bg-hover-rgb: var(--clr-accent-rgb);      /** Must be rgb. Example: "123, 69, 42" */
+    --main-button-text: var(--text);
+    --sub-button-bg-rgb: var(--clr-secondary-rgb);          /** Must be rgb. Example: "123, 69, 42" */
+    --sub-button-bg-hover-rgb: var(--clr-rgb);              /** Must be rgb. Example: "123, 69, 42" */
+    --sub-button-text: var(--text);
+}

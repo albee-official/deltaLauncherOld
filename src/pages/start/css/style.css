@@ -1,0 +1,263 @@
+* {
+    animation-play-state: paused;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    overflow: hidden;
+}
+
+body {
+    animation: fadein .32s;
+}
+
+body:not(.login-open) .app-frame {
+    opacity: 0;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes start {
+    0% {
+        margin-right: -100%;
+        /* width: 0; */
+    }
+
+    25% {
+        margin-right: -100%;
+    }
+
+    100% {
+        margin-right: -0;
+    }
+}
+
+.left {
+    position: relative;
+    flex: 1;
+    height: 100vh;
+}
+
+.bg {
+    z-index: -1;
+}
+
+.logo-container {
+    z-index: 1;
+    width: 100%;
+    max-width: 100vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.logo-container > .sub {
+    margin-top: 24px;
+}
+
+.logo-container > .sub > * {
+    margin: 2px 0;
+    color: var(--text);
+    opacity: .16;
+    font-size: 14px;
+    font-weight: 700;
+
+    transition: all .32s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.logo-container > .sub > *.active {
+    margin: 4px 0 !important;
+    opacity: 1;
+    font-size: 16px;
+}
+
+.logo {
+    width: 128px;
+}
+
+.right {
+    /* animation: start 1.6s cubic-bezier(0.77, 0, 0.175, 1); */
+    margin-right: -100%;
+    transition: margin-right 1s cubic-bezier(0.77, 0, 0.175, 1);
+
+    overflow: hidden;
+    width: 50vw;
+    min-width: 512px;
+    max-width: 700px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+body.login-open .right {
+    margin-right: 0;
+}
+
+.right > * {
+    min-width: 512px;
+    max-width: 664px;
+    width: 100%;
+    height: 100%;
+
+    padding: 0 48px 0 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.login > h1 {
+    -webkit-app-region: no-drag;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.login > p {
+    -webkit-app-region: no-drag;
+    color: var(--bg-accent);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 48px;
+}
+
+.login > p > a {
+    -webkit-app-region: no-drag;
+    color: var(--clr);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.login > p > a:hover {
+    color: var(--clr-accent);
+}
+
+.input {
+    -webkit-app-region: no-drag;
+    color: var(--text);
+    width: 100%;
+    margin-bottom: 32px;
+}
+
+.input > label {
+    height: 16px;
+    margin-bottom: 12px;
+
+    display: flex;
+    align-items: center;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.input > input {
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+
+    width: 100%;
+    height: 32px;
+    margin-bottom: 8px;
+
+    display: flex;
+    align-items: center;
+
+    font-size: 14px;
+    font-weight: 700;
+    background: none;
+    border: none;
+}
+
+.input > input::placeholder {
+    color: rgba(var(--text-rgb), .16);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.input > .input-underline {
+    width: 100%;
+    height: 3px;
+
+    background: rgba(var(--bg-accent-rgb), .32);
+}
+
+.input-underline > .input-underline-filler {
+    width: 0%;
+    height: 100%;
+    background: rgba(var(--clr-rgb), 1);
+
+    transition: width .32s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.input.full .input-underline-filler {
+    transition: width .16s cubic-bezier(0.77, 0, 0.175, 1);
+
+    width: 100%;
+}
+
+.input:focus-within > .input-underline {
+    background: rgba(var(--bg-accent-rgb), 1);
+}
+
+.input.full > .input-underline {
+    background: rgba(var(--bg-accent-rgb), 1);
+}
+
+.input:focus-within > .input-underline > .input-underline-filler {
+    width: 75%;
+}
+
+.buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.submit {
+    -webkit-app-region: no-drag;
+    width: 256px;
+    height: 48px;
+    cursor: pointer;
+}
+
+.submit > input {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+
+    color: var(--text);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    padding: 0 24px;
+
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    background: rgba(var(--text-rgb), 0);
+    border: rgba(var(--text-rgb), .16) 2px solid;
+
+    transition: all .16s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.submit:hover > input {
+    color: var(--text);
+    background: rgba(var(--text-rgb), .08);
+    border: rgba(var(--text-rgb), .16) 2px solid;
+}

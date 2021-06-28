@@ -11,9 +11,13 @@ app.on('ready', () => {
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 800,
+        minWidth: 824,
+        minHeight: 724,
         frame: false,
-        transparent: true,
-        vibrancy: 'fullscreen-ui',
+        thickFrame: true,
+        icon: 'D:/Projects/delta launcher wohoo/src/res/favicon.png',
+        // transparent: true,
+        // vibrancy: 'fullscreen-ui',
         webPreferences: {
             nodeIntegration: false,
             preload: path.join(__dirname, 'preload.js'),
@@ -33,6 +37,40 @@ app.on('ready', () => {
     });
 });
 
+function createMainWindow() {
+    return new Promise((resolve, _) => {
+        let win = new BrowserWindow({
+            width: 1400,
+            height: 800,
+            minWidth: 824,
+            minHeight: 724,
+            frame: false,
+            thickFrame: true,
+            icon: 'D:/Projects/delta launcher wohoo/src/res/favicon.png',
+            // transparent: true,
+            // vibrancy: 'fullscreen-ui',
+            webPreferences: {
+                nodeIntegration: false,
+                preload: path.join(__dirname, 'preload.js'),
+                contextIsolation: false,
+                enableRemoteModule: true,
+            },
+            show: false,
+        })
+    
+        win.loadFile('./src/pages/main/index.html');
+        win.on('ready-to-show', () => {
+            win.show()
+            resolve(win);
+        });
+    
+        win.webContents.on("devtools-opened", (err: string) => {
+            win.webContents.send("devtools-opened");
+            log.info("[MAIN] console opened");
+        });
+    })
+}
+
 // Biblioteks
 
 import { listeners } from  './includes/modpack-manager';
@@ -40,6 +78,12 @@ for (const listener_name in listeners) {
     //@ts-expect-error
     ipcMain.on(listener_name as string, listeners[listener_name] as Function);
 }
+
+ipcMain.on('open-main-window', async (event) => {
+    mainWindow = (await createMainWindow()) as BrowserWindow;
+    
+    event.reply('main-window-opened', event.sender.id)
+})
 
 ipcMain.on('get-window', (event) => {    
     event.reply('window-id', event.sender.id)
