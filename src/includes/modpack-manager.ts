@@ -1,5 +1,5 @@
 import type { IpcMainEvent } from 'electron/main';
-import type { remote as rmt } from 'electron'
+import type { remote as rmt, ipcRenderer as ipc } from 'electron'
 import * as fs from 'fs-extra';
 import * as path from 'path'
 
@@ -16,8 +16,8 @@ export let listeners = {
 export class ModpackManager {
     private _root = '';
 
-    public constructor (remote: typeof rmt) {
-        this._root = path.join(remote.app.getPath('appData'), 'DeltaThing');
+    public constructor (remote: typeof rmt, ipcRenderer: typeof ipc) {
+        this._root = ipcRenderer.sendSync('get-root');
     }
 
     public get root() {
@@ -25,8 +25,5 @@ export class ModpackManager {
         return this._root;
     }
 
-    public set root(val) {
-        fs.ensureDirSync(val);
-        this._root = val;
-    }
+    public set root(_) {}
 }

@@ -10,22 +10,8 @@ body {
     overflow: hidden;
 }
 
-body {
-    animation: fadein .32s;
-}
-
 body:not(.login-open) .app-frame {
     opacity: 0;
-}
-
-@keyframes fadein {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
 }
 
 @keyframes start {
@@ -251,7 +237,7 @@ body.login-open .right {
     font-weight: 700;
     border: none;
     background: rgba(var(--text-rgb), 0);
-    border: rgba(var(--text-rgb), .16) 2px solid;
+    border: rgba(var(--text-rgb), .24) 2px solid;
 
     transition: all .16s cubic-bezier(0.23, 1, 0.320, 1);
 }
@@ -259,5 +245,5 @@ body.login-open .right {
 .submit:hover > input {
     color: var(--text);
     background: rgba(var(--text-rgb), .08);
-    border: rgba(var(--text-rgb), .16) 2px solid;
+    border: rgba(var(--text-rgb), .24) 2px solid;
 }

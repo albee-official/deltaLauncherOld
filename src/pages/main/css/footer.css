@@ -1,0 +1,267 @@
+footer {
+    --footer-height: 80px;
+
+    height: var(--footer-height);
+    background: var(--bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-bar {
+    z-index: 0;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.footer-bar .info {
+    z-index: 1;
+    flex: 1;
+    padding-left: 64px;
+    max-height: calc(100% - 8px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.footer-bar .info > h1 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.footer-bar .info > p {
+    opacity: .32;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.footer-bar .progress-bar {
+    --progress-height: 0;
+    --progress-top-opacity: 0;
+
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.progress-bar .top {
+    width: 100%;
+    flex: 1;
+    opacity: var(--progress-top-opacity);
+}
+
+.progress-bar .bottom {
+    height: var(--progress-height);
+    width: 100%;
+}
+
+.progress-bar > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.progress-bar .progress-bg .bottom {
+    background-color: rgba(var(--bg-accent-rgb), .32);
+}
+
+.progress-bar .filler {
+    width: 50%;
+}
+
+@keyframes load-progress {
+    0% {
+        background-color: rgba(var(--clr-rgb), 1);
+    }
+
+    50% {
+        background-color: rgba(var(--clr-accent-rgb), 1);
+    }
+
+    100% {
+        background-color: rgba(var(--clr-rgb), 1);
+    }
+}
+
+.progress-bar .filler .top {
+    background-color: rgba(var(--bg-accent-rgb), .08);
+}
+
+.progress-bar .filler .bottom {
+    background-color: rgba(var(--clr-rgb), 1);
+    animation: load-progress 2s infinite linear;
+}
+
+.download .progress-bar {
+    --progress-height: 8px !important;
+    --progress-top-opacity: 1 !important;
+}
+
+.soft-download .progress-bar {
+    --progress-top-opacity: 1 !important;
+}
+
+.main-button-container {
+    width: var(--side-bar-width);
+    height: 100%;
+    position: relative;
+}
+
+.main-button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    /* background: rgba(var(--main-button-bg-rgb)); */
+    cursor: pointer;
+}
+
+.main-button > .info {
+    color: var(--main-button-text);
+    background: rgba(var(--main-button-bg-rgb));
+
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 32px;
+
+    transition: background .16s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.main-button > .info:hover {
+    background: rgba(var(--main-button-bg-hover-rgb), 1);
+}
+
+.main-button > .info > h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.main-button > .info > p {
+    font-size: 12px;
+    font-weight: 700;
+    opacity: .32;
+}
+
+.open-other-buttons {
+    --fill: var(--main-button-text);
+
+    width: var(--footer-height);
+    background-color: var(--clr-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    transition: all .16s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.main-button-container:hover :not(.main-button:hover) .open-other-buttons, .open-other-buttons:hover {
+    background-color: var(--main-button-text);
+    --fill: var(--clr-secondary);
+}
+
+.sub-button {
+    position: absolute;
+    bottom: 16px;
+    left: 0;
+    width: var(--side-bar-width);
+    height: 64px;
+
+    cursor: pointer;
+    opacity: 0;
+
+    display: flex;
+
+    transition: bottom .32s cubic-bezier(0.165, 0.84, 0.44, 1),
+                opacity .16s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.sub-button .info {
+    color: var(--main-button-text);
+    background: rgba(var(--main-button-bg-rgb));
+}
+
+.sub-button .info:hover {
+    color: var(--main-button-text);
+    background: rgba(var(--main-button-bg-hover-rgb));
+}
+
+.sub-button:nth-child(2n) .info {
+    color: var(--sub-button-text);
+    background: rgba(var(--sub-button-bg-rgb));
+}
+
+.sub-button:nth-child(2n) .info:hover {
+    color: var(--sub-button-text);
+    background: rgba(var(--sub-button-bg-hover-rgb));
+}
+
+.main-button-container.show-sub .sub-button {
+    opacity: 1;
+    bottom: calc(var(--order) * 64px + var(--footer-height));
+}
+
+.sub-button > .info {
+    height: 100%;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 32px;
+
+    transition: background-color .16s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.sub-button > .info > h1 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.sub-button > .info > p {
+    font-size: 12px;
+    font-weight: 700;
+    opacity: .64;
+}
+
+.sub-button .toggle {
+    color: var(--sub-button-text);
+    width: var(--footer-height);
+    background-color: rgba(var(--sub-button-bg-hover-rgb));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    transition: all .16s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.sub-button .toggle:hover {
+    color: rgba(var(--sub-button-bg-rgb));
+    background-color: var(--sub-button-text);
+}

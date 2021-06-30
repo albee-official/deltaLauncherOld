@@ -1,8 +1,18 @@
+/* 
+    this is just a template. DO NOT MODIFY IT. It's made just as an example.
+
+    @name: 'Delta'
+    @author: 'Albee'
+    @version: '1.0'
+    @description: 'Good old classic'
+    @default-bg: '../../res/bg-dark.jpg'
+*/
+
 :root {
     --bg: #F2F2F2;
     --bg-accent: #cecece;
     --clr: #EE4540;
-    --clr-accent: #F35242;
+    --clr-accent: #fa534d;
     --clr-secondary: #E13D40;
     --text: #1C1924;
     --text-accent: #4B4753;
@@ -10,7 +20,7 @@
     --bg-rgb: 242, 242, 242;
     --bg-accent-rgb: 206, 206, 206;
     --clr-rgb: 238, 69, 64;
-    --clr-accent-rgb: 243, 82, 66;
+    --clr-accent-rgb: 250, 83, 77;
     --clr-secondary-rgb: 225, 61, 64;
     --text-rgb: 28, 25, 36;
     --text-accent-rgb: 75, 71, 83;
@@ -19,16 +29,16 @@
 :root {
     --app-icon-clr: var(--bg); 
 
-    --app-bg: var(--clr-secondary);
-    --app-text: var(--bg);
+    --app-bg: var(--bg);
+    --app-text: var(--text);
 
     --profile-bg: var(--clr);
     --profile-text: var(--bg);
 
     --main-button-bg-rgb: var(--clr-rgb);                   /** Must be rgb. Example: "123, 69, 42" */
     --main-button-bg-hover-rgb: var(--clr-accent-rgb);      /** Must be rgb. Example: "123, 69, 42" */
-    --main-button-text: var(--bg);      
+    --main-button-text: var(--bg);
     --sub-button-bg-rgb: var(--clr-secondary-rgb);          /** Must be rgb. Example: "123, 69, 42" */
-    --sub-button-bg-hover-rgb: var(--clr-rgb);              /** Must be rgb. Example: "123, 69, 42" */
+    --sub-button-bg-hover-rgb: var(--clr-accent-rgb);       /** Must be rgb. Example: "123, 69, 42" */
     --sub-button-text: var(--bg);
 }

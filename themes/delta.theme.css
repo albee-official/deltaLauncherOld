@@ -1,44 +1,44 @@
 /* 
     this is just a template. DO NOT MODIFY IT. It's made just as an example.
 
-    @name: 'Velvet'
+    @name: 'Delta'
     @author: 'Albee'
     @version: '1.0'
-    @description: 'Dark aesthetic'
+    @description: 'Good old classic'
     @default-bg: '../../res/bg-dark.jpg'
 */
 
 :root {
-    --bg: #1C1924;
-    --bg-accent: #4B4753;
-    --clr: #705CF2;
-    --clr-accent: #8668FF;
-    --clr-secondary: #6754E2;
-    --text: #FFFFFF;
-    --text-accent: #E5E5E5;
+    --bg: #F2F2F2;
+    --bg-accent: #cecece;
+    --clr: #EE4540;
+    --clr-accent: #fa534d;
+    --clr-secondary: #E13D40;
+    --text: #1C1924;
+    --text-accent: #4B4753;
 
-    --bg-rgb: 28, 25, 36;
-    --bg-accent-rgb: 75, 71, 83;
-    --clr-rgb: 112, 92, 242;
-    --clr-accent-rgb: 134, 104, 255;
-    --clr-secondary-rgb: 103, 84, 226;
-    --text-rgb: 255, 255, 255;
-    --text-accent-rgb: 229, 229, 229;
+    --bg-rgb: 242, 242, 242;
+    --bg-accent-rgb: 206, 206, 206;
+    --clr-rgb: 238, 69, 64;
+    --clr-accent-rgb: 250, 83, 77;
+    --clr-secondary-rgb: 225, 61, 64;
+    --text-rgb: 28, 25, 36;
+    --text-accent-rgb: 75, 71, 83;
 }
 
 :root {
-    --app-icon-clr: var(--text); 
+    --app-icon-clr: var(--bg); 
 
     --app-bg: var(--bg);
     --app-text: var(--text);
 
     --profile-bg: var(--clr);
-    --profile-text: var(--text);
+    --profile-text: var(--bg);
 
     --main-button-bg-rgb: var(--clr-rgb);                   /** Must be rgb. Example: "123, 69, 42" */
     --main-button-bg-hover-rgb: var(--clr-accent-rgb);      /** Must be rgb. Example: "123, 69, 42" */
-    --main-button-text: var(--text);
+    --main-button-text: var(--bg);
     --sub-button-bg-rgb: var(--clr-secondary-rgb);          /** Must be rgb. Example: "123, 69, 42" */
     --sub-button-bg-hover-rgb: var(--clr-accent-rgb);       /** Must be rgb. Example: "123, 69, 42" */
-    --sub-button-text: var(--text);
+    --sub-button-text: var(--bg);
 }

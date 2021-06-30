@@ -11,7 +11,7 @@ app.on('ready', () => {
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 800,
-        minWidth: 824,
+        minWidth: 1000,
         minHeight: 724,
         frame: false,
         thickFrame: true,
@@ -42,7 +42,7 @@ function createMainWindow() {
         let win = new BrowserWindow({
             width: 1400,
             height: 800,
-            minWidth: 824,
+            minWidth: 1000,
             minHeight: 724,
             frame: false,
             thickFrame: true,
@@ -78,6 +78,14 @@ for (const listener_name in listeners) {
     //@ts-expect-error
     ipcMain.on(listener_name as string, listeners[listener_name] as Function);
 }
+
+// IPC
+
+ipcMain.on('get-root', (event) => {
+    let _path = path.join(app.getPath('appData'), '.delta');
+    fs.ensureDirSync(_path);
+    event.returnValue = _path;
+});
 
 ipcMain.on('open-main-window', async (event) => {
     mainWindow = (await createMainWindow()) as BrowserWindow;

@@ -1,32 +1,29 @@
 import { ipcRenderer, IpcRendererEvent, remote } from "electron";
-import { ModpackManager } from './includes/modpack-manager';
-let modpackManager = new ModpackManager(remote);
 
-let id = -1;
-
-ipcRenderer.send('get-window');
-ipcRenderer.on('window-id', (_, arg) => {
-    id = arg - 1; // Get window id and store it
-})
-
-window.onload = () => {
-    document.getElementById('app-exit')?.addEventListener('click', () => {
-        //@ts-expect-error
-        window.browserWindow.exit();
-    })
-
-    document.getElementById('app-minimize')?.addEventListener('click', () => {
-        //@ts-expect-error
-        window.browserWindow.minimize();
-    })
-
-    document.getElementById('app-reload')?.addEventListener('click', () => {
-        //@ts-expect-error
-        window.browserWindow.reload();
-    })
-}
-
+//  Allow importing in renderers
+//# DO NOT IMPORT ANYTHING THERE, ONLY TYPES
 window.exports = exports;
+
+// Includes
+
+import { ModpackManager } from './includes/modpack-manager';
+let modpackManager = new ModpackManager(remote, ipcRenderer);
+
+import { SettingsManager } from './includes/settings-manager';
+let settingsManager = new SettingsManager(remote, ipcRenderer);
+
+//. ------------------
+//#region Libs
+
+//@ts-expect-error
+window.modpackManager = modpackManager;
+
+//@ts-expect-error
+window.settingsManager = settingsManager;
+
+//#endregion
+//. ------------------
+//#region Apis
 
 //@ts-expect-error
 window.browserWindow = {
@@ -38,9 +35,6 @@ window.browserWindow = {
 }
 
 //@ts-expect-error
-window.modpackManager = modpackManager;
-
-//@ts-expect-error
 window.ipcRenderer = {
     send: ipcRenderer.send,
     sendSync: ipcRenderer.sendSync,
@@ -48,6 +42,8 @@ window.ipcRenderer = {
     once: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {ipcRenderer.once(channel, listener)},
 }
 
+//#endregion
+//. ------------------
 //#region  //. Console warning --------------------------------------------
 
 //@ts-expect-error
@@ -68,3 +64,35 @@ ipcRenderer.on('devtools-opened', (_) => {
 });
 
 //#endregion
+//. ------------------
+//#region App frame (close, minimize, reload buttons), Theme and other onload stuff
+
+let id = -1;
+
+ipcRenderer.send('get-window');
+ipcRenderer.on('window-id', (_, arg) => {
+    id = arg - 1; // Get window id and store it
+})
+
+window.onload = () => {
+    document.getElementById('app-exit')?.addEventListener('click', () => {
+        //@ts-expect-error
+        window.browserWindow.exit();
+    });
+
+    document.getElementById('app-minimize')?.addEventListener('click', () => {
+        //@ts-expect-error
+        window.browserWindow.minimize();
+    });
+
+    document.getElementById('app-reload')?.addEventListener('click', () => {
+        //@ts-expect-error
+        window.browserWindow.reload();
+    });
+
+    settingsManager.theme = settingsManager.settings.appearance.theme;
+    settingsManager.bg = settingsManager.settings.appearance.bg;
+}
+
+//#endregion
+//. ------------------

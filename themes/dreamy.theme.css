@@ -1,17 +1,25 @@
+/* 
+    @name: 'Dreamy'
+    @author: 'Albee'
+    @version: '1.0'
+    @description: 'Purple variant of default theme'
+    @default-bg: 'https://cdn.discordapp.com/attachments/731985411039166495/859672168735178763/6a62ed77268563.5c829061bda93.png'
+*/
+
 :root {
     --bg: #F2F2F2;
     --bg-accent: #cecece;
-    --clr: #EE4540;
-    --clr-accent: #F35242;
-    --clr-secondary: #E13D40;
+    --clr: #705CF2;
+    --clr-accent: #8668FF;
+    --clr-secondary: #6754E2;
     --text: #1C1924;
     --text-accent: #4B4753;
 
     --bg-rgb: 242, 242, 242;
     --bg-accent-rgb: 206, 206, 206;
-    --clr-rgb: 238, 69, 64;
-    --clr-accent-rgb: 243, 82, 66;
-    --clr-secondary-rgb: 225, 61, 64;
+    --clr-rgb: 112, 92, 242;
+    --clr-accent-rgb: 134, 104, 255;
+    --clr-secondary-rgb: 103, 84, 226;
     --text-rgb: 28, 25, 36;
     --text-accent-rgb: 75, 71, 83;
 }
@@ -19,16 +27,16 @@
 :root {
     --app-icon-clr: var(--bg); 
 
-    --app-bg: var(--text);
-    --app-text: var(--bg);
+    --app-bg: var(--bg);
+    --app-text: var(--text);
 
     --profile-bg: var(--clr);
     --profile-text: var(--bg);
 
     --main-button-bg-rgb: var(--clr-rgb);                   /** Must be rgb. Example: "123, 69, 42" */
     --main-button-bg-hover-rgb: var(--clr-accent-rgb);      /** Must be rgb. Example: "123, 69, 42" */
-    --main-button-text: var(--bg);      
+    --main-button-text: var(--bg);
     --sub-button-bg-rgb: var(--clr-secondary-rgb);          /** Must be rgb. Example: "123, 69, 42" */
-    --sub-button-bg-hover-rgb: var(--clr-rgb);              /** Must be rgb. Example: "123, 69, 42" */
+    --sub-button-bg-hover-rgb: var(--clr-accent-rgb);       /** Must be rgb. Example: "123, 69, 42" */
     --sub-button-text: var(--bg);
 }
