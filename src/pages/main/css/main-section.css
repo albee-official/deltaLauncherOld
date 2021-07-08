@@ -102,7 +102,17 @@
     font-size: 15px;
     font-weight: 600;
 
-    transition: background .16s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: background .16s cubic-bezier(0.165, 0.84, 0.44, 1),
+                opacity .16s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.server > .footer > .select.selected {
+    opacity: .64;
+}
+
+.server > .footer > .select.locked {
+    opacity: .32;
+    cursor: not-allowed;
 }
 
 .server > .footer > .select:hover {

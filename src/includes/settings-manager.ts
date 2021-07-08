@@ -1,4 +1,5 @@
 import { remote as rmt, ipcRenderer as ipc } from 'electron'
+import Events from 'events';
 import * as fs from 'fs-extra';
 import * as path from 'path'
 
@@ -25,6 +26,7 @@ export class SettingsManager {
     private _settings = {
         dev_mode: true,
         op_page: 'main',
+        on_modpack: 'magicae',
         appearance: {
             bg: '',
             theme: '',
@@ -33,6 +35,8 @@ export class SettingsManager {
 
     private _themes_path = '';
     private _themes: any = {};
+
+    private _events = new Events.EventEmitter();
 
     public constructor (remote: typeof rmt, ipcRenderer: typeof ipc) {
         this._root = ipcRenderer.sendSync('get-root');
@@ -84,6 +88,14 @@ export class SettingsManager {
         }
     }
 
+    public get events () {
+        return this._events;
+    }
+
+    public set events(to) {
+        this._events = to;
+    }
+
     public get root() {
         fs.ensureDirSync(this._root)
         return this._root;
@@ -130,6 +142,7 @@ export class SettingsManager {
                     bg_el.setAttribute('src', to);
                 } else {
                     console.log('> [SETTINGS] path not found');
+                    return;
                 }
             }
             
@@ -148,8 +161,56 @@ export class SettingsManager {
                 }
 
                 bg_el.setAttribute('src', dflt);
+                this._settings.appearance.bg = to;
             }
         }
+
+        this._events.emit('bg-loaded');
+    }
+
+    public async setBgAsync(to: any) {
+        return new Promise((resolve, reject) => {
+            if (to === 1) { // plain BG
+                console.log('> [SETTINGS] applying plain bg');
+                let bg_el = document.getElementById('bg-img');
+                if (bg_el) {
+                    bg_el.parentElement?.parentElement?.classList.add('plain');
+                }
+            } else if (to != undefined && to != '') {
+                console.log('> [SETTINGS] applying bg', to);
+                let bg_el = document.getElementById('bg-img');
+                if (bg_el) {
+                    bg_el.parentElement?.parentElement?.classList.remove('plain');
+                    if (fs.existsSync(to)) {
+                        bg_el.setAttribute('src', to);
+                    } else {
+                        console.log('> [SETTINGS] path not found');
+                        reject('no-path');
+                        return;
+                    }
+                }
+                
+                this._settings.appearance.bg = to;
+            } else if (to == '') {
+                console.log(`> [SETTINGS] setting default bg for '${this._settings.appearance.theme}'`);
+                let bg_el = document.getElementById('bg-img');
+                if (bg_el) {
+                    bg_el.parentElement?.parentElement?.classList.remove('plain');
+                    let dflt = '../../res/bg-light.jpg';
+                    if (this._settings.appearance.theme) {
+                        dflt = this._themes[this._settings.appearance.theme].default_bg;
+                        if (dflt == '') {
+                            dflt = '../../res/bg-light.jpg';
+                        }
+                    }
+    
+                    bg_el.setAttribute('src', dflt);
+                }
+            }
+    
+            this._events.emit('bg-loaded');
+            resolve(true);
+        });
     }
 
     public get themes() {
@@ -173,7 +234,33 @@ export class SettingsManager {
             console.log('> [SETTINGS] setting default theme');
         } else {
             console.log('> [SETTINGS] theme not found');
+            return;
         }
+
+        this._events.emit('theme-loaded');
+    }
+
+    public async setThemeAsync(to: string) {
+        return new Promise((resolve, reject) => {
+            if (this._themes[to] != undefined) {
+                console.log('> [SETTINGS] applying theme', this._themes[to]);
+                let theme_link = document.getElementById('theme');
+                if (theme_link) {
+                    theme_link.setAttribute('href', this._themes[to].path)
+                }
+                
+                this._settings.appearance.theme = to;
+            } else if (to == '') {
+                console.log('> [SETTINGS] setting default theme');
+            } else {
+                console.log('> [SETTINGS] theme not found');
+                reject('no-theme');
+                return;
+            }
+    
+            this._events.emit('theme-loaded');
+            resolve(true);
+        });
     }
     //#endregion
 }

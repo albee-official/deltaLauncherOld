@@ -13,8 +13,11 @@ interface IpcRenderer extends NodeJS.EventEmitter {
 
 declare let ipcRenderer: IpcRenderer;
 declare let modpackManager: any;
+declare let settingsManager: any;
 //#endregion
 
+//@ts-expect-error
+onbeforeload();
 console.log('> [START] hello from render :)');
 
 const coreCount = document.getElementById('cores');

@@ -30,6 +30,7 @@ header >.nav > .nav-element {
 
 .nav-element.active {
     color: var(--clr);
+    font-weight: 700;
 }
 
 header >.nav > .nav-element:not(.active):hover {

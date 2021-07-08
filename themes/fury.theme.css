@@ -1,0 +1,44 @@
+/* 
+    this is just a template. DO NOT MODIFY IT. It's made just as an example.
+
+    @name: 'Fury'
+    @author: 'Albee'
+    @version: '1.0'
+    @description: 'Dark fiery aesthetic'
+    @default-bg: 'https://cdn.discordapp.com/attachments/726363070594809897/862689248075710484/bb82b776060455.5c5e341a7bbaa.jpg'
+*/
+
+:root {
+    --bg: #1C1924;
+    --bg-accent: #4B4753;
+    --clr: #EE4540;
+    --clr-accent: #fa534d;
+    --clr-secondary: #E13D40;
+    --text: #FFFFFF;
+    --text-accent: #E5E5E5;
+
+    --bg-rgb: 28, 25, 36;
+    --bg-accent-rgb: 75, 71, 83;
+    --clr-rgb: 238, 69, 64;
+    --clr-accent-rgb: 250, 83, 77;
+    --clr-secondary-rgb: 225, 61, 64;
+    --text-rgb: 255, 255, 255;
+    --text-accent-rgb: 229, 229, 229;
+}
+
+:root {
+    --app-icon-clr: var(--text); 
+
+    --app-bg: var(--bg);
+    --app-text: var(--text);
+
+    --profile-bg: var(--clr);
+    --profile-text: var(--text);
+
+    --main-button-bg-rgb: var(--clr-rgb);                   /** Must be rgb. Example: "123, 69, 42" */
+    --main-button-bg-hover-rgb: var(--clr-accent-rgb);      /** Must be rgb. Example: "123, 69, 42" */
+    --main-button-text: var(--text);
+    --sub-button-bg-rgb: var(--clr-secondary-rgb);          /** Must be rgb. Example: "123, 69, 42" */
+    --sub-button-bg-hover-rgb: var(--clr-accent-rgb);       /** Must be rgb. Example: "123, 69, 42" */
+    --sub-button-text: var(--text);
+}

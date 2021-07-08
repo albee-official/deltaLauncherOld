@@ -1,0 +1,70 @@
+.settings > .category-container {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 64px 0 0 32px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.category-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.category-container::-webkit-scrollbar-track {
+    background-color: rgba(var(--text-rgb), .32);
+}
+
+.category-container::-webkit-scrollbar-thumb {
+    background-color: var(--clr);
+}
+
+.category-container::-webkit-scrollbar-thumb:hover {
+    background-color: var(--clr-accent);
+}
+
+.settings > .category {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    padding: 0 32px;
+    margin-bottom: 48px;
+}
+
+.category-name {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.category-name h1 {
+    font-size: 24px;
+    margin-left: 13px;
+    font-weight: 700;
+}
+
+.category-items {
+    padding-left: 24px;
+    width: 100%;
+    flex: 1;
+    display: grid;
+    grid-column-gap: 64px;
+    grid-row-gap: 48px;
+
+    grid-template-columns: repeat(auto-fill, 260px);
+    grid-auto-flow: row;
+}
+
+.category-items > .setting {
+    width: 480px;
+    min-height: 128px;
+}
+
+.category-items > .setting h1 {
+    font-size: 17px;
+    font-weight: 700;
+}

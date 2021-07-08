@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' fonts.googleapis.com; img-src *; font-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'">
 
-    <link rel="stylesheet" href="../../default-light.theme.css">
+    <link rel="stylesheet" href="../../default-dark.theme.css">
     <link rel="stylesheet" href="../../global.css">
 
     <link id="theme" rel="stylesheet" href="">
@@ -63,8 +63,8 @@
     <header>
         <div id="header-nav" class="nav noselect">
             <div class="nav-element active">Главная</div>
-            <div class="nav-element">Новости</div>
             <div class="nav-element">Настройки</div>
+            <div class="nav-element">Аккаунт</div>
         </div>
         <div class="flex-filler drag"></div>
         <div class="profile">
@@ -106,7 +106,7 @@
                             Magicae - наполненная до краев модификация, окутывающая волшебный мир с элементами приключений. Он основан на системе прогресса, похожей на SevTech: Ages.
                         </div>
                         <div class="footer">
-                            <div class="select">Выбрать</div>
+                            <div id="select-magicae" class="select">Выбрать</div>
                             <div class="online">Онлайн: 24 / 32</div>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                             Magicae - наполненная до краев модификация, окутывающая волшебный мир с элементами приключений. Он основан на системе прогресса, похожей на SevTech: Ages.
                         </div>
                         <div class="footer">
-                            <div class="select">Выбрать</div>
+                            <div id="select-fabrica" class="select">Выбрать</div>
                             <div class="online">Онлайн: 24 / 32</div>
                         </div>
                     </div>
@@ -169,7 +169,7 @@
                             Magicae - наполненная до краев модификация, окутывающая волшебный мир с элементами приключений. Он основан на системе прогресса, похожей на SevTech: Ages.
                         </div>
                         <div class="footer">
-                            <div class="select">Выбрать</div>
+                            <div id="select-statera" class="select">Выбрать</div>
                             <div class="online">Онлайн: 24 / 32</div>
                         </div>
                     </div>
@@ -193,7 +193,7 @@
                             Magicae - наполненная до краев модификация, окутывающая волшебный мир с элементами приключений. Он основан на системе прогресса, похожей на SevTech: Ages.
                         </div>
                         <div class="footer">
-                            <div class="select">Выбрать</div>
+                            <div id="select-insula" class="select">Выбрать</div>
                             <div class="online">Онлайн: 24 / 32</div>
                         </div>
                     </div>
@@ -201,11 +201,53 @@
                 <div class="sidemenu">
                 </div>
             </section>
-            <section class="news">
-                <h1>this is news!</h1>
+            <section class="settings">
+                <div class="category-container">
+                    <div class="category">
+                        <div class="category-name">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10.854" height="6.426" viewBox="0 0 10.854 6.426">
+                                <path id="Path_440" data-name="Path 440" d="M0,0,4.012,4.012,8.025,0" transform="translate(1.414 1.414)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                            </svg>
+                            <h1>Игра</h1>
+                        </div>
+                        <div class="category-items">
+                            <div class="setting">
+                                <h1>Выделение памяти</h1>
+                            </div>
+                            <div class="setting">
+                                <h1>Степень оптимизации</h1>
+                            </div>
+                            <div class="setting">
+                                <h1>Настройки управления</h1>
+                            </div>
+                            <div class="setting">
+                                <h1>Параметры запуска Java</h1>
+                            </div>
+                            <div class="setting">
+                                <h1>Дополнительные моды</h1>
+                            </div>
+                            <div class="setting">
+                                <h1>Директории сборок</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category">
+                        <div class="category-name">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10.854" height="6.426" viewBox="0 0 10.854 6.426">
+                                <path id="Path_440" data-name="Path 440" d="M0,0,4.012,4.012,8.025,0" transform="translate(1.414 1.414)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                            </svg>
+                            <h1>Лаунчер</h1>
+                        </div>
+                        <div class="category-items">
+                            <div class="setting">
+                                <h1>Выделение памяти</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
-            <section class="settings toright">
-                <h1>this is settings!</h1>
+            <section class="account toright">
+                <h1>this is account!</h1>
             </section>
         </div>
     </main>
@@ -223,8 +265,8 @@
                 </div>
             </div>
             <div class="info">
-                <h1>Дарова</h1>
-                <p>Нет, ну ряльно привет чисто</p>
+                <h1 id="info-header">Дарова</h1>
+                <p id="info-sub">Нет, ну ряльно привет чисто</p>
             </div>
         </div>
         <div id="main-button-container" class="main-button-container">

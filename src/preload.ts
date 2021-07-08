@@ -74,7 +74,23 @@ ipcRenderer.on('window-id', (_, arg) => {
     id = arg - 1; // Get window id and store it
 })
 
-window.onload = () => {
+// window.onunload = () => {
+//     ipcRenderer.send('win-hide');
+// }
+
+//@ts-expect-error
+window.onbeforeload = () => {
+    settingsManager.theme = settingsManager.settings.appearance.theme;
+    settingsManager.bg = settingsManager.settings.appearance.bg;
+
+    console.log('onbeforeload');
+}
+
+window.onload = async () => {
+    // settingsManager.theme = settingsManager.settings.appearance.theme;
+    // settingsManager.bg = settingsManager.settings.appearance.bg;
+    console.log('onload');
+    
     document.getElementById('app-exit')?.addEventListener('click', () => {
         //@ts-expect-error
         window.browserWindow.exit();
@@ -89,10 +105,15 @@ window.onload = () => {
         //@ts-expect-error
         window.browserWindow.reload();
     });
-
-    settingsManager.theme = settingsManager.settings.appearance.theme;
-    settingsManager.bg = settingsManager.settings.appearance.bg;
 }
+
+//@ts-expect-error
+window.CapitalizeFirstLetter = (string: string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// let i = 10000000000;
+// while (i > 0) {i--};
 
 //#endregion
 //. ------------------

@@ -35,6 +35,8 @@ app.on('ready', () => {
         log.info("[MAIN] console opened");
         // win.webContents.closeDevTools();
     });
+
+    onFirstLaunch();
 });
 
 function createMainWindow() {
@@ -59,7 +61,7 @@ function createMainWindow() {
         })
     
         win.loadFile('./src/pages/main/index.html');
-        win.on('ready-to-show', () => {
+        win.on('ready-to-show', async () => {
             win.show()
             resolve(win);
         });
@@ -81,10 +83,20 @@ for (const listener_name in listeners) {
 
 // IPC
 
-ipcMain.on('get-root', (event) => {
+function onFirstLaunch(afterupdate?: boolean) {
+    if (afterupdate) {
+        console.log('first launch');
+    }
+}
+
+function getRoot() {
     let _path = path.join(app.getPath('appData'), '.delta');
     fs.ensureDirSync(_path);
-    event.returnValue = _path;
+    return _path;
+}
+
+ipcMain.on('get-root', (event) => {
+    event.returnValue = getRoot();
 });
 
 ipcMain.on('open-main-window', async (event) => {
