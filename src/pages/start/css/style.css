@@ -218,6 +218,13 @@ body.login-open .right {
     width: 256px;
     height: 48px;
     cursor: pointer;
+    opacity: 1;
+
+    transition: opacity .32s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.submit.locked {
+    opacity: .5;
 }
 
 .submit > input {

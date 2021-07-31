@@ -4,7 +4,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 64px 0 0 32px;
+    padding: 48px 0 0 32px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -14,7 +14,7 @@
 }
 
 .category-container::-webkit-scrollbar-track {
-    background-color: rgba(var(--text-rgb), .32);
+    background-color: rgba(var(--bg-rgb), .32);
 }
 
 .category-container::-webkit-scrollbar-thumb {
@@ -25,12 +25,10 @@
     background-color: var(--clr-accent);
 }
 
-.settings > .category {
+.settings .category {
     width: 100%;
     display: flex;
     flex-direction: column;
-
-    padding: 0 32px;
     margin-bottom: 48px;
 }
 
@@ -38,33 +36,226 @@
     width: 100%;
     display: flex;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 38px;
 }
 
 .category-name h1 {
-    font-size: 24px;
-    margin-left: 13px;
+    font-size: 28px;
     font-weight: 700;
 }
 
 .category-items {
-    padding-left: 24px;
     width: 100%;
     flex: 1;
     display: grid;
     grid-column-gap: 64px;
     grid-row-gap: 48px;
 
-    grid-template-columns: repeat(auto-fill, 260px);
+    grid-template-columns: repeat(auto-fill, 480px);
     grid-auto-flow: row;
 }
 
 .category-items > .setting {
-    width: 480px;
+    --width: 480px;
+    width: var(--width);
+    max-width: var(--width);
     min-height: 128px;
+    display: flex;
+    flex-direction: column;
 }
 
-.category-items > .setting h1 {
+.category-items > .setting > h1 {
     font-size: 17px;
     font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.category-items > .setting > h2 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.category-items > .setting > p {
+    color: var(--text);
+    font-size: 15px;
+    opacity: .48;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.setting > .just-button {
+    cursor: pointer;
+    color: var(--text);
+    font-size: 15px;
+    opacity: .48;
+    font-weight: 600;
+
+    transition: opacity .32s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.setting > .just-button:hover {
+    opacity: .64;
+}
+
+.setting > .gap {
+    height: 12px;
+}
+
+.setting > .big-gap {
+    height: 32px;
+}
+
+.slider {
+    border: var(--text) 2px dashed;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 16px;
+}
+
+.setting > .tip {
+    max-width: var(--width);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.setting > .tip > h1 {
+    max-width: var(--width);
+    width: 100%;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: .64;
+}
+
+.setting > .tip > p {
+    max-width: var(--width);
+    width: 100%;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: .32;
+}
+
+.setting > .controls {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.k-v-pair {
+    cursor: pointer;
+    display: flex;
+    padding: 5px 0;
+}
+
+.k-v-pair > .k {
+    font-size: 15px;
+    font-weight: 700;
+    width: 128px;
+    opacity: .48;
+}
+
+.k-v-pair > .v {
+    font-size: 15px;
+    font-weight: 700;
+    width: 96px;
+    opacity: .32;
+
+    transition: opacity .32s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.k-v-pair:hover > .v {
+    opacity: .48;
+}
+
+.setting > input {
+    background: none;
+    border: none;
+    width: 100%;
+    height: 48px;
+
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    border: rgba(var(--text-rgb), .16) 2px solid;
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+
+.setting > input::placeholder {
+    color: var(--text);
+    font-size: 14px;
+    opacity: .24;
+    font-weight: 700;
+}
+
+.setting .checkbox {
+    height: 24px;
+}
+
+.modpack-dirs .k {
+    font-size: 14px;
+}
+
+.modpack-dirs .v {
+    font-size: 14px;
+}
+
+.themes {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.themes > .theme {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.themes > .theme > .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.themes > .theme > .left h1 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.themes > .theme > .left p {
+    font-size: 14px;
+    font-weight: 700;
+    opacity: .32;
+}
+
+.themes > .theme > .right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    margin-right: 24px;
+}
+
+.themes > .theme > .right h1 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.themes > .theme > .right p {
+    font-size: 12px;
+    font-weight: 700;
+    opacity: .32;
+}
+
+.themes > .theme > .button {
+    width: 96px;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }

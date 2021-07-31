@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' fonts.googleapis.com; img-src *; font-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'">
 
-    <link rel="stylesheet" href="../../default-dark.theme.css">
+    <link rel="stylesheet" href="../../default-light.theme.css">
     <link rel="stylesheet" href="../../global.css">
 
     <link id="theme" rel="stylesheet" href="">
@@ -28,6 +28,20 @@
     <script defer src="../../../dist/pages/main/js/renderer.js"></script>
 </head>
 <body>
+    <div id="select-overlay-thing" class="overlay-thing">
+        <div class="overlay-container">
+            <h1>Выберите: ХУЙНЮ</h1>
+            <div id="select-overlay-list" class="list"></div>
+        </div>
+    </div>
+
+    <div id="overlay-thing" class="overlay-thing">
+        <div class="overlay-container">
+            <h1>Я люблю: ХУЙНЮ</h1>
+            <p>Фанаты ХЫЙНИ be like</p>
+        </div>
+    </div>
+
     <div id="bg" class="bg">
         <div style="opacity: .72" class="color"></div>
         <div style="opacity: .32" class="filter"></div>
@@ -69,14 +83,15 @@
         <div class="flex-filler drag"></div>
         <div class="profile">
             <div class="profile-info">
-                <h1>AlbeeTheLoli</h1>
-                <p class="noselect">Сменить аккаунт</p>
+                <h1 id="profile-login-el"></h1>
+                <p id="change-account" class="noselect">Сменить аккаунт</p>
             </div>
             <div class="bg">
                 <div style="opacity: .80;" class="color"></div>
                 <!-- <div style="opacity: 0;" class="filter"></div> -->
                 <div class="img">
-                    <img src="../../res/profile-img.jpg" alt="">
+                    <!-- <img src="../../res/profile-img.jpg" alt=""> -->
+                    <img id="profile-picture-img" src="" alt="">
                 </div>
             </div>
         </div>
@@ -198,62 +213,245 @@
                         </div>
                     </div>
                 </div>
-                <div class="sidemenu">
+                <div class="sidemenu opened">
+                    <h1>Выделение памяти</h1>
+                    <div class="slider">
+
+                    </div>
+                    <h1>Дополнительные моды</h1>
+                    <label data-name="inventory-tweaks" class="checkbox">
+                        <input type="checkbox">
+                        <p class="checkbox-text">Inventory Tweaks</p>
+                        <div class="checkmark">
+                            <div class="checkmark-fill"></div>
+                        </div>
+                    </label>
+                    <label data-name="record" class="checkbox">
+                        <input type="checkbox">
+                        <p class="checkbox-text">Record</p>
+                        <div class="checkmark">
+                            <div class="checkmark-fill"></div>
+                        </div>
+                    </label>
+                    <label data-name="dynamic-souroundings" class="checkbox">
+                        <input type="checkbox">
+                        <p class="checkbox-text">Dynamic Souroundings</p>
+                        <div class="checkmark">
+                            <div class="checkmark-fill"></div>
+                        </div>
+                    </label>
+                    <label data-name="optifine" class="checkbox">
+                        <input type="checkbox">
+                        <p class="checkbox-text">Optifines</p>
+                        <div class="checkmark">
+                            <div class="checkmark-fill"></div>
+                        </div>
+                    </label>
                 </div>
             </section>
             <section class="settings">
                 <div class="category-container">
                     <div class="category">
                         <div class="category-name">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="10.854" height="6.426" viewBox="0 0 10.854 6.426">
-                                <path id="Path_440" data-name="Path 440" d="M0,0,4.012,4.012,8.025,0" transform="translate(1.414 1.414)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                            </svg>
                             <h1>Игра</h1>
                         </div>
                         <div class="category-items">
                             <div class="setting">
                                 <h1>Выделение памяти</h1>
+                                <div class="slider">
+
+                                </div>
+                                <div class="tip">
+                                    <h1>Внимение!</h1>
+                                    <p>Значения ниже 6 Гигабайтов могут вызывать лаги во время игры.</p>
+                                </div>
                             </div>
                             <div class="setting">
                                 <h1>Степень оптимизации</h1>
+                                <div class="slider">
+
+                                </div>
+                                <div class="tip">
+                                    <h1>Важно!</h1>
+                                    <p>При данном уровне графики, игра может выглядеть ужасно, а местами и не правильно.</p>
+                                </div>
                             </div>
                             <div class="setting">
                                 <h1>Настройки управления</h1>
+                                <div class="controls">
+                                    <div class="k-v-pair">
+                                        <p class="k">Присесть</p><p class="v">LSHIFT</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Бег</p><p class="v">LCTRL</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Вперед</p><p class="v">W</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Назад</p><p class="v">S</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Вправо</p><p class="v">D</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Влево</p><p class="v">A</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Приблизить</p><p class="v">R</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Квесты</p><p class="v">T</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="setting">
                                 <h1>Параметры запуска Java</h1>
+                                <input type="text" placeholder="Не указанны">
+                                <div class="tip">
+                                    <p>Неправильные параметры могут повлечь проблемы с запуском и нестабильность игры в целом. Не советуем писать сюда что либо просто так.</p>
+                                </div>
                             </div>
                             <div class="setting">
                                 <h1>Дополнительные моды</h1>
+                                <div class="addons">
+                                    <label data-name="inventory-tweaks" class="checkbox">
+                                        <input type="checkbox">
+                                        <p class="checkbox-text">Inventory Tweaks</p>
+                                        <div class="checkmark">
+                                            <div class="checkmark-fill"></div>
+                                        </div>
+                                    </label>
+                                    <label data-name="record" class="checkbox">
+                                        <input type="checkbox">
+                                        <p class="checkbox-text">Record</p>
+                                        <div class="checkmark">
+                                            <div class="checkmark-fill"></div>
+                                        </div>
+                                    </label>
+                                    <label data-name="dynamic-souroundings" class="checkbox">
+                                        <input type="checkbox">
+                                        <p class="checkbox-text">Dynamic Souroundings</p>
+                                        <div class="checkmark">
+                                            <div class="checkmark-fill"></div>
+                                        </div>
+                                    </label>
+                                    <label data-name="optifine" class="checkbox">
+                                        <input type="checkbox">
+                                        <p class="checkbox-text">Optifines</p>
+                                        <div class="checkmark">
+                                            <div class="checkmark-fill"></div>
+                                        </div>
+                                    </label>
+                                </div>
                             </div>
                             <div class="setting">
                                 <h1>Директории сборок</h1>
+                                <div id="modpack-dirs" class="modpack-dirs">
+                                    <div class="k-v-pair">
+                                        <p class="k">Библиотеки</p><p id="libs-dir" class="v">C:/Users/Albee/.delta/libs</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Magicae</p><p id="magicae-dir" class="v">C:/Users/Albee/.delta/modpacks/magicae</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Fabrica</p><p id="fabrica-dir" class="v">C:/Users/Albee/.delta/modpacks/fabrica</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Statera</p><p id="statera-dir" class="v">C:/Users/Albee/.delta/modpacks/statera</p>
+                                    </div>
+                                    <div class="k-v-pair">
+                                        <p class="k">Insula</p><p id="insula-dir" class="v">C:/Users/Albee/.delta/modpacks/insula</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="category">
                         <div class="category-name">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="10.854" height="6.426" viewBox="0 0 10.854 6.426">
-                                <path id="Path_440" data-name="Path 440" d="M0,0,4.012,4.012,8.025,0" transform="translate(1.414 1.414)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                            </svg>
                             <h1>Лаунчер</h1>
                         </div>
                         <div class="category-items">
                             <div class="setting">
-                                <h1>Выделение памяти</h1>
+                                <h1>Тема</h1>
+                                <h2>Установленные темы:</h2>
+                                <div id="themes-container" class="themes">
+                                    <div class="theme">
+                                        <div class="left">
+                                            <h1>Default</h1>
+                                            <p>Standart look of delta</p>
+                                        </div>
+                                        <div class="right">
+                                            <h1>Albee</h1>
+                                            <p>v1.0</p>
+                                        </div>
+                                        <div class="button">
+                                            <div id="select-def-theme" class="select-button small">Выбрать</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="gap"></div>
+                                <p id="recheck-themes" class="just-button">Обновить список тем</p>
+                                <p id="open-themes-folder" class="just-button">Открыть папку тем</p>
+                            </div>
+                            <div class="setting">
+                                <h1>Задний фон</h1>
+
+                                <h2>Установленный</h2>
+                                <p id="open-bg-path" class="just-button">По умолчанию</p>
+                                <div class="gap"></div>
+
+                                <h2>Степень размытия</h2>
+                                <div class="slider"></div>
+                                <h2>Прозрачность фона</h2>
+                                <div class="slider"></div>
+                                <div class="big-gap"></div>
+                                <h2>Настройки</h2>
+                                <p id="change-bg" class="just-button">Сменить</p>
+                                <p id="reset-bg" class="just-button">Сбросить</p>
+                                <label data-name="bg-muted" class="checkbox">
+                                    <input id="bg-muted-cb" type="checkbox">
+                                    <p class="checkbox-text">Заглушить задний фон</p>
+                                    <div class="checkmark">
+                                        <div class="checkmark-fill"></div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="setting">
+                                <h1>Дополнительно</h1>
+                                <p class="just-button">Очистка кэша</p>
+                                <div class="gap"></div>
+                                <label data-name="show-console" class="checkbox">
+                                    <input type="checkbox">
+                                    <p class="checkbox-text">Показать консоль</p>
+                                    <div class="checkmark">
+                                        <div class="checkmark-fill"></div>
+                                    </div>
+                                </label>
+                                <label data-name="show-console" class="checkbox">
+                                    <input type="checkbox">
+                                    <p class="checkbox-text">Использовать встроенную Java</p>
+                                    <div class="checkmark">
+                                        <div class="checkmark-fill"></div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="setting">
+                                <h1>Информация</h1>
+                                <p>Версия лаунчера: <span id="version-span"></span></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
             <section class="account toright">
-                <h1>this is account!</h1>
+                <p>Refused to load the stylesheet 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap' because it violates the following Content Security Policy directive: "style-src 'self' 'unsafe-inline'". Note that 'style-src-elem' was not explicitly set, so 'style-src' is used as a fallback.</p>
             </section>
         </div>
     </main>
 
-    <footer class="download">
-        <div class="footer-bar">
+    <footer>
+        <div id="footer-bar" class="footer-bar">
             <div class="progress-bar">
                 <div class="progress-bg">
                     <div class="top"></div>

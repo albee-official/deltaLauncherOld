@@ -58,10 +58,12 @@ footer {
     width: 100%;
     flex: 1;
     opacity: var(--progress-top-opacity);
+    transition: opacity .16s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .progress-bar .bottom {
     height: var(--progress-height);
+    transition: height .08s cubic-bezier(0.165, 0.84, 0.44, 1);
     width: 100%;
 }
 
@@ -81,19 +83,23 @@ footer {
 
 .progress-bar .filler {
     width: 50%;
+    transition: width .02s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 @keyframes load-progress {
     0% {
         background-color: rgba(var(--clr-rgb), 1);
+        opacity: .64;
     }
 
     50% {
         background-color: rgba(var(--clr-accent-rgb), 1);
+        opacity: 1;
     }
 
     100% {
         background-color: rgba(var(--clr-rgb), 1);
+        opacity: .64;
     }
 }
 

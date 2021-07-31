@@ -20,6 +20,10 @@ body{
     /* transition: backdrop-filter .8s cubic-bezier(0.23, 1, 0.320, 1); */
 }
 
+input {
+    font-family: 'Montserrat', sans-serif;
+}
+
 @keyframes fadein {
     0% {
         opacity: 0;
@@ -33,7 +37,6 @@ body{
         opacity: 1;
     }
 }
-
 
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
@@ -200,4 +203,98 @@ body{
 
 .bg.plain > .img > img {
     opacity: 0;
+}
+
+/* checkboxes */
+
+.checkbox{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+    cursor: pointer;
+
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 2px 0;
+}
+
+.checkbox-left{
+    justify-content: flex-start;
+    width: max-content;
+}
+
+.checkbox input{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkbox .checkmark{
+    height: 12px;
+    width: 12px;
+    background: none;
+    border: var(--text) 2px solid;
+    margin-right: 8px;
+    margin-top: 1px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkbox .checkbox-text {
+    opacity: .48;
+}
+
+.checkbox .checkmark-fill{
+    background: var(--text);
+    opacity: 0;
+    height: 12px;
+    width: 12px;
+
+    transition: opacity .4s;
+}
+
+.checkbox input:checked ~ .checkmark .checkmark-fill {
+    opacity: 1;
+}
+
+/* Buttons */
+
+.select-button {
+    width: 164px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+
+    cursor: pointer;
+    background: rgba(var(--text-rgb), 0);
+    border: rgba(var(--text-rgb), .16) 2px solid;
+    font-size: 15px;
+    font-weight: 600;
+
+    transition: background .16s cubic-bezier(0.165, 0.84, 0.44, 1),
+                opacity .16s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.select-button.selected {
+    opacity: .64;
+}
+
+.select-button.locked {
+    opacity: .32;
+    cursor: not-allowed;
+}
+
+.select-button.small {
+    font-size: 13px;
+}
+
+.select-button:hover {
+    background: rgba(var(--text-rgb), .08);
+    border: rgba(var(--text-rgb), .24) 2px solid;
 }

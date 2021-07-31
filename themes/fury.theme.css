@@ -1,6 +1,4 @@
 /* 
-    this is just a template. DO NOT MODIFY IT. It's made just as an example.
-
     @name: 'Fury'
     @author: 'Albee'
     @version: '1.0'
@@ -16,6 +14,9 @@
     --clr-secondary: #E13D40;
     --text: #FFFFFF;
     --text-accent: #E5E5E5;
+
+    --white: var(--text);                                   /** Brightest color */
+    --black: var(--bg);                                     /** Darkest color */
 
     --bg-rgb: 28, 25, 36;
     --bg-accent-rgb: 75, 71, 83;

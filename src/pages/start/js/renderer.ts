@@ -13,7 +13,8 @@ interface IpcRenderer extends NodeJS.EventEmitter {
 
 declare let ipcRenderer: IpcRenderer;
 declare let modpackManager: any;
-declare let settingsManager: any;
+declare let settingsInterface: any;
+declare let authInterface: any;
 //#endregion
 
 //@ts-expect-error
@@ -41,26 +42,26 @@ function closeLogin() {
 
 let a = 1;
 
+let login_submit = document.getElementById('login-submit');
+
 (async () => {
     // speedrun();
 
     await checkForUpdates();
 
     showLogin();
-    document.getElementById('login-submit')?.addEventListener('click', async (e) => {
+    login_submit?.addEventListener('click', async (e) => {
         e.preventDefault();
-        await login();
-        closeLogin();
-
-        await start();
+        //@ts-expect-error
+        await login(document.getElementById('login-field')?.value, document.getElementById('password-field')?.value);
     });
+    login_submit?.click();
 })();
 
 async function speedrun() {
     a = .01;
     await checkForUpdates();
-    await login();
-    await start();
+    await login('sawukalu164@gmail.com', '123123');
 }
 
 let procent = 0;
@@ -72,22 +73,28 @@ async function checkForUpdates() {
     let ae = setInterval(() => {
         procent++;
         if (start_steps) start_steps[0].innerHTML = `Проверка обновлений: ${procent}%`
-    }, 2000 / 100);
-    await new Promise((resolve, reject) => { setTimeout(() => {resolve(undefined)}, 2000 * a) } );
-    clearInterval(ae);
-}
-
-async function login() {
-    console.log('> [START] logging you in...');
-
-    // delay in async method
-    procent = 0;
-    let ae = setInterval(() => {
-        procent++;
-        if (start_steps) start_steps[1].innerHTML = `Запрос авторизации: ${procent}%`
     }, 1000 / 100);
     await new Promise((resolve, reject) => { setTimeout(() => {resolve(undefined)}, 1000 * a) } );
     clearInterval(ae);
+}
+
+let logging_in = false;
+async function login(login: string, password: string) {
+    if (logging_in) return;
+    logging_in = true;
+    console.log('> [START] logging you in...');
+
+    login_submit?.classList.add('locked');
+    let res = await authInterface.login(login, password);
+    if (res.status == 'logged in') {
+        closeLogin();
+
+        await start();
+    } else {
+        console.log(res.errors);
+    }
+    login_submit?.classList.remove('locked');
+    logging_in = false;
 }
 
 async function start() {
@@ -98,8 +105,8 @@ async function start() {
     let ae = setInterval(() => {
         procent++;
         if (start_steps) start_steps[2].innerHTML = `Запуск: ${procent}%`
-    }, 3000 / 100);
-    await new Promise((resolve, reject) => { setTimeout(() => {resolve(undefined)}, 3000 * a) } );
+    }, 500 / 100);
+    await new Promise((resolve, reject) => { setTimeout(() => {resolve(undefined)}, 500 * a) } );
     clearInterval(ae);
 
     ipcRenderer.send('open-main-window');

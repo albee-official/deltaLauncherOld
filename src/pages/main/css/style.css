@@ -41,18 +41,89 @@ main {
     align-items: center;
     justify-content: center;
 
-    transition: left .32s cubic-bezier(0.645, 0.045, 0.355, 1),
+    transition: left .32s cubic-bezier(0.23, 1, 0.320, 1),
                 opacity .32s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
 .toleft {
     pointer-events: none !important;
     opacity: 0 !important;
-    left: -128px !important;
+    left: 128px !important;
 }
 
 .toright {
     pointer-events: none !important;
     opacity: 0 !important;
     left: 128px !important;
+}
+
+.overlay-thing {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(var(--bg-rgb), .8);
+    z-index: 10;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    pointer-events: none;
+
+    transition: all 1s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.overlay-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    transition: all 1s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.overlay-container h1 {
+    color: rgba(var(--text-rgb), 1);
+    font-weight: bold;
+    font-size: 32px;
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.overlay-container p {
+    color: rgba(var(--text-rgb), .48);
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.overlay-container .list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.overlay-container .list .el {
+    position: relative;
+    cursor: pointer;
+    color: rgba(var(--text-rgb), .48);
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    margin-bottom: 12px;
+
+    transition: color .32s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.overlay-container .list .el:hover {
+    color: rgba(var(--text-rgb), 1);
+}
+
+
+.overlay-thing.open {
+    opacity: 1 !important;
+    pointer-events: all !important;
 }

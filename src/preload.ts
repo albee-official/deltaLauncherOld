@@ -1,4 +1,7 @@
-import { ipcRenderer, IpcRendererEvent, remote } from "electron";
+import { BrowserWindow, ipcRenderer, IpcRendererEvent, remote, shell } from "electron";
+import path from 'path'
+import logger from 'electron-log';
+const log = logger.create('renderer');
 
 //  Allow importing in renderers
 //# DO NOT IMPORT ANYTHING THERE, ONLY TYPES
@@ -6,11 +9,14 @@ window.exports = exports;
 
 // Includes
 
-import { ModpackManager } from './includes/modpack-manager';
-let modpackManager = new ModpackManager(remote, ipcRenderer);
+let modpackManager = remote.getGlobal('modpackManager');
 
-import { SettingsManager } from './includes/settings-manager';
-let settingsManager = new SettingsManager(remote, ipcRenderer);
+import { SettingsInterface } from './includes/settings-manager';
+let settingsInterface = new SettingsInterface(remote, ipcRenderer);
+
+import { AuthInterface } from './includes/auth-manager';
+let authInterface = new AuthInterface(remote, ipcRenderer);
+
 
 //. ------------------
 //#region Libs
@@ -19,7 +25,10 @@ let settingsManager = new SettingsManager(remote, ipcRenderer);
 window.modpackManager = modpackManager;
 
 //@ts-expect-error
-window.settingsManager = settingsManager;
+window.settingsInterface = settingsInterface;
+
+//@ts-expect-error
+window.authInterface = authInterface;
 
 //#endregion
 //. ------------------
@@ -42,6 +51,28 @@ window.ipcRenderer = {
     once: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {ipcRenderer.once(channel, listener)},
 }
 
+//@ts-expect-error
+window.shell = {
+    showItemInFolder: async (path: string) => {        
+        await shell.showItemInFolder(path);
+    },
+    openPath: async (path: string) => {
+        await shell.openPath(path);
+    }
+}
+
+//@ts-expect-error
+window.path = {
+    ...path    
+}
+
+//@ts-expect-error
+window.dialog = {
+    showOpenDialog: async (options: any) => {
+        return await remote.dialog.showOpenDialog(options);
+    }
+}
+
 //#endregion
 //. ------------------
 //#region  //. Console warning --------------------------------------------
@@ -50,17 +81,17 @@ window.ipcRenderer = {
 if (window.browserWindow.isDevToolsOpened()) {
     let header_color = `#705CF2`; 
     let p_color = `#6754E2`;
-    console.log("%cПодожди-ка!", `color:${header_color}; font-size: 48px; padding: 8px 0; font-weight:bold`);
-    console.log("%cТот, кто попросил вставить что либо сюда, с вероятностью 420/69 хочет тебя обмануть.", "color:#ffffff; font-size: 14px; padding: 8px 0");
-    console.log("%cЕсли вставить сюда что-нибудь, плохие дяди смогут получить доступ к вашему аккаунту.", `color:${p_color}; font-size: 16px; padding: 8px 0; font-weight:bold`);
+    console.info("%cПодожди-ка!", `color:${header_color}; font-size: 48px; padding: 8px 0; font-weight:bold`);
+    console.info("%cТот, кто попросил вставить что либо сюда, с вероятностью 420/69 хочет тебя обмануть.", "color:#ffffff; font-size: 14px; padding: 8px 0");
+    console.info("%cЕсли вставить сюда что-нибудь, плохие дяди смогут получить доступ к вашему аккаунту.", `color:${p_color}; font-size: 16px; padding: 8px 0; font-weight:bold`);
 }
 
 ipcRenderer.on('devtools-opened', (_) => {
     let header_color = `#705CF2`; 
     let p_color = `#6754E2`;
-    console.log("%cПодожди-ка!", `color:${header_color}; font-size: 48px; padding: 8px 0; font-weight:bold`);
-    console.log("%cТот, кто попросил вставить что либо сюда, с вероятностью 420/69 хочет тебя обмануть.", "color:#ffffff; font-size: 14px; padding: 8px 0");
-    console.log("%cЕсли вставить сюда что-нибудь, плохие дяди смогут получить доступ к вашему аккаунту.", `color:${p_color}; font-size: 16px; padding: 8px 0; font-weight:bold`);
+    console.info("%cПодожди-ка!", `color:${header_color}; font-size: 48px; padding: 8px 0; font-weight:bold`);
+    console.info("%cТот, кто попросил вставить что либо сюда, с вероятностью 420/69 хочет тебя обмануть.", "color:#ffffff; font-size: 14px; padding: 8px 0");
+    console.info("%cЕсли вставить сюда что-нибудь, плохие дяди смогут получить доступ к вашему аккаунту.", `color:${p_color}; font-size: 16px; padding: 8px 0; font-weight:bold`);
 });
 
 //#endregion
@@ -80,8 +111,8 @@ ipcRenderer.on('window-id', (_, arg) => {
 
 //@ts-expect-error
 window.onbeforeload = () => {
-    settingsManager.theme = settingsManager.settings.appearance.theme;
-    settingsManager.bg = settingsManager.settings.appearance.bg;
+    settingsInterface.theme = settingsInterface.settings.appearance.theme;
+    settingsInterface.bg = settingsInterface.settings.appearance.bg;
 
     console.log('onbeforeload');
 }
@@ -106,6 +137,11 @@ window.onload = async () => {
         window.browserWindow.reload();
     });
 }
+
+window.console.log = log.info;
+
+//@ts-expect-error
+window.version = remote.app.getVersion();
 
 //@ts-expect-error
 window.CapitalizeFirstLetter = (string: string) => {

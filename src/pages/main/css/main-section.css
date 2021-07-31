@@ -2,7 +2,7 @@
     flex: 1;
     height: 100%;
     overflow-y: auto;
-    padding: 64px 0 0 32px;
+    padding: 48px 0 0 32px;
     /* padding-bottom: 0; */
     display: flex;
     flex-wrap: wrap;
@@ -13,7 +13,7 @@
 }
 
 .servers::-webkit-scrollbar-track {
-    background-color: rgba(var(--text-rgb), .32);
+    background-color: rgba(var(--bg-rgb), .32);
 }
 
 .servers::-webkit-scrollbar-thumb {
@@ -124,4 +124,20 @@
     color: rgba(var(--text-rgb), .48);
     font-size: 15px;
     font-weight: 600;
+}
+
+.sidemenu {
+    background-color: rgba(var(--clr-rgb), .32);
+    height: 100%;
+    width: var(--side-bar-width);
+    display: flex;
+    flex-direction: column;
+    padding: 48px 32px;
+    color: var(--text) !important;
+}
+
+.sidemenu > h1 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }

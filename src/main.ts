@@ -1,13 +1,20 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import electron, { app, BrowserWindow, ipcMain, remote } from "electron";
 import path from 'path';
 import logger from 'electron-log'
 import * as fs from 'fs-extra';
+import fetch from 'node-fetch'
 
 const log = logger.create('main');
 
 let mainWindow: BrowserWindow;
 
 app.on('ready', () => {
+    appReady();
+
+    onFirstLaunch();
+});
+
+function appReady() {
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 800,
@@ -35,15 +42,13 @@ app.on('ready', () => {
         log.info("[MAIN] console opened");
         // win.webContents.closeDevTools();
     });
-
-    onFirstLaunch();
-});
+}
 
 function createMainWindow() {
     return new Promise((resolve, _) => {
         let win = new BrowserWindow({
-            width: 1400,
-            height: 800,
+            width: 1600,
+            height: 900,
             minWidth: 1000,
             minHeight: 724,
             frame: false,
@@ -75,11 +80,37 @@ function createMainWindow() {
 
 // Biblioteks
 
-import { listeners } from  './includes/modpack-manager';
-for (const listener_name in listeners) {
+import { listeners as mm_l } from  './includes/modpack-manager';
+for (const listener_name in mm_l) {
     //@ts-expect-error
     ipcMain.on(listener_name as string, listeners[listener_name] as Function);
 }
+
+// Settings
+import { SettingsStorage } from './includes/settings-manager';
+Object.defineProperty(global, 'settingsStorage', {
+    value: new SettingsStorage(remote, getRoot())
+})
+
+// Auth
+
+import { listeners as auth_listeners, AuthStorage } from './includes/auth-manager'
+Object.defineProperty(global, 'authStorage', {
+    //@ts-expect-error
+    value: new AuthStorage(ipcMain, fetch, settingsStorage)
+})
+for (const listener_name in auth_listeners) {
+    //@ts-expect-error
+    ipcMain.on(listener_name as string, listeners[listener_name] as Function);
+}
+
+// ModpackManager
+import { ModpackManager } from './includes/modpack-manager';
+Object.defineProperty(global, 'modpackManager', {
+    //@ts-expect-error
+    value: new ModpackManager(remote, getRoot(), settingsStorage)
+})
+
 
 // IPC
 
@@ -103,6 +134,13 @@ ipcMain.on('open-main-window', async (event) => {
     mainWindow = (await createMainWindow()) as BrowserWindow;
     
     event.reply('main-window-opened', event.sender.id)
+})
+
+ipcMain.on('open-start-window', async (event) => {
+    // app.relaunch();
+    // app.exit();
+    appReady();
+    BrowserWindow.getAllWindows()[1].destroy();
 })
 
 ipcMain.on('get-window', (event) => {    

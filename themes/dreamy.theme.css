@@ -15,6 +15,9 @@
     --text: #1C1924;
     --text-accent: #4B4753;
 
+    --white: var(--bg);                                     /** Brightest color */
+    --black: var(--text);                                   /** Darkest color */
+
     --bg-rgb: 242, 242, 242;
     --bg-accent-rgb: 206, 206, 206;
     --clr-rgb: 112, 92, 242;

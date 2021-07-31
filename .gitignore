@@ -3,6 +3,8 @@
 
 # custom
 *.zip
+java/
+build/
 
 ### Linux ###
 *~
