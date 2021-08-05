@@ -102,8 +102,8 @@
     font-size: 15px;
     font-weight: 600;
 
-    transition: background .16s cubic-bezier(0.165, 0.84, 0.44, 1),
-                opacity .16s cubic-bezier(0.165, 0.84, 0.44, 1);
+    /* transition: background .16s cubic-bezier(0.165, 0.84, 0.44, 1),
+                opacity .16s cubic-bezier(0.165, 0.84, 0.44, 1); */
 }
 
 .server > .footer > .select.selected {
@@ -127,13 +127,18 @@
 }
 
 .sidemenu {
-    background-color: rgba(var(--clr-rgb), .32);
+    background-color: var(--sidebar-bg);
     height: 100%;
     width: var(--side-bar-width);
     display: flex;
     flex-direction: column;
     padding: 48px 32px;
-    color: var(--text) !important;
+    color: var(--sidebar-text) !important;
+}
+
+.sidemenu * {
+    color: var(--sidebar-text) !important;
+    border-color: var(--sidebar-text) !important;
 }
 
 .sidemenu > h1 {

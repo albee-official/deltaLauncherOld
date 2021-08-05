@@ -14,6 +14,9 @@ app.on('ready', () => {
     onFirstLaunch();
 });
 
+app.commandLine.appendSwitch("js-flags", "--expose_gc --max-old-space-size=256");
+// app.allowRendererProcessReuse = false;
+
 function appReady() {
     mainWindow = new BrowserWindow({
         width: 1400,

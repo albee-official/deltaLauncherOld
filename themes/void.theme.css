@@ -1,0 +1,70 @@
+/* 
+    @name: 'Void'
+    @author: 'Albee'
+    @version: '1.0'
+    @description: 'Dark aesthetic'
+    @default-bg: 'https://cdn.discordapp.com/attachments/731985411039166495/871803580573683772/28c428dce17491507488e41c8506ac71blackandwhite.jpg'
+*/
+
+:root {
+    --bg: #141414;
+    --bg-accent: #202020;
+    --clr: #1d1d1d;
+    --clr-accent: #292929;
+    --clr-secondary: #2e2e2e;
+    --text: #FFFFFF;
+    --text-accent: #E5E5E5;
+
+    --white: var(--text);                                   /** Brightest color */
+    --black: var(--bg);                                     /** Darkest color */
+
+    --bg-rgb: 20, 20, 20;
+    --bg-accent-rgb: 32, 32, 32;
+    --clr-rgb: 29, 29, 29;
+    --clr-accent-rgb: 41, 41, 41;
+    --clr-secondary-rgb: 46, 46, 46;
+    --text-rgb: 255, 255, 255;
+    --text-accent-rgb: 229, 229, 229;
+}
+
+header {
+    --header-bg: var(--bg);
+
+    --profile-bg: var(--clr);
+    --profile-text: var(--text);
+
+    --header-nav-text: rgba(var(--text-rgb), .24);
+    --header-nav-text-hover: rgba(var(--text-rgb), .48);
+    --header-nav-text-active: var(--text);
+    --header-nav-bg: rgba(var(--text-rgb), 0);
+    --header-nav-bg-hover: rgba(var(--text-rgb), .02);
+    --header-nav-bg-active: var(--header-bg);
+}
+
+:root {
+    --app-icon-clr: var(--text);
+
+    --app-bg: var(--bg);
+    --app-text: var(--text);
+}
+
+main {
+    --sidebar-bg: rgba(var(--bg-rgb), .32);
+    --sidebar-text: rgba(var(--text-rgb), 1);
+}
+
+footer {
+    --footer-bg: var(--bg);
+    --footer-text: var(--text);
+
+    --main-button-bg: var(--clr);
+    --main-button-bg-hover: var(--clr-accent);
+    --main-button-text: var(--text);
+
+    --progress-bar-bg: rgba(var(--bg-accent-rgb), .32);
+    --progress-bar-filler: var(--text);
+
+    --sub-button-bg: var(--clr-secondary);
+    --sub-button-bg-hover: var(--clr-accent);
+    --sub-button-text: var(--text);
+}

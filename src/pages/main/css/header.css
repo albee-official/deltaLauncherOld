@@ -5,11 +5,11 @@ header {
     display: flex;
     justify-content: space-between;
 
-    background-color: var(--bg);
+    background-color: var(--header-bg);
 }
 
 header > .nav {
-    color: rgba(var(--text-rgb), .32);
+    color: var(--header-nav-text);
     font-size: 14px;
     font-weight: 600;
     display: flex;
@@ -17,7 +17,7 @@ header > .nav {
 }
 
 header >.nav > .nav-element {
-    background: rgba(var(--text-rgb), 0);
+    background: var(--header-nav-bg);
     cursor: pointer;
     width: 128px;
     height: 100%;
@@ -29,16 +29,17 @@ header >.nav > .nav-element {
 }
 
 .nav-element.active {
-    color: var(--clr);
+    color: var(--header-nav-text-active);
+    background: var(--header-nav-bg-active);
     font-weight: 700;
 }
 
 header >.nav > .nav-element:not(.active):hover {
-    color: rgba(var(--text-rgb), .48);
+    color: var(--header-nav-text-hover);
 }
 
 header >.nav > .nav-element:hover {
-    background: rgba(var(--text-rgb), .02);
+    background: var(--header-nav-bg-hover);
 }
 
 

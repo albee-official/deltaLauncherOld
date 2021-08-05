@@ -2,6 +2,7 @@ import { BrowserWindow, ipcRenderer, IpcRendererEvent, remote, shell } from "ele
 import path from 'path'
 import logger from 'electron-log';
 const log = logger.create('renderer');
+import fs from 'fs-extra';
 
 //  Allow importing in renderers
 //# DO NOT IMPORT ANYTHING THERE, ONLY TYPES
@@ -30,6 +31,9 @@ window.settingsInterface = settingsInterface;
 //@ts-expect-error
 window.authInterface = authInterface;
 
+//@ts-expect-error
+window.fs = fs;
+
 //#endregion
 //. ------------------
 //#region Apis
@@ -39,7 +43,8 @@ window.browserWindow = {
     exit: () => {remote.getCurrentWindow().close()},
     minimize: () => {remote.getCurrentWindow().minimize()},
     maximize: () => {remote.getCurrentWindow().maximize()},
-    reload: () => {remote.getCurrentWindow().reload()},
+    //@ts-expect-error
+    reload: () => {window.modpackManager.downloader.cancel(); remote.getCurrentWindow().reload()},
     isDevToolsOpened: () => {return remote.getCurrentWindow().webContents.isDevToolsOpened()}
 }
 
@@ -49,6 +54,7 @@ window.ipcRenderer = {
     sendSync: ipcRenderer.sendSync,
     on: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {ipcRenderer.on(channel, listener)},
     once: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {ipcRenderer.once(channel, listener)},
+    removeAllListeners: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {ipcRenderer.removeAllListeners(channel)},
 }
 
 //@ts-expect-error
@@ -135,7 +141,15 @@ window.onload = async () => {
     document.getElementById('app-reload')?.addEventListener('click', () => {
         //@ts-expect-error
         window.browserWindow.reload();
+        //@ts-expect-error
+        window.modpackManager.downloader.cancel();
     });
+
+    window.onbeforeunload = () => {
+        //@ts-expect-error
+        window.modpackManager.downloader.cancel();
+        console.log('BYE :)');
+    }
 }
 
 window.console.log = log.info;

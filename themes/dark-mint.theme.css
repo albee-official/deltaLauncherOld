@@ -1,17 +1,17 @@
 /* 
-    @name: 'Velvet'
+    @name: 'Tenebris'
     @author: 'Albee'
     @version: '1.0'
-    @description: 'Dark aesthetic'
-    @default-bg: '../../res/bg-dark.jpg'
+    @description: 'looks cool ngl'
+    @default-bg: 'https://cdn.discordapp.com/attachments/731985411039166495/871799152592449536/960776ee0a824b366435fcd1ec0f72b3.jpg'
 */
 
 :root {
     --bg: #1C1924;
     --bg-accent: #4B4753;
-    --clr: #705CF2;
-    --clr-accent: #8668FF;
-    --clr-secondary: #6754E2;
+    --clr: #67A4B9;
+    --clr-accent: #77b4c9;
+    --clr-secondary: #588ea0;
     --text: #FFFFFF;
     --text-accent: #E5E5E5;
 
@@ -20,9 +20,9 @@
 
     --bg-rgb: 28, 25, 36;
     --bg-accent-rgb: 75, 71, 83;
-    --clr-rgb: 112, 92, 242;
-    --clr-accent-rgb: 134, 104, 255;
-    --clr-secondary-rgb: 103, 84, 226;
+    --clr-rgb: 103, 164, 185;
+    --clr-accent-rgb: 119, 180, 201;
+    --clr-secondary-rgb: 88, 142, 160;
     --text-rgb: 255, 255, 255;
     --text-accent-rgb: 229, 229, 229;
 }
@@ -34,6 +34,11 @@ header {
 
 :root {
     --app-icon-clr: var(--text);
+}
+
+main {
+    --sidebar-bg: rgba(var(--bg-rgb), .16);
+    --sidebar-text: rgba(var(--text-rgb), 1);
 }
 
 footer {

@@ -19,6 +19,7 @@ const settings_pattern = {
     on_page: 0,
     on_modpack: 'magicae',
     selected_user: -1,
+    auto_go_to_server_thing: false,
     appearance: {
         bg: '',
         theme: '',
@@ -297,6 +298,12 @@ export class SettingsInterface {
             resolve(true);
         });
     }
+
+    public get themes_path() {
+        return this._themes_path;
+    }
+
+    public set themes_path(_: any) {}
 
     public get themes() {
         return this._themes;
