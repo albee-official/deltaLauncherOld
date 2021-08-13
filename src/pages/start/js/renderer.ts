@@ -44,6 +44,22 @@ let a = 1;
 
 let login_submit = document.getElementById('login-submit');
 
+function waitConnected() {
+    return new Promise((resolve, reject) => {
+        if (navigator.onLine) {
+            // resolve(true);
+        } else {
+            setTimeout(() => {
+                if (navigator.onLine) {
+                    resolve(true);
+                } else {
+                    console.log('> [START] no internet...');
+                }
+            }, 2000)
+        }
+    })
+}
+
 (async () => {
     // speedrun();
 
@@ -67,6 +83,8 @@ async function speedrun() {
 let procent = 0;
 async function checkForUpdates() {
     console.log('> [START] checking for updates...');
+
+    await waitConnected();
     
     // delay in async method
     procent = 0;

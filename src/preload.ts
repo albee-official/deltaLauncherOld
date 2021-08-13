@@ -119,6 +119,15 @@ ipcRenderer.on('window-id', (_, arg) => {
 window.onbeforeload = () => {
     settingsInterface.theme = settingsInterface.settings.appearance.theme;
     settingsInterface.bg = settingsInterface.settings.appearance.bg;
+    
+    //@ts-expect-error
+    window.online = navigator.onLine;
+
+    //@ts-expect-error
+    window.addEventListener('online', () => {window.online = true})
+
+    //@ts-expect-error
+    window.addEventListener('online', () => {window.online = false})
 
     console.log('onbeforeload');
 }
