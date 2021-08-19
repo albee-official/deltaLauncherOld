@@ -47,7 +47,7 @@ let login_submit = document.getElementById('login-submit');
 function waitConnected() {
     return new Promise((resolve, reject) => {
         if (navigator.onLine) {
-            // resolve(true);
+            resolve(true);
         } else {
             setTimeout(() => {
                 if (navigator.onLine) {

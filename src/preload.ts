@@ -138,6 +138,8 @@ window.onload = async () => {
     console.log('onload');
     
     document.getElementById('app-exit')?.addEventListener('click', () => {
+        console.log('exiting');
+        
         //@ts-expect-error
         window.browserWindow.exit();
     });
@@ -148,6 +150,7 @@ window.onload = async () => {
     });
 
     document.getElementById('app-reload')?.addEventListener('click', () => {
+        console.log('reloading');
         //@ts-expect-error
         window.browserWindow.reload();
         //@ts-expect-error
