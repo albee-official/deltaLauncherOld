@@ -50,10 +50,11 @@
 
     <div class="left noselect drag">
         <div id="bg" class="bg darken">
-            <div style="background-color: var(--bg);" class="color"></div>
-            <div class="filter"></div>
+            <div id="bg-opacity" class="color"></div>
+            <div id="bg-blur" class="filter"></div> 
             <div class="img">
                 <img id="bg-img" src="" alt=""/>
+                <video autoplay loop id="bg-video" src="" alt=""></video>
             </div>
         </div>
 
@@ -123,7 +124,7 @@
     <div class="right">
         <form class="login">
             <h1>Войти</h1>
-            <p>Забыли пароль? <a href="D:\Projects\delta launcher wohoo\src\pages\start\index.html">Восстановить пароль</a></p>
+            <p>Забыли пароль? <a style="cursor: pointer;" id="forgot-password">Восстановить пароль</a></p>
             <div class="input">
                 <label for="login-field">Почта</label>
                 <input id="login-field" type="text" placeholder="Ваша супер крутая почта от аккаунта">

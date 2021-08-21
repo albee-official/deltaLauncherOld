@@ -213,6 +213,20 @@ body.login-open .right {
     align-items: center;
 }
 
+.buttons > p {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    opacity: .48;
+    cursor: pointer;
+
+    transition: opacity .32s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.buttons > p:hover {
+    opacity: 1;
+}
+
 .submit {
     -webkit-app-region: no-drag;
     width: 256px;

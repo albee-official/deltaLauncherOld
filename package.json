@@ -9,7 +9,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "build-exe": "electron-builder build --win --publish never",
-    "deploy-exe": "electron-builder build --win --publish always"
+    "deploy": "electron-builder build --win --publish always"
   },
   "author": "",
   "license": "ISC",

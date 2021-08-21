@@ -1,8 +1,9 @@
-import { BrowserWindow, ipcRenderer, IpcRendererEvent, remote, shell } from "electron";
+import { BrowserWindow, ipcRenderer, IpcRendererEvent, remote, Shell, shell } from "electron";
 import path from 'path'
 import logger from 'electron-log';
 const log = logger.create('renderer');
 import fs from 'fs-extra';
+import os from 'os'
 
 //  Allow importing in renderers
 //# DO NOT IMPORT ANYTHING THERE, ONLY TYPES
@@ -43,6 +44,7 @@ window.browserWindow = {
     exit: () => {remote.getCurrentWindow().close()},
     minimize: () => {remote.getCurrentWindow().minimize()},
     maximize: () => {remote.getCurrentWindow().maximize()},
+    show: () => {remote.getCurrentWindow().show()},
     //@ts-expect-error
     reload: () => {window.modpackManager.downloader.cancel(); remote.getCurrentWindow().reload()},
     isDevToolsOpened: () => {return remote.getCurrentWindow().webContents.isDevToolsOpened()}
@@ -64,6 +66,9 @@ window.shell = {
     },
     openPath: async (path: string) => {
         await shell.openPath(path);
+    },
+    openExternal: async (url: string) => {
+        await shell.openExternal(url);
     }
 }
 
@@ -119,27 +124,27 @@ ipcRenderer.on('window-id', (_, arg) => {
 window.onbeforeload = () => {
     settingsInterface.theme = settingsInterface.settings.appearance.theme;
     settingsInterface.bg = settingsInterface.settings.appearance.bg;
-    
-    //@ts-expect-error
-    window.online = navigator.onLine;
-
-    //@ts-expect-error
-    window.addEventListener('online', () => {window.online = true})
-
-    //@ts-expect-error
-    window.addEventListener('online', () => {window.online = false})
+    settingsInterface.filter_opacity = settingsInterface.settings.appearance.filter_opacity;
+    settingsInterface.blur_amount = settingsInterface.settings.appearance.blur_amount;
 
     console.log('onbeforeload');
 }
+
+//@ts-expect-error
+window.max_setable_ram = Math.min(Math.ceil(os.freemem() / 1024 / 1024 / 1024) + 1, Math.ceil(os.totalmem() / 1024 / 1024 / 1024));
+//@ts-expect-error
+window.min_setable_ram = 4;
 
 window.onload = async () => {
     // settingsManager.theme = settingsManager.settings.appearance.theme;
     // settingsManager.bg = settingsManager.settings.appearance.bg;
     console.log('onload');
+
+    if (settingsInterface.settings.dev_mode) document.body.classList.add('dev');
+    (document.getElementById('bg-video') as HTMLVideoElement).muted = settingsInterface.settings.appearance.muted;
     
     document.getElementById('app-exit')?.addEventListener('click', () => {
         console.log('exiting');
-        
         //@ts-expect-error
         window.browserWindow.exit();
     });
@@ -162,6 +167,9 @@ window.onload = async () => {
         window.modpackManager.downloader.cancel();
         console.log('BYE :)');
     }
+
+    //@ts-expect-error
+    window.browserWindow.show();
 }
 
 window.console.log = log.info;

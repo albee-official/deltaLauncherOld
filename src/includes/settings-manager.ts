@@ -20,9 +20,20 @@ const settings_pattern = {
     on_modpack: 'magicae',
     selected_user: -1,
     auto_go_to_server_thing: false,
+    modpack_settings: {
+        alocated_memory: 4,
+        optimization_level: 2,
+        java_parameters: '',
+        use_builtin_java: true,
+        show_console_output: false,
+    },
     appearance: {
+        reduced_motion: false,
         bg: '',
         theme: '',
+        filter_opacity: 80,
+        blur_amount: 0, 
+        muted: true,
     },
     modpacks: {
         libs: {
@@ -141,11 +152,15 @@ export class SettingsStorage {
     }
 
     public async save() {
+        log.info('[SETTINGS] saving...');
         await fs.writeFile(this._settings_path, JSON.stringify(this._settings, null, '\t'));
+        log.info('[SETTINGS] saved!');
     }
 
     public saveSync() {
+        log.info('[SETTINGS] saving...');
         fs.writeFileSync(this._settings_path, JSON.stringify(this._settings, null, '\t'));
+        log.info('[SETTINGS] saved!');
     }
 }
 
@@ -212,31 +227,73 @@ export class SettingsInterface {
         
     }
 
-    public set bg(to: any) {
-        if (to === 1) { // plain BG
+    public set filter_opacity(to: number) {
+        this.settings.appearance.filter_opacity = to;
+        //@ts-expect-error
+        document.getElementById('bg-opacity').style.opacity = to / 100;
+    }
+
+    public get filter_opacity() {
+        return this.settings.appearance.filter_opacity;
+    }
+
+    public set blur_amount(to: number) {
+        this.settings.appearance.blur_amount = to;
+        //@ts-expect-error
+        document.getElementById('bg-blur').style = `--amount: ${to}px`;
+    }
+
+    public get blur_amount() {
+        return this.settings.appearance.blur_amount;
+    }
+
+    public set bg(to: string) {
+        if (to === '1') { // plain BG
             log.info('[SETTINGS] applying plain bg');
             let bg_el = document.getElementById('bg-img');
             if (bg_el) {
+                (document.getElementById('bg-video') as HTMLVideoElement).src = '';
+                document.body.classList.remove('video');
                 bg_el.parentElement?.parentElement?.classList.add('plain');
             }
         } else if (to != undefined && to != '') {
-            log.info('[SETTINGS] applying bg', to);
-            let bg_el = document.getElementById('bg-img');
-            if (bg_el) {
-                bg_el.parentElement?.parentElement?.classList.remove('plain');
-                if (fs.existsSync(to)) {
-                    bg_el.setAttribute('src', to);
-                } else {
-                    log.info('[SETTINGS] path not found');
-                    return;
+            let ext = path.extname(to);   
+            if (ext == '.png' || ext == '.jpeg' || ext == '.jpg' || ext == '.gif') {
+                log.info('[SETTINGS] applying image bg', to);
+                let bg_el = document.getElementById('bg-img') as HTMLImageElement;
+                if (bg_el) {
+                    (document.getElementById('bg-video') as HTMLVideoElement).src = '';
+                    document.body.classList.remove('video');
+                    bg_el.parentElement?.parentElement?.classList.remove('plain');
+                    if (fs.existsSync(to)) {
+                        bg_el.src = to;
+                    } else {
+                        log.info('[SETTINGS] path not found');
+                        return;
+                    }
+                }
+            } else if (ext == '.mp4' || ext == '.mov' || ext == '.ogg') {
+                log.info('[SETTINGS] applying video bg', to);
+                let bg_el = document.getElementById('bg-video') as HTMLVideoElement;
+                if (bg_el) {
+                    document.body.classList.add('video');
+                    bg_el.parentElement?.parentElement?.classList.remove('plain');
+                    if (fs.existsSync(to)) {
+                        bg_el.src = to;
+                    } else {
+                        log.info('[SETTINGS] path not found');
+                        return;
+                    }
                 }
             }
             
             this._settings.appearance.bg = to;
         } else if (to == '') {
             log.info(`[SETTINGS] setting default bg for '${this._settings.appearance.theme}'`);
-            let bg_el = document.getElementById('bg-img');
+            let bg_el = document.getElementById('bg-img') as HTMLImageElement;
             if (bg_el) {
+                (document.getElementById('bg-video') as HTMLVideoElement).src = '';
+                document.body.classList.remove('video');
                 bg_el.parentElement?.parentElement?.classList.remove('plain');
                 let dflt = '../../res/bg-light.jpg';
                 if (this._settings.appearance.theme) {
@@ -246,7 +303,7 @@ export class SettingsInterface {
                     }
                 }
 
-                bg_el.setAttribute('src', dflt);
+                bg_el.src = dflt;
                 this._settings.appearance.bg = to;
             }
         }
@@ -256,31 +313,52 @@ export class SettingsInterface {
 
     public async setBgAsync(to: any) {
         return new Promise((resolve, reject) => {
-            if (to === 1) { // plain BG
+            if (to === '1') { // plain BG
                 log.info('[SETTINGS] applying plain bg');
                 let bg_el = document.getElementById('bg-img');
                 if (bg_el) {
+                    (document.getElementById('bg-video') as HTMLVideoElement).src = '';
+                    document.body.classList.remove('video');
                     bg_el.parentElement?.parentElement?.classList.add('plain');
                 }
             } else if (to != undefined && to != '') {
-                log.info('[SETTINGS] applying bg', to);
-                let bg_el = document.getElementById('bg-img');
-                if (bg_el) {
-                    bg_el.parentElement?.parentElement?.classList.remove('plain');
-                    if (fs.existsSync(to)) {
-                        bg_el.setAttribute('src', to);
-                    } else {
-                        log.info('[SETTINGS] path not found');
-                        reject('no-path');
-                        return;
+                let ext = path.extname(to);   
+                if (ext == '.png' || ext == '.jpeg' || ext == '.jpg' || ext == '.gif') {
+                    log.info('[SETTINGS] applying image bg', to);
+                    let bg_el = document.getElementById('bg-img') as HTMLImageElement;
+                    if (bg_el) {
+                        (document.getElementById('bg-video') as HTMLVideoElement).src = '';
+                        document.body.classList.remove('video');
+                        bg_el.parentElement?.parentElement?.classList.remove('plain');
+                        if (fs.existsSync(to)) {
+                            bg_el.src = to;
+                        } else {
+                            log.info('[SETTINGS] path not found');
+                            return;
+                        }
+                    }
+                } else if (ext == '.mp4' || ext == '.mov' || ext == '.ogg') {
+                    log.info('[SETTINGS] applying video bg', to);
+                    let bg_el = document.getElementById('bg-video') as HTMLVideoElement;
+                    if (bg_el) {
+                        document.body.classList.add('video');
+                        bg_el.parentElement?.parentElement?.classList.remove('plain');
+                        if (fs.existsSync(to)) {
+                            bg_el.src = to;
+                        } else {
+                            log.info('[SETTINGS] path not found');
+                            return;
+                        }
                     }
                 }
                 
                 this._settings.appearance.bg = to;
             } else if (to == '') {
                 log.info(`[SETTINGS] setting default bg for '${this._settings.appearance.theme}'`);
-                let bg_el = document.getElementById('bg-img');
+                let bg_el = document.getElementById('bg-img') as HTMLImageElement;
                 if (bg_el) {
+                    (document.getElementById('bg-video') as HTMLVideoElement).src = '';
+                    document.body.classList.remove('video');
                     bg_el.parentElement?.parentElement?.classList.remove('plain');
                     let dflt = '../../res/bg-light.jpg';
                     if (this._settings.appearance.theme) {
@@ -290,7 +368,8 @@ export class SettingsInterface {
                         }
                     }
     
-                    bg_el.setAttribute('src', dflt);
+                    bg_el.src = dflt;
+                    this._settings.appearance.bg = to;
                 }
             }
     

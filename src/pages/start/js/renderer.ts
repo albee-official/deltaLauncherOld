@@ -15,6 +15,7 @@ declare let ipcRenderer: IpcRenderer;
 declare let modpackManager: any;
 declare let settingsInterface: any;
 declare let authInterface: any;
+declare let shell: any;
 //#endregion
 
 //@ts-expect-error
@@ -39,6 +40,10 @@ function closeLogin() {
     document.getElementById('bg')?.classList.add('darken');
     document.body.classList.remove('login-open');
 }
+
+document.getElementById('forgot-password')?.addEventListener('click', () => {
+    shell.openExternal('http://localhost:3000/auth/forgotpass');
+})
 
 let a = 1;
 

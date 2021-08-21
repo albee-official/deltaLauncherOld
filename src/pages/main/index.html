@@ -27,7 +27,7 @@
     <title>Delta</title>
     <script defer src="../../../dist/pages/main/js/renderer.js"></script>
 </head>
-<body>
+<body class="reduced-motion">
     <div id="select-overlay-thing" class="overlay-thing">
         <div class="overlay-container">
             <h1>Выберите: ХУЙНЮ</h1>
@@ -43,10 +43,11 @@
     </div>
 
     <div id="bg" class="bg">
-        <div style="opacity: .72" class="color"></div>
-        <div style="opacity: .32" class="filter"></div>
+        <div id="bg-opacity" class="color"></div>
+        <div id="bg-blur" class="filter"></div>
         <div class="img">
             <img id="bg-img" src="" alt=""/>
+            <video autoplay loop id="bg-video" src="" alt=""></video>
         </div>
     </div>
 
@@ -215,9 +216,7 @@
                 </div>
                 <div class="sidemenu opened">
                     <h1>Выделение памяти</h1>
-                    <div class="slider">
-
-                    </div>
+                    <div id="sidemenu-memory-slider" data-min="2" data-max="16" data-step="1" data-unit="Гб" data-spread="2" class="slider"></div>
                     <h1>Дополнительные моды</h1>
                     <label data-name="inventory-tweaks" class="checkbox">
                         <input type="checkbox">
@@ -258,9 +257,7 @@
                         <div class="category-items">
                             <div class="setting">
                                 <h1>Выделение памяти</h1>
-                                <div class="slider">
-
-                                </div>
+                                <div id="memory-slider" data-min="2" data-max="16" data-step="1" data-unit="Гб" data-spread="2" class="slider"></div>
                                 <div class="tip">
                                     <h1>Внимение!</h1>
                                     <p>Значения ниже 6 Гигабайтов могут вызывать лаги во время игры.</p>
@@ -268,9 +265,7 @@
                             </div>
                             <div class="setting">
                                 <h1>Степень оптимизации</h1>
-                                <div class="slider">
-
-                                </div>
+                                <div id="optimization-slider" data-min="1" data-max="5" data-step="1" data-values="Минимальная;Низкая;Средняя;Высокая;Максимальная" class="slider"></div>
                                 <div class="tip">
                                     <h1>Важно!</h1>
                                     <p>При данном уровне графики, игра может выглядеть ужасно, а местами и не правильно.</p>
@@ -305,7 +300,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="setting">
+                            <div class="setting dev-only">
                                 <h1>Параметры запуска Java</h1>
                                 <input type="text" placeholder="Не указанны">
                                 <div class="tip">
@@ -373,6 +368,37 @@
                         </div>
                         <div class="category-items">
                             <div class="setting">
+                                <h1>Задний фон</h1>
+
+                                <h2>Установленный</h2>
+                                <p id="open-bg-path" class="just-button">По умолчанию</p>
+                                <div class="gap"></div>
+
+                                <h2>Степень размытия</h2>
+                                <div id="blur-slider" data-min="0" data-max="64" data-unit="px" data-free="true" class="slider"></div>
+
+                                <h2>Прозрачность фона</h2>
+                                <div id="opacity-slider" data-min="0" data-max="100" data-unit="%" data-free="true" class="slider"></div>
+
+                                <div class="gap"></div>
+                                <h2>Настройки</h2>
+                                <p id="change-bg" class="just-button">Сменить</p>
+                                <p id="reset-bg" class="just-button">Сбросить</p>
+                                <div class="tip">
+                                    <h1>Поддерживаемые форматы: png, jpg, jpeg, gif, mp4, mov, ogg</h1>
+                                    <p>Установка видео как заднего фона может кушать много мощностей видеокарты.</p>
+                                </div>
+                                <div class="big-gap"></div>
+                                <h2 class="video-only">Настройки видео</h2>
+                                <label data-name="bg-muted" class="checkbox video-only">
+                                    <input id="bg-muted-cb" type="checkbox">
+                                    <p class="checkbox-text">Заглушить задний фон</p>
+                                    <div class="checkmark">
+                                        <div class="checkmark-fill"></div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="setting">
                                 <h1>Тема</h1>
                                 <h2>Установленные темы:</h2>
                                 <div id="themes-container" class="themes">
@@ -392,54 +418,44 @@
                                 </div>
                                 <div class="gap"></div>
                                 <p id="recheck-themes" class="just-button">Обновить список тем</p>
-                                <a href="" class="just-button">Список доступных тем</a>
+                                <p id="open-themes-list" class="just-button">Список доступных тем</p>
                                 <p id="open-themes-folder" class="just-button">Открыть папку тем</p>
-                            </div>
-                            <div class="setting">
-                                <h1>Задний фон</h1>
-
-                                <h2>Установленный</h2>
-                                <p id="open-bg-path" class="just-button">По умолчанию</p>
-                                <div class="gap"></div>
-
-                                <h2>Степень размытия</h2>
-                                <div class="slider"></div>
-                                <h2>Прозрачность фона</h2>
-                                <div class="slider"></div>
-                                <div class="big-gap"></div>
-                                <h2>Настройки</h2>
-                                <p id="change-bg" class="just-button">Сменить</p>
-                                <p id="reset-bg" class="just-button">Сбросить</p>
-                                <label data-name="bg-muted" class="checkbox">
-                                    <input id="bg-muted-cb" type="checkbox">
-                                    <p class="checkbox-text">Заглушить задний фон</p>
-                                    <div class="checkmark">
-                                        <div class="checkmark-fill"></div>
-                                    </div>
-                                </label>
                             </div>
                             <div class="setting">
                                 <h1>Дополнительно</h1>
                                 <p id="open-root" class="just-button">Открыть корневую папку</p>
                                 <p class="just-button">Очистка кэша</p>
                                 <div class="gap"></div>
-                                <label data-name="show-console" class="checkbox">
-                                    <input type="checkbox">
-                                    <p class="checkbox-text">Показать консоль</p>
+                                <label data-name="reduced-motion" class="checkbox">
+                                    <input id="reduced-motion-checkbox" type="checkbox">
+                                    <p class="checkbox-text">Убрать анимации</p>
                                     <div class="checkmark">
                                         <div class="checkmark-fill"></div>
                                     </div>
                                 </label>
-                                <label data-name="show-console" class="checkbox">
-                                    <input type="checkbox">
+                                <label data-name="show-console" class="checkbox dev-only">
+                                    <input id="show-console" type="checkbox">
+                                    <p class="checkbox-text">Связать консоли</p>
+                                    <div class="checkmark">
+                                        <div class="checkmark-fill"></div>
+                                    </div>
+                                </label>
+                                <label data-name="use-builtin-java" class="checkbox">
+                                    <input id="use-builtin-java" type="checkbox">
                                     <p class="checkbox-text">Использовать встроенную Java</p>
                                     <div class="checkmark">
                                         <div class="checkmark-fill"></div>
                                     </div>
                                 </label>
                             </div>
+                        </div>
+                    </div>
+                    <div class="category">
+                        <div class="category-name">
+                            <h1>Информация</h1>
+                        </div>
+                        <div class="category-items">
                             <div class="setting">
-                                <h1>Информация</h1>
                                 <p>Версия лаунчера: <span id="version-span"></span></p>
                             </div>
                         </div>

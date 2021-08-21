@@ -38,7 +38,7 @@ function appReady() {
     })
 
     mainWindow.loadFile('./src/pages/start/index.html');
-    mainWindow.on('ready-to-show', () => mainWindow.show());
+    // mainWindow.on('ready-to-show', () => mainWindow.show());
 
     mainWindow.webContents.on("devtools-opened", (err: string) => {
         mainWindow.webContents.send("devtools-opened");
@@ -50,7 +50,7 @@ function appReady() {
 function createMainWindow() {
     return new Promise((resolve, _) => {
         let win = new BrowserWindow({
-            width: 1600,
+            width: 1610,
             height: 900,
             minWidth: 1000,
             minHeight: 724,
@@ -70,7 +70,6 @@ function createMainWindow() {
     
         win.loadFile('./src/pages/main/index.html');
         win.on('ready-to-show', async () => {
-            win.show()
             resolve(win);
         });
     
@@ -124,7 +123,7 @@ function onFirstLaunch(afterupdate?: boolean) {
 }
 
 function getRoot() {
-    let _path = path.join(app.getPath('appData'), '.delta');
+    let _path = path.join(app.getPath('appData'), '.delta-new');
     fs.ensureDirSync(_path);
     return _path;
 }

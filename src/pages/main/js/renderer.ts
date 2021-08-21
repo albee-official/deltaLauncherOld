@@ -25,6 +25,8 @@ declare let dialog: any;
 declare let CapitalizeFirstLetter: Function;
 declare let version: string;
 declare let gc: any;
+declare let max_setable_ram: number;
+declare let min_setable_ram: number;
 //#endregion
 
 //@ts-expect-error
@@ -46,6 +48,173 @@ enum sections {
     MAIN,
     SETTINGS,
     ACCOUNT,
+}
+
+class Slider {
+    el: HTMLDivElement;
+    input: HTMLInputElement;
+
+    id: string;
+    min: number;
+    max: number;
+    step: number;
+    unit: string;
+    step_values: string[];
+    free: boolean;
+    value_step: number;
+
+    max_val: number;
+    min_val: number;
+
+    private _index = 0;
+
+    constructor (slider: HTMLDivElement, value?: number) { 
+        this.el = slider;
+
+        this.id = slider.id;
+        this.min = parseInt(slider.dataset.min as string);
+        this.max = parseInt(slider.dataset.max as string);
+        this.step = parseInt(slider.dataset.step as string) || -1;
+        this.unit = (slider.dataset.unit as string) || '';
+        this.value_step = parseInt(slider.dataset.spread as string) || 1;
+        this.step_values = (slider.dataset.values as string || '').toString().split(';');
+        this.free = slider.dataset.free == 'true'
+
+        this.max_val = this.max;
+        this.min_val = this.min;
+
+        let html = `
+            <input min="${this.min}" max="${this.max}" ${this.step > 0 ? 'step="' + this.step + '"' : 'step="1"'} type="range" name="${this.id}-input" id="${this.id}-input">
+            <div class="stops">
+        `;
+
+        if (this.free) {
+            html += `
+                <div class="stop only-value">
+                    <div class="value">
+                        ${this.min}${this.unit}
+                    </div>
+                    <div></div>
+                </div>
+                <div class="stop only-value">
+                    <div class="value">
+                        ${this.max}${this.unit}
+                    </div>
+                    <div></div>
+                </div>
+                <div class="stop pointer" style="position: absolute;">
+                    <div></div>
+                    <div class="value">
+                        ${this.min}${this.unit}
+                    </div>
+                </div>
+            `;
+        } else {
+            let j = 0;
+            if (this.step_values.length > 1) {
+                for (let i = this.min; i <= this.max; i += this.step) {
+                    if (j % this.value_step == 0) {
+                        html += `
+                            <div class="stop">
+                                <div class="line"></div>
+                                <div class="value">
+                                    ${this.step_values[j]}
+                                </div>
+                            </div>
+                        `
+                    } else {
+                        html += `
+                            <div class="stop empty">
+                                <div class="line"></div>
+                            </div>
+                        `
+                    }
+                    j++;
+                }
+            } else {
+                for (let i = this.min; i <= this.max; i += this.step) {
+                    if (j % this.value_step == 0) {
+                        html += `
+                            <div class="stop">
+                                <div class="line"></div>
+                                <div class="value">
+                                    ${i}${this.unit}
+                                </div>
+                            </div>
+                        `
+                    } else {
+                        html += `
+                            <div class="stop empty">
+                                <div class="line"></div>
+                            </div>
+                        `
+                    }
+                    j++;
+                }
+            }
+        }
+
+        html += `</div>`
+        slider.innerHTML = html;
+
+        let slider_input = slider.children[0] as HTMLInputElement;
+        this.input = slider_input;
+
+        if (value != undefined) this.value = value;        
+
+        if (!this.free) {
+            this._index = (parseInt(slider_input.value) - this.min) / this.step;
+            slider_input.addEventListener('input', () => {
+                this.value = Math.min(Math.max(this.min_val, this.value), this.max_val);
+                slider.children[1].children[this._index].classList.remove('active');
+                this._index = (parseInt(slider_input.value) - this.min) / this.step;
+                slider.children[1].children[this._index].classList.add('active');
+            });
+
+            this.el.children[1].children[(parseInt(this.input.value) - this.min) / this.step].classList.add('active');
+        } else {
+            let pointer = slider.children[1].children[2] as HTMLDivElement;
+            slider_input.addEventListener('input', () => {
+                this.value = Math.min(Math.max(this.min_val, this.value), this.max_val);
+                pointer.style.left = `${(parseFloat(slider_input.value) / this.max) * slider.clientWidth}px`;
+                pointer.children[1].innerHTML = `${slider_input.value}px`;
+            });
+
+            pointer.style.left = `${(parseFloat(slider_input.value) / this.max) * slider.clientWidth}px`;
+            pointer.children[1].innerHTML = `${slider_input.value}px`;
+        }
+    }
+
+    public set value(to: number) {
+        this.input.value = to.toString();
+
+        if (!this.free) {
+            this.el.children[1].children[this._index].classList.remove('active');
+            this._index = (parseInt(this.input.value) - this.min) / this.step;
+            this.el.children[1].children[this._index].classList.add('active');
+        } else {
+            let pointer = this.el.children[1].children[2] as HTMLDivElement;
+            pointer.style.left = `${(parseFloat(this.input.value) / this.max) * this.el.clientWidth}px`;
+            pointer.children[1].innerHTML = `${this.input.value}px`;
+        }
+    }
+
+    public get value() {
+        return parseFloat(this.input.value);
+    }
+
+    public set oninput(to: any) {
+        this.input.oninput = to;
+    }
+
+    public set onchange(to: any) {
+        this.input.onchange = to;
+    }
+
+    public update() {
+        if (this.input.oninput) this.input.oninput(new Event('input'));
+        if (this.input.onchange) this.input.onchange(new Event('change'));
+    }
 }
 
 class Overlay {
@@ -343,6 +512,13 @@ class MainButton {
                 ]
                 break;
 
+            case 'launched':
+                this.locked = true;
+                this.h1 = 'Запущена';
+                this.p = 'Сборка уже запущена';
+                this.sub_buttons = [];
+                break;
+
             case 'install':
                 this.locked = false;
                 this.h1 = 'Скачать';
@@ -533,6 +709,12 @@ class UI {
     public overlay = new Overlay();
     public main_button = new MainButton();
 
+    public memory_slider = new Slider(document.getElementById('memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.alocated_memory);
+    public sidemenu_memory_slider = new Slider(document.getElementById('sidemenu-memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.alocated_memory);
+    public optimization_slider = new Slider(document.getElementById('optimization-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.optimization_level);
+    public blur_slider = new Slider(document.getElementById('blur-slider') as HTMLDivElement, settingsInterface.blur_amount);
+    public opacity_slider = new Slider(document.getElementById('opacity-slider') as HTMLDivElement, settingsInterface.filter_opacity);
+
     constructor () {
         async function updateModpackDirs() {
             (document.getElementById('libs-dir') as HTMLParagraphElement).innerText = await modpackManager.ensureLibsDir();
@@ -542,6 +724,36 @@ class UI {
             (document.getElementById('insula-dir') as HTMLParagraphElement).innerText = await modpackManager.ensureModpackDir('insula');
         };
         updateModpackDirs();
+
+        this.memory_slider.oninput = () => {
+            settingsInterface.settings.modpack_settings.alocated_memory = this.memory_slider.value
+            this.sidemenu_memory_slider.value = this.memory_slider.value;
+        };
+        this.memory_slider.onchange = () => settingsInterface.save();
+
+        this.memory_slider.max_val = max_setable_ram;
+        this.memory_slider.min_val = min_setable_ram;
+
+        this.sidemenu_memory_slider.oninput = () => {
+            settingsInterface.settings.modpack_settings.alocated_memory = this.sidemenu_memory_slider.value
+            this.memory_slider.value = this.sidemenu_memory_slider.value;
+        }
+        this.sidemenu_memory_slider.onchange = () => settingsInterface.save();
+
+        this.sidemenu_memory_slider.max_val = max_setable_ram;
+        this.sidemenu_memory_slider.min_val = min_setable_ram;
+
+        this.optimization_slider.oninput = () => settingsInterface.settings.modpack_settings.optimization_level = this.optimization_slider.value;
+        this.optimization_slider.onchange = () => settingsInterface.save();
+
+        this.blur_slider.oninput = () => settingsInterface.blur_amount = this.blur_slider.value;
+        this.blur_slider.onchange = () => settingsInterface.save();
+
+        this.opacity_slider.oninput = () => settingsInterface.filter_opacity = this.opacity_slider.value;
+        this.opacity_slider.onchange = () => settingsInterface.save();
+
+        let opacity_obg = document.getElementById('bg-opacity');
+        if (opacity_obg) opacity_obg.style.transition = 'none 0s ease 0s';
 
         async function showSelectModpack(modpack: string) {
             let options = {
@@ -655,6 +867,39 @@ class UI {
             }
         });
 
+        if (settingsInterface.settings.appearance.reduced_motion) {
+            document.body.classList.add('reduced-motion');
+        } else {
+            document.body.classList.remove('reduced-motion');
+        }
+
+        (document.getElementById('reduced-motion-checkbox') as HTMLInputElement).checked = settingsInterface.settings.appearance.reduced_motion;
+        document.getElementById('reduced-motion-checkbox')?.addEventListener('click', () => {
+            settingsInterface.settings.appearance.reduced_motion = !settingsInterface.settings.appearance.reduced_motion;
+            if (settingsInterface.settings.appearance.reduced_motion) {
+                document.body.classList.add('reduced-motion');
+            } else {
+                document.body.classList.remove('reduced-motion');
+            }
+            settingsInterface.save();
+        });
+
+        (document.getElementById('show-console') as HTMLInputElement).checked = settingsInterface.settings.modpack_settings.show_console_output;
+        document.getElementById('show-console')?.addEventListener('click', () => {
+            settingsInterface.settings.modpack_settings.show_console_output = !settingsInterface.settings.modpack_settings.show_console_output;
+            settingsInterface.save();
+        });
+        
+        (document.getElementById('use-builtin-java') as HTMLInputElement).checked = settingsInterface.settings.modpack_settings.use_builtin_java;
+        document.getElementById('use-builtin-java')?.addEventListener('click', () => {
+            settingsInterface.settings.modpack_settings.use_builtin_java = !settingsInterface.settings.modpack_settings.use_builtin_java;
+            settingsInterface.save();
+        });
+
+        document.getElementById('open-themes-list')?.addEventListener('click', () => {
+            shell.openExternal(`https://github.com/AlbeeTheLoli/deltaLauncher/tree/main/themes`);
+        });
+
         document.getElementById('open-themes-folder')?.addEventListener('click', () => {
             if (settingsInterface.themes_path) shell.openPath(path.normalize(settingsInterface.themes_path));
         });
@@ -677,14 +922,15 @@ class UI {
 
         document.getElementById('reset-bg')?.addEventListener('click', () => {
             settingsInterface.bg = '';
-            settingsInterface.save();   
+            settingsInterface.save();
+            if (open_bg_el) open_bg_el.innerText = settingsInterface.bg == '' ? 'По умолчанию' : settingsInterface.bg;
         })
 
         document.getElementById('change-bg')?.addEventListener('click', async () => {
             let options = {
                 title : "Выберите задний фон", 
                 filters :[
-                    {name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif']},
+                    {name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'ogg', 'mov']},
                 ],
                 properties: ['openFile']
                }
@@ -696,7 +942,18 @@ class UI {
             
             settingsInterface.bg = path.normalize(file.filePaths[0]);
             settingsInterface.save();
+
+            if (open_bg_el) open_bg_el.innerText = settingsInterface.bg == '' ? 'По умолчанию' : settingsInterface.bg;
         })
+
+        let bg_video = document.getElementById('bg-video') as HTMLVideoElement;
+        document.getElementById('bg-muted-cb')?.addEventListener('input', () => {
+            settingsInterface.settings.appearance.muted = !settingsInterface.settings.appearance.muted;
+            bg_video.muted = settingsInterface.settings.appearance.muted;
+        });
+
+        //@ts-expect-error
+        document.getElementById('bg-muted-cb').checked = settingsInterface.settings.appearance.muted
 
         document.getElementById('open-root')?.addEventListener('click', () => {
             if (settingsInterface.root != '') shell.openPath(path.normalize(settingsInterface.root));
@@ -732,12 +989,18 @@ class UI {
     public set modpack(to) {
         this._buttons[settingsInterface.settings.on_modpack].state = 'none';
         this._buttons[to].state = 'selected';
-        if (modpackManager.modpacks[to].installed) {
+        this.updateMainButtonState(to);
+        settingsInterface.settings.on_modpack = to;
+    }
+
+    public updateMainButtonState(modpack=this.modpack) {
+        if (Object.keys(modpackManager.launched_modpacks).includes(modpack) && modpackManager.launched_modpacks[modpack] != undefined) {
+            this.main_button.state = 'launched';
+        } else if (modpackManager.modpacks[modpack].installed) {
             this.main_button.state = 'play';
         } else {
             this.main_button.state = 'install';
         }
-        settingsInterface.settings.on_modpack = to;
     }
 }
 
@@ -851,6 +1114,16 @@ async function main_button_click() {
         console.log(`${modpack} installed. launching...`);
         ui.overlay.show(`Запуск ${capitalizeFirstLetter(modpack)}...`, ' ')
 
+        ui.main_button.h1 = 'Запускается...';
+        ui.main_button.locked = true;
+        ui.main_button.p = 'Не выключайте лаунчер';
+
+        let status = await launchModpack(modpack);
+
+        ui.modpack = modpack;
+        ui.overlay.hide();
+        ui.can_select_modpack = true;
+
     } else if (ui.main_button.state == 'install') {         //. УСТАНОВИТЬ
 
         ui.can_select_modpack = false;
@@ -934,3 +1207,33 @@ ipcRenderer.on('modpack-downloaded', async (event, modpack) => {
     ui.footer.download_in_progress = false;
     ui.can_select_modpack = true;
 })
+
+//#.region --- minecraft lifecycle ---
+
+async function launchModpack(modpack_name: string) {
+    let status = await modpackManager.launchModpack(modpack_name, 2, settingsInterface.settings.modpack_settings.alocated_memory, authInterface.logged_user.login, '123').catch(err => {
+        console.error(err);
+    });
+    return status;
+}
+
+ipcRenderer.on('modpack-launched', (event, modpack_name) => {
+    console.log(`[MODPACK] <${modpack_name}> modpack launched`);
+    ui.can_select_modpack = true;
+})
+
+ipcRenderer.on('modpack-data', (event, {modpack_name, data}) => {
+    console.log(`[MODPACK] <${modpack_name}> ${data}`);
+})
+
+ipcRenderer.on('modpack-exit', (event, {modpack_name, code, signal}) => {
+    console.log(`[MODPACK] <${modpack_name}> modpack exited with code ${code} - ${signal}`);
+    ui.updateMainButtonState();
+})
+
+ipcRenderer.on('modpack-error', (event, {modpack_name, error}) => {
+    console.log(`[MODPACK] <${modpack_name}> ${error}`);
+    ui.updateMainButtonState();
+})
+
+//#endregion
