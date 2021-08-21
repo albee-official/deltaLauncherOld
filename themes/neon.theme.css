@@ -1,0 +1,59 @@
+  
+/* 
+    @name: 'Neon'
+    @author: 'Albee'
+    @version: '1.0'
+    @description: 'Dark aesthetic'
+    @default-bg: '../../res/bg-dark.jpg'
+*/
+
+:root {
+    --complementary: #6abafc;
+
+    --bg: #1C1924;
+    --bg-accent: #4B4753;
+    --clr: #fc6afc;
+    --clr-accent: #ff7eff;
+    --clr-secondary: #f05af0;
+    --text: #FFFFFF;
+    --text-accent: #E5E5E5;
+
+    --white: var(--text);                                   /** Brightest color */
+    --black: var(--bg);                                     /** Darkest color */
+
+    --bg-rgb: 28, 25, 36;
+    --bg-accent-rgb: 75, 71, 83;
+    --clr-rgb: 252, 106, 252;
+    --clr-accent-rgb: 255, 126, 255;
+    --clr-secondary-rgb: 240, 90, 240;
+    --text-rgb: 255, 255, 255;
+    --text-accent-rgb: 229, 229, 229;
+}
+
+header {
+    --profile-bg: var(--clr);
+    --profile-text: var(--text);
+
+    --header-nav-text: rgba(var(--text-rgb), .32);
+    --header-nav-text-hover: rgba(var(--text-rgb), .48);
+    --header-nav-text-active: var(--complementary);
+}
+
+main {
+    --clr: #6abafc;
+    --clr-accent: #7dc5ff;
+    --clr-secondary: #5ea8e6;
+
+    --clr-rgb: 106, 186, 252;
+    --clr-accent-rgb: 125, 197, 255;
+    --clr-secondary-rgb: 94, 168, 230;
+}
+
+:root {
+    --app-icon-clr: var(--text);
+}
+
+footer {
+    --main-button-text: var(--text);
+    --sub-button-text: var(--text);
+}
