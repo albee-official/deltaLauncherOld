@@ -334,7 +334,7 @@ export class ModpackManager {
                     BrowserWindow.getAllWindows()[0]?.webContents.send('download-progress', progress);
                 }
             )
-            if (downloaded_path == false) {
+            if (downloaded_path == '') {
                 log.info('[MODPACK] <libs> download cancelled');
                 return;
             }
@@ -387,7 +387,7 @@ export class ModpackManager {
                     BrowserWindow.getAllWindows()[0]?.webContents.send('download-progress', progress);
                 }
             )
-            if (downloaded_path == false) {
+            if (downloaded_path == '') {
                 log.info(`[MODPACK] <${modpack_name}> download cancelled`);
                 return;
             }
@@ -422,7 +422,7 @@ export class ModpackManager {
         log.info('[MODPACK] Moving: libraries...');
         if (!(await fs.pathExists(modpack_path + '\\libraries'))) {
             await fs.ensureDir(modpack_path + '\\libraries');
-            await copyWithProgress(path.join(modpackManager.libs[libs_version].path, 'libraries'), path.join(modpack_path, 'libraries'), 
+            await copyWithProgress(path.join(this.libs[libs_version].path, 'libraries'), path.join(modpack_path, 'libraries'), 
                 (progress: any) => {
                     BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-progress', {
                         percent: progress.progress * 30
@@ -438,7 +438,7 @@ export class ModpackManager {
         log.info('[MODPACK] Moving: assets...');
         if (!(await fs.pathExists(modpack_path + '\\assets'))) {
             await fs.ensureDir(modpack_path + '\\assets');
-            await copyWithProgress(path.join(modpackManager.libs[libs_version].path, 'assets'), path.join(modpack_path, 'assets'), 
+            await copyWithProgress(path.join(this.libs[libs_version].path, 'assets'), path.join(modpack_path, 'assets'), 
                 (progress: any) => {
                     BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-progress', {
                         percent: 30 + (progress.progress * 35)
@@ -455,7 +455,7 @@ export class ModpackManager {
         log.info('[MODPACK] Moving: versions...');
         if (!(await fs.pathExists(modpack_path + '\\versions'))) {
             await fs.ensureDir(modpack_path + '\\versions');
-            await copyWithProgress(path.join(modpackManager.libs[libs_version].path, 'versions'), path.join(modpack_path, 'versions'), 
+            await copyWithProgress(path.join(this.libs[libs_version].path, 'versions'), path.join(modpack_path, 'versions'), 
                 (progress: any) => {
                     BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-progress', {
                         percent: 65 + (progress.progress * 35)
@@ -477,7 +477,7 @@ export class ModpackManager {
     } = {};
     public async launchModpack(modpack_name: string, min_rem: number, max_rem: number, username: string, uuid: string): Promise<string> {
         return new Promise(async (resolve, reject) => {
-            if (Object.keys(this.launched_modpacks).includes(modpack_name) && modpackManager.launched_modpacks[modpack_name] != undefined) {
+            if (Object.keys(this.launched_modpacks).includes(modpack_name) && this.launched_modpacks[modpack_name] != undefined) {
                 reject('already launched');
                 return;
             }

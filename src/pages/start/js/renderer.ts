@@ -12,9 +12,15 @@ interface IpcRenderer extends NodeJS.EventEmitter {
 }
 
 declare let ipcRenderer: IpcRenderer;
-declare let modpackManager: any;
-declare let settingsInterface: any;
-declare let authInterface: any;
+import type { AuthInterface } from '../../../includes/auth-manager'
+import type { ModpackManager } from '../../../includes/modpack-manager'
+import type { SettingsInterface } from '../../../includes/settings-manager'
+import type { AutoUpdaterInterface } from '../../../includes/auto-updater'
+
+declare let authInterface: AuthInterface;
+declare let modpackManager: ModpackManager;
+declare let settingsInterface: SettingsInterface;
+declare let autoUpdater: AutoUpdaterInterface;
 declare let shell: any;
 //#endregion
 
@@ -68,15 +74,17 @@ function waitConnected() {
 (async () => {
     // speedrun();
 
-    await checkForUpdates();
-
-    showLogin();
-    login_submit?.addEventListener('click', async (e) => {
-        e.preventDefault();
-        //@ts-expect-error
-        await login(document.getElementById('login-field')?.value, document.getElementById('password-field')?.value);
-    });
-    login_submit?.click();
+    if (await checkForUpdates()) {
+        console.log('update installed. relaunching to install it');
+    } else {
+        showLogin();
+        login_submit?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            //@ts-expect-error
+            await login(document.getElementById('login-field')?.value, document.getElementById('password-field')?.value);
+        });
+        login_submit?.click();
+    }
 })();
 
 async function speedrun() {
@@ -90,16 +98,25 @@ async function checkForUpdates() {
     console.log('> [START] checking for updates...');
 
     await waitConnected();
-    
-    // delay in async method
-    procent = 0;
-    let ae = setInterval(() => {
-        procent++;
-        if (start_steps) start_steps[0].innerHTML = `Проверка обновлений: ${procent}%`
-    }, 1000 / 100);
-    await new Promise((resolve, reject) => { setTimeout(() => {resolve(undefined)}, 1000 * a) } );
-    clearInterval(ae);
+    return await autoUpdater.checkForUpdates();
 }
+
+let update_p = document.getElementById('update-step') as HTMLDivElement;
+ipcRenderer.on('update-noneed', (event, version) => {
+    update_p.innerHTML = 'Обновлений не найденно';
+});
+
+ipcRenderer.on('update-found', (event, version) => {
+    update_p.innerHTML = `Доступно обновление: '${version}'`
+});
+
+ipcRenderer.on('update-progress', (event, {name, url, progress}) => {
+    update_p.innerHTML = `Скачиваем версию '${name}': ${Math.round(progress.percent.toPrecision(2) * 1000) / 10}%`
+});
+
+ipcRenderer.on('update-downloaded', (event, version) => {
+    update_p.innerHTML = `Скачана новая версия: '${version}' Запускаем установщик...`;
+});
 
 let logging_in = false;
 async function login(login: string, password: string) {

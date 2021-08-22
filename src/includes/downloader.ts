@@ -6,12 +6,19 @@ const log = logger.create('downloader');
 log.variables.label = 'downloader';
 log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
 
+export interface progress {
+    percent: number,
+    total_size: number,
+    received_size: number,
+    status: string,
+}
+
 export class Downloader {
     downloading = false;
     path = '';
     threads = -1;
     paused = false;
-    progress = {
+    progress: progress = {
         percent: -1,
         total_size: -1,
         received_size: -1,
@@ -149,7 +156,7 @@ export class Downloader {
             let received_bytes = 0;
             let total_bytes = 0;
 
-            await new Promise((resolve, reject) => {                
+            await new Promise(async (resolve, reject) => {                
                 let req = request({
                     headers: {
                         Range: `bytes=${start_bytes}-${finish_bytes}`,
@@ -158,6 +165,7 @@ export class Downloader {
                     url: url,
                 })
 
+                await fs.ensureFile(path + "\\" + `downloadingthread${thread_num}.thread`);
                 let out = fs.createWriteStream(path + "\\" + `downloadingthread${thread_num}.thread`);
                 req.pipe(out);
         
@@ -195,7 +203,7 @@ export class Downloader {
     }
 
     progress_interval: NodeJS.Timeout | undefined = undefined;
-    public download(folder: string, url: string, file_name: string, threads: number = 1, onProgress: (progress: any) => void) {
+    public download(folder: string, url: string, file_name: string, threads: number = 1, onProgress: (progress: any) => void): Promise<string> {
         return new Promise(async (resolve, reject) => {
             if (this.downloading) {
                 log.info(`download in progress.`)
@@ -210,7 +218,7 @@ export class Downloader {
     
             if (file_info == null) {
                 log.info(`something went wrong while getting size... aborting download`);
-                resolve(false);
+                resolve('');
             }
     
             let received_bytes = 0;
@@ -282,7 +290,7 @@ export class Downloader {
                             resolve(outputPath);
                         } else {
                             log.info(`canceled`);
-                            resolve(false);
+                            resolve('');
                         }
                     }
                 });

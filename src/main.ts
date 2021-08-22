@@ -109,10 +109,11 @@ Object.defineProperty(global, 'modpackManager', {
 })
 
 // AutoUpdater
-// import { AutoUpdater } from './includes/auto-updater';
-// Object.defineProperty(global, 'autoUpdater', {
-//     value: new AutoUpdater(ipcMain, getRoot(), settingsStorage)
-// })
+import { AutoUpdater } from './includes/auto-updater';
+declare let autoUpdater: AutoUpdater;
+Object.defineProperty(global, 'autoUpdater', {
+    value: new AutoUpdater(ipcMain, getRoot(), settingsStorage)
+})
 
 
 // IPC
@@ -122,6 +123,7 @@ function onFirstLaunch(afterupdate?: boolean) {
     settingsStorage.saveSync();
     if (afterupdate) {
         console.log('after update');
+        autoUpdater.afterUpdate();
     } else {
         console.log('first launch');
     }

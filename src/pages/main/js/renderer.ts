@@ -11,7 +11,7 @@ interface IpcRenderer extends NodeJS.EventEmitter {
     sendSync(channel: string, ...args: any[]): any;
 }
 
-// declare let ipcRenderer: IpcRenderer;
+declare let ipcRenderer: IpcRenderer;
 import type { AuthInterface } from '../../../includes/auth-manager'
 import type { ModpackManager } from '../../../includes/modpack-manager'
 import type { SettingsInterface } from '../../../includes/settings-manager'

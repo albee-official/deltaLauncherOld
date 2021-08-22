@@ -6,12 +6,12 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "build-exe": "electron-builder build --win --publish never",
-    "deploy": "electron-builder build --win --publish always"
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "build-exe": "npm run build && electron-builder build --win --publish never",
+    "deploy": "npm run build && electron-builder build --win --publish always"
   },
-  "author": "",
+  "author": "Albee",
   "license": "ISC",
   "dependencies": {
     "@types/fs-extra": "^9.0.11",
@@ -52,7 +52,7 @@
       {
         "provider": "github",
         "owner": "AlbeeTheLoli",
-        "repo": "Delta-Launcher"
+        "repo": "deltaLauncher"
       }
     ],
     "nsis": {

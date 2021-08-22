@@ -9,7 +9,7 @@ log.variables.label = 'settings';
 log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
 
 const settings_pattern = {
-    dev_mode: true,
+    dev_mode: false,
     on_page: 0,
     on_modpack: 'magicae',
     selected_user: -1,

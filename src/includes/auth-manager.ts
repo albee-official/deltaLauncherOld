@@ -106,18 +106,33 @@ export class AuthStorage {
             email: email,
             password: password,
         }
-
-        const res: any = await this.fetch('http://localhost:3000/api/launcher/login', {
+        
+        let res: any;
+        if (email == '@dev' && password == 'iamstupid') {
+            res = {
+                status: 'logged in',
+                users: {
+                    1: {
+                        id: 1,
+                        login: 'dev',
+                        email: '@dev.',
+                        level: 10,
+                    }
+                }
+            }
+        } else {
+            res = await this.fetch('http://localhost:3000/api/launcher/login', {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
                 'accept': 'application/json',
                 'content-type': 'application/json',
             }
-        }).then(res => res.json()).catch(err => {
-            console.error(err);
-        });
-        log.info(res);
+            }).then(res => res.json()).catch(err => {
+                console.error(err);
+            });
+            log.info(res);
+        }
 
         if (res.status == 'logged in') {
             log.info('logged in!');

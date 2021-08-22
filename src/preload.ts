@@ -20,6 +20,9 @@ let settingsInterface = new SettingsInterface(remote, ipcRenderer);
 import { AuthInterface } from './includes/auth-manager';
 let authInterface = new AuthInterface(remote, ipcRenderer);
 
+import { AutoUpdaterInterface } from './includes/auto-updater';
+let autoUpdater = new AutoUpdaterInterface(remote, ipcRenderer);
+
 
 //. ------------------
 //#region Libs
@@ -34,7 +37,7 @@ window.settingsInterface = settingsInterface;
 window.authInterface = authInterface;
 
 //@ts-expect-error
-window.fs = fs;
+window.autoUpdater = autoUpdater;
 
 //#endregion
 //. ------------------
