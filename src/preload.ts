@@ -2,6 +2,7 @@ import { BrowserWindow, ipcRenderer, IpcRendererEvent, remote, Shell, shell } fr
 import path from 'path'
 import logger from 'electron-log';
 const log = logger.create('renderer');
+log.transports.console.format = '{h}:{i}:{s} > {text}';
 import fs from 'fs-extra';
 import os from 'os'
 

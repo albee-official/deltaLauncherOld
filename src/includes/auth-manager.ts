@@ -5,18 +5,15 @@ import keytar from 'keytar';
 import logger from 'electron-log';
 import { SettingsStorage } from './settings-manager';
 const log = logger.create('auth');
-//# Listeners in main event
-
-export let listeners = {
-    // 'close-main': (event: IpcMainEvent) => {
-    //     event.reply('fuck off');
-    // },
-}
-
-//# Lib
+log.variables.label = 'auth';
+log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
 
 export class AuthInterface {
     private _getGlobal: typeof rmt.getGlobal;
+
+    public constructor (remote: typeof rmt, ipcRenderer: typeof ipcR) {
+        this._getGlobal = remote.getGlobal;
+    }
 
     public get logged_user() {
         return this._getGlobal('authStorage').logged_user;
@@ -43,11 +40,6 @@ export class AuthInterface {
         //@ts-expect-error
         browserWindow.reload();
     }
-
-    public constructor (remote: typeof rmt, ipcRenderer: typeof ipcR) {
-        // this._ipc = ipcRenderer;
-        this._getGlobal = remote.getGlobal;
-    }
 }
 
 export class AuthStorage {
@@ -65,7 +57,7 @@ export class AuthStorage {
     private settingsStorage;
 
     public constructor (ipcMain: typeof ipcM, ftch: typeof fetchType, _settingsStorage: SettingsStorage) {
-        log.info('[AUTH] init');
+        log.info('init');
 
         this.logged_user = null;
         this.users = null;
@@ -75,7 +67,7 @@ export class AuthStorage {
     }
 
     public async logout() {
-        log.info('[AUTH] logged out!');
+        log.info('logged out!');
 
         const stored_credentials = (await keytar.findCredentials('Delta'))[0];
         await keytar.deletePassword('Delta', stored_credentials.account);
@@ -95,8 +87,8 @@ export class AuthStorage {
     }
 
     public async login(email: string, password: string) {
-        log.info('[AUTH] Logging in for:', email);
-        log.info('[AUTH] Checking saved credentials...');
+        log.info('Logging in for:', email);
+        log.info('Checking saved credentials...');
         const stored_credentials = (await keytar.findCredentials('Delta'))[0];
         if (stored_credentials != null && stored_credentials) {
             log.info(`[LOGIN] Found stored credentials for: ${stored_credentials.account}`);
@@ -107,7 +99,7 @@ export class AuthStorage {
                 password = stored_credentials["password"] || "";
             }
         } else {
-            log.info('[AUTH] Nothing found');
+            log.info('Nothing found');
         }
         
         let body = {
@@ -128,10 +120,10 @@ export class AuthStorage {
         log.info(res);
 
         if (res.status == 'logged in') {
-            log.info('[AUTH] logged in!');
+            log.info('logged in!');
             
             if (stored_credentials) await keytar.deletePassword('Delta', stored_credentials.account);
-            await keytar.setPassword('Delta', email, password).then(res => { log.info('[AUTH] credentials saved!', res); })
+            await keytar.setPassword('Delta', email, password).then(res => { log.info('credentials saved!', res); })
             
             if (Object.keys(res.users).filter(id => {return id == this.settingsStorage.settings.selected_user.toString()}).length > 0) {
                 this.logged_user = res.users[this.settingsStorage.settings.selected_user];
@@ -142,7 +134,7 @@ export class AuthStorage {
             }
             this.users = res.users;
         } else {
-            log.info('[AUTH] error!');
+            log.info('error!');
             log.info(res.errors);
         }
 

@@ -177,11 +177,11 @@ class Slider {
             slider_input.addEventListener('input', () => {
                 this.value = Math.min(Math.max(this.min_val, this.value), this.max_val);
                 pointer.style.left = `${(parseFloat(slider_input.value) / this.max) * slider.clientWidth}px`;
-                pointer.children[1].innerHTML = `${slider_input.value}px`;
+                pointer.children[1].innerHTML = `${slider_input.value}${this.unit}`;
             });
 
             pointer.style.left = `${(parseFloat(slider_input.value) / this.max) * slider.clientWidth}px`;
-            pointer.children[1].innerHTML = `${slider_input.value}px`;
+            pointer.children[1].innerHTML = `${slider_input.value}${this.unit}`;
         }
     }
 
@@ -194,8 +194,8 @@ class Slider {
             this.el.children[1].children[this._index].classList.add('active');
         } else {
             let pointer = this.el.children[1].children[2] as HTMLDivElement;
-            pointer.style.left = `${(parseFloat(this.input.value) / this.max) * this.el.clientWidth}px`;
-            pointer.children[1].innerHTML = `${this.input.value}px`;
+            pointer.style.left = `${(parseFloat(this.input.value) / this.max) * this.el.clientWidth}$xp`;
+            pointer.children[1].innerHTML = `${this.input.value}${this.unit}`;
         }
     }
 

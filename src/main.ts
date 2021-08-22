@@ -5,13 +5,13 @@ import * as fs from 'fs-extra';
 import fetch from 'node-fetch'
 
 const log = logger.create('main');
+log.variables.label = 'main';
+log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
 
 let mainWindow: BrowserWindow;
 
 app.on('ready', () => {
     appReady();
-
-    onFirstLaunch();
 });
 
 app.commandLine.appendSwitch("js-flags", "--expose_gc --max-old-space-size=256");
@@ -42,7 +42,7 @@ function appReady() {
 
     mainWindow.webContents.on("devtools-opened", (err: string) => {
         mainWindow.webContents.send("devtools-opened");
-        log.info("[MAIN] console opened");
+        log.info("console opened");
         // win.webContents.closeDevTools();
     });
 }
@@ -75,49 +75,54 @@ function createMainWindow() {
     
         win.webContents.on("devtools-opened", (err: string) => {
             win.webContents.send("devtools-opened");
-            log.info("[MAIN] console opened");
+            log.info("console opened");
         });
     })
 }
 
-// Biblioteks
-
-import { listeners as mm_l } from  './includes/modpack-manager';
-for (const listener_name in mm_l) {
-    //@ts-expect-error
-    ipcMain.on(listener_name as string, listeners[listener_name] as Function);
-}
-
 // Settings
 import { SettingsStorage } from './includes/settings-manager';
+declare let settingsStorage: SettingsStorage;
 Object.defineProperty(global, 'settingsStorage', {
     value: new SettingsStorage(remote, getRoot())
 })
 
+if (settingsStorage.settings.version == '') {
+    settingsStorage.first_launch = true;
+} else if (settingsStorage.settings.version != app.getVersion()) {
+    settingsStorage.after_update = true;
+}
+
+if (settingsStorage.first_launch || settingsStorage.after_update) onFirstLaunch(settingsStorage.after_update);
+
 // Auth
 
-import { listeners as auth_listeners, AuthStorage } from './includes/auth-manager'
+import { AuthStorage } from './includes/auth-manager'
 Object.defineProperty(global, 'authStorage', {
-    //@ts-expect-error
     value: new AuthStorage(ipcMain, fetch, settingsStorage)
 })
-for (const listener_name in auth_listeners) {
-    //@ts-expect-error
-    ipcMain.on(listener_name as string, listeners[listener_name] as Function);
-}
 
 // ModpackManager
 import { ModpackManager } from './includes/modpack-manager';
 Object.defineProperty(global, 'modpackManager', {
-    //@ts-expect-error
     value: new ModpackManager(remote, getRoot(), settingsStorage)
 })
+
+// AutoUpdater
+// import { AutoUpdater } from './includes/auto-updater';
+// Object.defineProperty(global, 'autoUpdater', {
+//     value: new AutoUpdater(ipcMain, getRoot(), settingsStorage)
+// })
 
 
 // IPC
 
 function onFirstLaunch(afterupdate?: boolean) {
+    settingsStorage.settings.version = app.getVersion();
+    settingsStorage.saveSync();
     if (afterupdate) {
+        console.log('after update');
+    } else {
         console.log('first launch');
     }
 }
@@ -134,7 +139,6 @@ ipcMain.on('get-root', (event) => {
 
 ipcMain.on('open-main-window', async (event) => {
     mainWindow = (await createMainWindow()) as BrowserWindow;
-    
     event.reply('main-window-opened', event.sender.id)
 })
 

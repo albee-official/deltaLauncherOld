@@ -136,6 +136,10 @@
     color: var(--sidebar-text) !important;
 }
 
+.sidemenu > .slider {
+    margin-bottom: 32px !important;
+}
+
 .sidemenu * {
     color: var(--sidebar-text) !important;
     border-color: var(--sidebar-text) !important;

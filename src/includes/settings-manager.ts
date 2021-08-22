@@ -5,14 +5,8 @@ import * as path from 'path'
 
 import logger from 'electron-log';
 const log = logger.create('settings');
-
-export let listeners = {
-    // 'test': (event: IpcMainEvent) => {
-    //     event.reply('fuck off');
-    // },
-}
-
-//# Lib
+log.variables.label = 'settings';
+log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
 
 const settings_pattern = {
     dev_mode: true,
@@ -20,6 +14,7 @@ const settings_pattern = {
     on_modpack: 'magicae',
     selected_user: -1,
     auto_go_to_server_thing: false,
+    version: '',
     modpack_settings: {
         alocated_memory: 4,
         optimization_level: 2,
@@ -71,8 +66,11 @@ export class SettingsStorage {
     private _themes_path = '';
     private _themes: any = {};
 
+    public first_launch = false;
+    public after_update = false;
+
     public constructor (remote: typeof rmt, root: string) {
-        log.info('[SETTINGS] init');
+        log.info('init');
 
         this._root = root;
 
@@ -87,8 +85,8 @@ export class SettingsStorage {
             if (raw) settings = JSON.parse(raw);
                 
         } catch (err) {
-            log.info('[SETTINGS] error occured while trying to read settings');
-            console.error('[SETTINGS]', err);
+            log.info('error occured while trying to read settings');
+            console.error('', err);
         }
 
         this._settings = Object.assign(this._settings, settings);
@@ -104,7 +102,7 @@ export class SettingsStorage {
         fs.ensureDirSync(this._themes_path);
         for (const theme_name of fs.readdirSync(this._themes_path)) {
             if (theme_name.endsWith('.theme.css')) {
-                log.info(`[SETTINGS] loading '${theme_name}'`);
+                log.info(`loading '${theme_name}'`);
                 let raw = fs.readFileSync(path.join(this._themes_path, theme_name)).toString();
                 try {
                     let args = {
@@ -123,8 +121,8 @@ export class SettingsStorage {
                         args.default_bg.split('<script>').length > 1 ||
                         args.path.split('<script>').length > 1
                     ) {
-                        log.info(`[SETTINGS] error while parsing '${theme_name}'`);
-                        log.info(`[SETTINGS] this theme looks sus my friend... why would it contain any scripts?`);
+                        log.info(`error while parsing '${theme_name}'`);
+                        log.info(`this theme looks sus my friend... why would it contain any scripts?`);
                         continue;
                     } else {
                         this._themes = {
@@ -133,8 +131,8 @@ export class SettingsStorage {
                         };
                     }
                 } catch (err) {
-                    log.info(`[SETTINGS] error while parsing '${theme_name}'`);
-                    log.info(`[SETTINGS] make sure your theme fits the pattern:\n\t@name: ''\n\t@author: ''\n\t@version: ''\n\t@description: ''\n\t@default-bg: ''\n`);
+                    log.info(`error while parsing '${theme_name}'`);
+                    log.info(`make sure your theme fits the pattern:\n\t@name: ''\n\t@author: ''\n\t@version: ''\n\t@description: ''\n\t@default-bg: ''\n`);
                     
                     console.warn(err);
                 }
@@ -152,15 +150,15 @@ export class SettingsStorage {
     }
 
     public async save() {
-        log.info('[SETTINGS] saving...');
+        log.info('saving...');
         await fs.writeFile(this._settings_path, JSON.stringify(this._settings, null, '\t'));
-        log.info('[SETTINGS] saved!');
+        log.info('saved!');
     }
 
     public saveSync() {
-        log.info('[SETTINGS] saving...');
+        log.info('saving...');
         fs.writeFileSync(this._settings_path, JSON.stringify(this._settings, null, '\t'));
-        log.info('[SETTINGS] saved!');
+        log.info('saved!');
     }
 }
 
@@ -174,14 +172,19 @@ export class SettingsInterface {
 
     private _events = new Events.EventEmitter();
 
+    public first_launch: boolean;
+    public after_update: boolean;
+
     public constructor (remote: typeof rmt, ipcRenderer: typeof ipc) {
-        log.info('[SETTINGS] manager init');
+        log.info('manager init');
         let storage = remote.getGlobal('settingsStorage');
         this._root = storage._root;
         this._settings_path = storage._settings_path;
         this._settings = storage._settings;
         this._themes_path = storage._themes_path;
         this._themes = storage._themes;
+        this.first_launch = storage.first_launch;
+        this.after_update = storage.after_update;
     }
 
     public get events () { return this._events; }
@@ -249,7 +252,7 @@ export class SettingsInterface {
 
     public set bg(to: string) {
         if (to === '1') { // plain BG
-            log.info('[SETTINGS] applying plain bg');
+            log.info('applying plain bg');
             let bg_el = document.getElementById('bg-img');
             if (bg_el) {
                 (document.getElementById('bg-video') as HTMLVideoElement).src = '';
@@ -259,7 +262,7 @@ export class SettingsInterface {
         } else if (to != undefined && to != '') {
             let ext = path.extname(to);   
             if (ext == '.png' || ext == '.jpeg' || ext == '.jpg' || ext == '.gif') {
-                log.info('[SETTINGS] applying image bg', to);
+                log.info('applying image bg', to);
                 let bg_el = document.getElementById('bg-img') as HTMLImageElement;
                 if (bg_el) {
                     (document.getElementById('bg-video') as HTMLVideoElement).src = '';
@@ -268,12 +271,12 @@ export class SettingsInterface {
                     if (fs.existsSync(to)) {
                         bg_el.src = to;
                     } else {
-                        log.info('[SETTINGS] path not found');
+                        log.info('path not found');
                         return;
                     }
                 }
             } else if (ext == '.mp4' || ext == '.mov' || ext == '.ogg') {
-                log.info('[SETTINGS] applying video bg', to);
+                log.info('applying video bg', to);
                 let bg_el = document.getElementById('bg-video') as HTMLVideoElement;
                 if (bg_el) {
                     document.body.classList.add('video');
@@ -281,7 +284,7 @@ export class SettingsInterface {
                     if (fs.existsSync(to)) {
                         bg_el.src = to;
                     } else {
-                        log.info('[SETTINGS] path not found');
+                        log.info('path not found');
                         return;
                     }
                 }
@@ -289,7 +292,7 @@ export class SettingsInterface {
             
             this._settings.appearance.bg = to;
         } else if (to == '') {
-            log.info(`[SETTINGS] setting default bg for '${this._settings.appearance.theme}'`);
+            log.info(`setting default bg for '${this._settings.appearance.theme}'`);
             let bg_el = document.getElementById('bg-img') as HTMLImageElement;
             if (bg_el) {
                 (document.getElementById('bg-video') as HTMLVideoElement).src = '';
@@ -314,7 +317,7 @@ export class SettingsInterface {
     public async setBgAsync(to: any) {
         return new Promise((resolve, reject) => {
             if (to === '1') { // plain BG
-                log.info('[SETTINGS] applying plain bg');
+                log.info('applying plain bg');
                 let bg_el = document.getElementById('bg-img');
                 if (bg_el) {
                     (document.getElementById('bg-video') as HTMLVideoElement).src = '';
@@ -324,7 +327,7 @@ export class SettingsInterface {
             } else if (to != undefined && to != '') {
                 let ext = path.extname(to);   
                 if (ext == '.png' || ext == '.jpeg' || ext == '.jpg' || ext == '.gif') {
-                    log.info('[SETTINGS] applying image bg', to);
+                    log.info('applying image bg', to);
                     let bg_el = document.getElementById('bg-img') as HTMLImageElement;
                     if (bg_el) {
                         (document.getElementById('bg-video') as HTMLVideoElement).src = '';
@@ -333,12 +336,12 @@ export class SettingsInterface {
                         if (fs.existsSync(to)) {
                             bg_el.src = to;
                         } else {
-                            log.info('[SETTINGS] path not found');
+                            log.info('path not found');
                             return;
                         }
                     }
                 } else if (ext == '.mp4' || ext == '.mov' || ext == '.ogg') {
-                    log.info('[SETTINGS] applying video bg', to);
+                    log.info('applying video bg', to);
                     let bg_el = document.getElementById('bg-video') as HTMLVideoElement;
                     if (bg_el) {
                         document.body.classList.add('video');
@@ -346,7 +349,7 @@ export class SettingsInterface {
                         if (fs.existsSync(to)) {
                             bg_el.src = to;
                         } else {
-                            log.info('[SETTINGS] path not found');
+                            log.info('path not found');
                             return;
                         }
                     }
@@ -354,7 +357,7 @@ export class SettingsInterface {
                 
                 this._settings.appearance.bg = to;
             } else if (to == '') {
-                log.info(`[SETTINGS] setting default bg for '${this._settings.appearance.theme}'`);
+                log.info(`setting default bg for '${this._settings.appearance.theme}'`);
                 let bg_el = document.getElementById('bg-img') as HTMLImageElement;
                 if (bg_el) {
                     (document.getElementById('bg-video') as HTMLVideoElement).src = '';
@@ -394,7 +397,7 @@ export class SettingsInterface {
     
     public set theme(to) {
         if (this._themes[to] != undefined) {
-            log.info('[SETTINGS] applying theme', this._themes[to]);
+            log.info('applying theme', this._themes[to]);
             let theme_link = document.getElementById('theme');
             if (theme_link) {
                 theme_link.setAttribute('href', this._themes[to].path)
@@ -403,7 +406,7 @@ export class SettingsInterface {
             this._settings.appearance.theme = to;
             this.bg = this.bg;
         } else if (to == '') {
-            log.info('[SETTINGS] setting default theme');
+            log.info('setting default theme');
             this._settings.appearance.theme = '';
             let theme_link = document.getElementById('theme');
             if (theme_link) {
@@ -411,7 +414,7 @@ export class SettingsInterface {
             }
             this.bg = this.bg;
         } else {
-            log.info('[SETTINGS] theme not found. setting default theme');
+            log.info('theme not found. setting default theme');
             this._settings.appearance.theme = '';
             let theme_link = document.getElementById('theme');
             if (theme_link) {
@@ -427,7 +430,7 @@ export class SettingsInterface {
     public async setThemeAsync(to: string) {
         return new Promise((resolve, reject) => {
             if (this._themes[to] != undefined) {
-                log.info('[SETTINGS] applying theme', this._themes[to]);
+                log.info('applying theme', this._themes[to]);
                 let theme_link = document.getElementById('theme');
                 if (theme_link) {
                     theme_link.setAttribute('href', this._themes[to].path)
@@ -435,9 +438,9 @@ export class SettingsInterface {
                 
                 this._settings.appearance.theme = to;
             } else if (to == '') {
-                log.info('[SETTINGS] setting default theme');
+                log.info('setting default theme');
             } else {
-                log.info('[SETTINGS] theme not found');
+                log.info('theme not found');
                 reject('no-theme');
                 return;
             }
