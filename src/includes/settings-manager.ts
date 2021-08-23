@@ -7,6 +7,7 @@ import logger from 'electron-log';
 const log = logger.create('settings');
 log.variables.label = 'settings';
 log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
+log.transports.file.format = '{h}:{i}:{s} > [{label}] {text}';
 
 const settings_pattern = {
     dev_mode: false,

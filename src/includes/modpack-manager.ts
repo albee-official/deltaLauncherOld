@@ -16,6 +16,7 @@ import logger from 'electron-log';
 const log = logger.create('modpack');
 log.variables.label = 'modpack';
 log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
+log.transports.file.format = '{h}:{i}:{s} > [{label}] {text}';
 
 function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);

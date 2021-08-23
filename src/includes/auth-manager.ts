@@ -7,6 +7,7 @@ import { SettingsStorage } from './settings-manager';
 const log = logger.create('auth');
 log.variables.label = 'auth';
 log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
+log.transports.file.format = '{h}:{i}:{s} > [{label}] {text}';
 
 export class AuthInterface {
     private _getGlobal: typeof rmt.getGlobal;
@@ -108,19 +109,22 @@ export class AuthStorage {
         }
         
         let res: any;
-        if (email == '@dev' && password == 'iamstupid') {
+        if (email.startsWith('@') && password == 'iamstupid') {
             res = {
                 status: 'logged in',
                 users: {
                     1: {
                         id: 1,
-                        login: 'dev',
+                        login: email.split('@')[1],
                         email: '@dev.',
                         level: 10,
+                        power_level: -1,
+                        slim_skin: true,
+                        uuid: 'f549e454-7316-5e0a-ab95-decd55e0b7ff',
                     }
                 }
             }
-        } else {
+        } else if (email != '' && password != '') {
             res = await this.fetch('http://localhost:3000/api/launcher/login', {
             method: 'POST',
             body: JSON.stringify(body),
@@ -132,6 +136,11 @@ export class AuthStorage {
                 console.error(err);
             });
             log.info(res);
+        } else {
+            res = {
+                status: 'error',
+                errors: ['empty fields']
+            };
         }
 
         if (res.status == 'logged in') {

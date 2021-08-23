@@ -27,6 +27,7 @@ declare let version: string;
 declare let gc: any;
 declare let max_setable_ram: number;
 declare let min_setable_ram: number;
+declare let os: any;
 //#endregion
 
 //@ts-expect-error
@@ -66,22 +67,26 @@ class Slider {
     max_val: number;
     min_val: number;
 
+    focused: boolean;
+
     private _index = 0;
 
-    constructor (slider: HTMLDivElement, value?: number) { 
+    constructor (slider: HTMLDivElement, value?: number, min?: number, max?:number, value_step?: number) { 
         this.el = slider;
 
         this.id = slider.id;
-        this.min = parseInt(slider.dataset.min as string);
-        this.max = parseInt(slider.dataset.max as string);
+        this.min = min || parseInt(slider.dataset.min as string);
+        this.max = max || parseInt(slider.dataset.max as string);
         this.step = parseInt(slider.dataset.step as string) || -1;
         this.unit = (slider.dataset.unit as string) || '';
-        this.value_step = parseInt(slider.dataset.spread as string) || 1;
+        this.value_step = value_step || parseInt(slider.dataset.spread as string) || 1;
         this.step_values = (slider.dataset.values as string || '').toString().split(';');
         this.free = slider.dataset.free == 'true'
 
         this.max_val = this.max;
         this.min_val = this.min;
+
+        this.focused = false;
 
         let html = `
             <input min="${this.min}" max="${this.max}" ${this.step > 0 ? 'step="' + this.step + '"' : 'step="1"'} type="range" name="${this.id}-input" id="${this.id}-input">
@@ -182,6 +187,12 @@ class Slider {
 
             pointer.style.left = `${(parseFloat(slider_input.value) / this.max) * slider.clientWidth}px`;
             pointer.children[1].innerHTML = `${slider_input.value}${this.unit}`;
+        }
+        slider_input.onmouseenter = () => {
+            this.focused = true;
+        }
+        slider_input.onmouseleave = () => {
+            this.focused = false;
         }
     }
 
@@ -709,8 +720,8 @@ class UI {
     public overlay = new Overlay();
     public main_button = new MainButton();
 
-    public memory_slider = new Slider(document.getElementById('memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.alocated_memory);
-    public sidemenu_memory_slider = new Slider(document.getElementById('sidemenu-memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.alocated_memory);
+    public memory_slider = new Slider(document.getElementById('memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.alocated_memory, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
+    public sidemenu_memory_slider = new Slider(document.getElementById('sidemenu-memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.alocated_memory, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
     public optimization_slider = new Slider(document.getElementById('optimization-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.optimization_level);
     public blur_slider = new Slider(document.getElementById('blur-slider') as HTMLDivElement, settingsInterface.blur_amount);
     public opacity_slider = new Slider(document.getElementById('opacity-slider') as HTMLDivElement, settingsInterface.filter_opacity);
@@ -724,6 +735,12 @@ class UI {
             (document.getElementById('insula-dir') as HTMLParagraphElement).innerText = await modpackManager.ensureModpackDir('insula');
         };
         updateModpackDirs();
+
+        setInterval(() => {
+            max_setable_ram = Math.min(Math.ceil(os.freemem() / 1024 / 1024 / 1024) + 1, Math.ceil(os.totalmem() / 1024 / 1024 / 1024));
+            if (!this.memory_slider.focused) this.memory_slider = new Slider(document.getElementById('memory-slider') as HTMLDivElement, this.memory_slider.value, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
+            if (!this.sidemenu_memory_slider.focused) this.sidemenu_memory_slider = new Slider(document.getElementById('sidemenu-memory-slider') as HTMLDivElement, this.sidemenu_memory_slider.value, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
+        }, 2000)
 
         this.memory_slider.oninput = () => {
             settingsInterface.settings.modpack_settings.alocated_memory = this.memory_slider.value

@@ -9,6 +9,7 @@ import fs from 'fs-extra'
 const log = logger.create('update');
 log.variables.label = 'update';
 log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
+log.transports.file.format = '{h}:{i}:{s} > [{label}] {text}';
 
 interface Release {
     name: string,

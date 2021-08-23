@@ -1,6 +1,6 @@
 {
   "name": "delta-launcher",
-  "version": "0.1.0-beta",
+  "version": "0.1.2-beta",
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
@@ -38,6 +38,7 @@
     "productName": "Delta Launcher",
     "target": "nsis",
     "directories": {
+      "buildResources": "resources",
       "output": "build"
     },
     "extraResources": [

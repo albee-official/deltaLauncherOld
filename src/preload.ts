@@ -3,6 +3,7 @@ import path from 'path'
 import logger from 'electron-log';
 const log = logger.create('renderer');
 log.transports.console.format = '{h}:{i}:{s} > {text}';
+log.transports.file.format = '{h}:{i}:{s} > {text}';
 import fs from 'fs-extra';
 import os from 'os'
 
@@ -138,6 +139,8 @@ window.onbeforeload = () => {
 window.max_setable_ram = Math.min(Math.ceil(os.freemem() / 1024 / 1024 / 1024) + 1, Math.ceil(os.totalmem() / 1024 / 1024 / 1024));
 //@ts-expect-error
 window.min_setable_ram = 4;
+//@ts-expect-error
+window.os = os;
 
 window.onload = async () => {
     // settingsManager.theme = settingsManager.settings.appearance.theme;

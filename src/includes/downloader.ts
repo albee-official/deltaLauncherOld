@@ -5,6 +5,7 @@ import logger from 'electron-log';
 const log = logger.create('downloader');
 log.variables.label = 'downloader';
 log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
+log.transports.file.format = '{h}:{i}:{s} > [{label}] {text}';
 
 export interface progress {
     percent: number,

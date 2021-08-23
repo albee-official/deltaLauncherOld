@@ -7,11 +7,13 @@ import fetch from 'node-fetch'
 const log = logger.create('main');
 log.variables.label = 'main';
 log.transports.console.format = '{h}:{i}:{s} > [{label}] {text}';
+log.transports.file.format = '{h}:{i}:{s} > [{label}] {text}';
 
 let mainWindow: BrowserWindow;
 
 app.on('ready', () => {
     appReady();
+    if (settingsStorage.first_launch || settingsStorage.after_update) onFirstLaunch(settingsStorage.after_update);
 });
 
 app.commandLine.appendSwitch("js-flags", "--expose_gc --max-old-space-size=256");
@@ -93,8 +95,6 @@ if (settingsStorage.settings.version == '') {
     settingsStorage.after_update = true;
 }
 
-if (settingsStorage.first_launch || settingsStorage.after_update) onFirstLaunch(settingsStorage.after_update);
-
 // Auth
 
 import { AuthStorage } from './includes/auth-manager'
@@ -115,9 +115,6 @@ Object.defineProperty(global, 'autoUpdater', {
     value: new AutoUpdater(ipcMain, getRoot(), settingsStorage)
 })
 
-
-// IPC
-
 function onFirstLaunch(afterupdate?: boolean) {
     settingsStorage.settings.version = app.getVersion();
     settingsStorage.saveSync();
@@ -129,8 +126,10 @@ function onFirstLaunch(afterupdate?: boolean) {
     }
 }
 
+// IPC
+
 function getRoot() {
-    let _path = path.join(app.getPath('appData'), '.delta-new');
+    let _path = path.join(app.getPath('appData'), '.delta-dev');
     fs.ensureDirSync(_path);
     return _path;
 }

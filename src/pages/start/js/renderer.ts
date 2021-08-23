@@ -26,7 +26,7 @@ declare let shell: any;
 
 //@ts-expect-error
 onbeforeload();
-console.log('> [START] hello from render :)');
+console.log('hello from render :)');
 
 const coreCount = document.getElementById('cores');
 const start_steps = document.getElementById('steps')?.children;
@@ -86,12 +86,6 @@ function waitConnected() {
         login_submit?.click();
     }
 })();
-
-async function speedrun() {
-    a = .01;
-    await checkForUpdates();
-    await login('sawukalu164@gmail.com', '123123');
-}
 
 let procent = 0;
 async function checkForUpdates() {
