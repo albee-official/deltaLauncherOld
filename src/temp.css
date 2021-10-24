@@ -1,0 +1,66 @@
+/* 
+    this is just a template. DO NOT MODIFY IT. It's made just as an example.
+
+    @name: 'Delta'
+    @author: 'Albee'
+    @version: '1.0'
+    @description: 'Good old classic'
+    @default-bg: '../../res/bg-dark.jpg'
+*/
+
+:root {
+    --bg: #F2F2F2;
+    --bg-accent: #cecece;
+    --clr: #EE4540;
+    --clr-accent: #fa534d;
+    --clr-secondary: #E13D40;
+    --text: #1C1924;
+    --text-accent: #4B4753;
+
+    --white: var(--bg);                                     /** Brightest color */
+    --black: var(--text);                                   /** Darkest color */
+
+    --bg-rgb: 242, 242, 242;
+    --bg-accent-rgb: 206, 206, 206;
+    --clr-rgb: 238, 69, 64;
+    --clr-accent-rgb: 250, 83, 77;
+    --clr-secondary-rgb: 225, 61, 64;
+    --text-rgb: 28, 25, 36;
+    --text-accent-rgb: 75, 71, 83;
+}
+
+:root {
+    --header-bg: var(--bg);
+
+    --profile-bg: var(--clr);
+    --profile-text: var(--bg);
+
+    --header-nav-text: rgba(var(--text-rgb), .32);
+    --header-nav-text-hover: rgba(var(--text-rgb), .48);
+    --header-nav-text-active: var(--clr);
+    --header-nav-bg: rgba(var(--text-rgb), 0);
+    --header-nav-bg-hover: rgba(var(--text-rgb), .02);
+    --header-nav-bg-active: var(--header-bg);
+
+    --app-icon-clr: var(--bg);
+
+    --app-bg: var(--bg);
+    --app-text: var(--text);
+
+    --sidebar-bg: rgba(var(--clr-rgb), .32);
+    --sidebar-text: rgba(var(--text-rgb), 1);
+
+    --footer-bg: var(--bg);
+    --footer-text: var(--text);
+
+    --main-button-bg: var(--clr);
+    --main-button-bg-hover: var(--clr-accent);
+    --main-button-text: var(--bg);
+
+    --progress-bar-bg: rgba(var(--bg-accent-rgb), .32);
+    --progress-bar-filler: rgba(var(--clr-rgb), 1);
+
+    --sub-button-bg: var(--clr-secondary);
+    --sub-button-bg-hover: var(--clr-accent);
+    --sub-button-text: var(--bg);
+}

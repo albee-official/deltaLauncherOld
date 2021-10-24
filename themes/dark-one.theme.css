@@ -1,0 +1,76 @@
+/* 
+    @name: 'Default Dark'
+    @author: 'Albee'
+    @version: '1.0'
+    @description: 'Dark variant of default theme'
+    @default-bg: 'https://cdn.discordapp.com/attachments/731985411039166495/901572511265865779/bg.jpeg'
+*/
+
+:root {
+    --bg-primary: #212121;
+    --bg-secondary: #1E1E1E;
+    --bg-secondary-alt: #191919;
+    --bg-tertiary: #222222;
+    --bg-tertiary-alt: #252525;
+    --bg-hover: var(--bg-secondary);
+    --bg-hover-alt: var(--bg-secondary-alt);
+
+    --text-primary: #E2E2E2;
+    --text-secondary: #6E6E6E;
+    --text-secondary-alt: #333333;
+    --text-tertiary: #EBEBEB;
+    --text-tertiary-alt: #FFFFFF;
+
+
+    --bg-primary-rgb: 33, 33, 33;
+    --bg-secondary-rgb: 30, 30, 30;
+    --bg-secondary-alt-rgb: 25, 25, 25;
+    --bg-tertiary-rgb: 34, 34, 34;
+    --bg-tertiary-alt-rgb: 37, 37, 37;
+    --bg-hover-rgb: var(--bg-secondary-rgb);
+    --bg-hover-alt-rgb: var(--bg-secondary-alt-rgb);
+
+    --text-primary-rgb: 226, 226, 226;
+    --text-secondary-rgb: 110, 110, 110;
+    --text-secondary-alt-rgb: 51, 51, 51;
+    --text-tertiary-rgb: 235, 235, 235;
+    --text-tertiary-alt-rgb: 255, 255, 255;
+
+
+
+    --clr-primary: #FF4B57;
+    --clr-tertiary: #FF5661;
+    --clr-secondary: #E64754;
+
+    --alt-primary: #6E4BFF;
+    --alt-tertiary: #7756FF;
+    --alt-secondary: #6747E8;
+
+
+    --clr-primary-rgb: 255, 75, 87;
+    --clr-tertiary-rgb: 255, 86, 97;
+    --clr-secondary-rgb: 230, 71, 84;
+
+    --alt-primary-rgb: 110, 75, 255;
+    --alt-tertiary-rgb: 119, 86, 255;
+    --alt-secondary-rgb: 103, 71, 232;
+}
+
+header {
+    --header-profile-bg: var(--clr-primary);
+    --header-profile-text: var(--text-primary);
+}
+
+:root {
+    --app-icon-clr: var(--text-primary);
+
+    --slider-track: rgba(var(--text-primary-rgb), .32);
+    --slider-ticks: rgba(var(--text-primary-rgb), .32);
+    --slider-ticks-empty: rgba(var(--text-primary-rgb), .16);
+    --slider-ticks-active: rgba(var(--text-primary-rgb), .48);
+}
+
+footer {
+    --main-button-text: var(--text-primary);
+    --sub-button-text: var(--text-primary);
+}

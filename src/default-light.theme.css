@@ -1,5 +1,6 @@
 /* 
     this is just a template. DO NOT MODIFY IT. It's made just as an example.
+    you can freely copy it and base your themes around it tho. It's recomended that way actually...
 
     @name: 'Delta'
     @author: 'Albee'
@@ -9,58 +10,124 @@
 */
 
 :root {
-    --bg: #F2F2F2;
-    --bg-accent: #cecece;
-    --clr: #EE4540;
-    --clr-accent: #fa534d;
-    --clr-secondary: #E13D40;
-    --text: #1C1924;
-    --text-accent: #4B4753;
+    --bg-primary: #F7F7F9;
+    --bg-secondary: #EFEFF2;
+    --bg-secondary-alt: #E8E7EB;
+    --bg-tertiary: #FAFAFB;
+    --bg-tertiary-alt: #FDFDFD;
+    --bg-hover: var(--bg-secondary);
+    --bg-hover-alt: var(--bg-secondary-alt);
 
-    --white: var(--bg);                                     /** Brightest color */
-    --black: var(--text);                                   /** Darkest color */
+    --text-primary: #342F41;
+    --text-secondary: #9791A5;
+    --text-secondary-alt: #D4D3D7;
+    --text-tertiary: #1C1924;
+    --text-tertiary-alt: #09070C;
 
-    --bg-rgb: 242, 242, 242;
-    --bg-accent-rgb: 206, 206, 206;
-    --clr-rgb: 238, 69, 64;
-    --clr-accent-rgb: 250, 83, 77;
-    --clr-secondary-rgb: 225, 61, 64;
-    --text-rgb: 28, 25, 36;
-    --text-accent-rgb: 75, 71, 83;
+
+    --bg-primary-rgb: 247, 247, 249;
+    --bg-secondary-rgb: 239, 239, 242;
+    --bg-secondary-alt-rgb: 232, 231, 235;
+    --bg-tertiary-rgb: 250, 250, 251;
+    --bg-tertiary-alt-rgb: 253, 253, 253;
+    --bg-hover-rgb: var(--bg-secondary-rgb);
+    --bg-hover-alt-rgb: var(--bg-secondary-alt-rgb);
+
+    --text-primary-rgb: 52, 47, 65;
+    --text-secondary-rgb: 151, 145, 165;
+    --text-secondary-alt-rgb: 212, 211, 215;
+    --text-tertiary-rgb: 28, 25, 36;
+    --text-tertiary-alt-rgb: 9, 7, 12;
+
+
+
+    --clr-primary: #634BFF;
+    --clr-tertiary: #6C56FF;
+    --clr-secondary: #5D47E8;
+
+    --alt-primary: #EE406F;
+    --alt-tertiary: #EF4B77;
+    --alt-secondary: #D73D6A;
+
+
+    --clr-primary-rgb: 99, 75, 255;
+    --clr-tertiary-rgb: 108, 86, 255;
+    --clr-secondary-rgb: 93, 71, 232;
+
+    --alt-primary-rgb: 238, 64, 111;
+    --alt-tertiary-rgb: 239, 75, 119;
+    --alt-secondary-rgb: 215, 61, 106;
 }
 
-:root {
-    --header-bg: var(--bg);
+/* 
+    EVERYTHING BELOW IS OPTIONAL
+    these parameters could be left out, or rewritten for additional controll
+*/
 
-    --profile-bg: var(--clr);
-    --profile-text: var(--bg);
+:root { 
 
-    --header-nav-text: rgba(var(--text-rgb), .32);
-    --header-nav-text-hover: rgba(var(--text-rgb), .48);
-    --header-nav-text-active: var(--clr);
-    --header-nav-bg: rgba(var(--text-rgb), 0);
-    --header-nav-bg-hover: rgba(var(--text-rgb), .02);
-    --header-nav-bg-active: var(--header-bg);
+    /* app */
 
-    --app-icon-clr: var(--bg);
+    --app-bg: var(--bg-primary);
+    --app-text: var(--text-primary);
+    --app-icon-clr: var(--bg-primary);
 
-    --app-bg: var(--bg);
-    --app-text: var(--text);
+    /* header (kinda obvious ngl) */
 
-    --sidebar-bg: rgba(var(--clr-rgb), .32);
-    --sidebar-text: rgba(var(--text-rgb), 1);
+    --header-height: 76px;
+    --header-bg: var(--bg-primary);
+    --header-nav-text: var(--text-secondary);
+    --header-nav-text-hover: var(--text-primary);
+    --header-nav-text-active: var(--clr-primary);
+    --header-nav-text-active-hover: var(--alt-primary);
+    --header-nav-bg: rgba(var(--text-primary-rgb), 0);
+    --header-nav-bg-hover: rgba(var(--text-primary-rgb), .02);
+    --header-nav-bg-active: var(--header-primary-bg);
+    --header-nav-bg-active-hover: var(--header-primary-bg);
+    --header-profile-bg: var(--clr-primary);
+    --header-profile-text: var(--bg-primary);
 
-    --footer-bg: var(--bg);
-    --footer-text: var(--text);
+    /* main */
 
-    --main-button-bg: var(--clr);
-    --main-button-bg-hover: var(--clr-accent);
-    --main-button-text: var(--bg);
+    --main-bg: var(--bg-primary);
+    --main-bg-rgb: var(--bg-primary-rgb);
+    --main-text: var(--text-primary);
+    --main-text-rgb: var(--text-primary-rgb);
 
-    --progress-bar-bg: rgba(var(--bg-accent-rgb), .32);
-    --progress-bar-filler: rgba(var(--clr-rgb), 1);
+    --sidebar-width: 384px;
+    --sidebar-bg: rgba(var(--clr-secondary-rgb), .16);
+    --sidebar-bg-rgb: var(--clr-secondary-rgb);
+    --sidebar-text: var(--text-primary);
+    --sidebar-text-rgb: var(--text-primary-rgb);
+    --sidebar-slider-thumb: var(--clr-primary);
+    --sidebar-slider-thumb-hover: var(--alt-tertiary);
+
+    /* footer */
+
+    --footer-height: 76px;
+    --footer-bg: var(--bg-primary);
+    --footer-text: var(--text-primary);
+
+    --main-button-bg: var(--clr-primary);
+    --main-button-bg-hover: var(--clr-tertiary);
+    --main-button-text: var(--bg-primary);
 
     --sub-button-bg: var(--clr-secondary);
-    --sub-button-bg-hover: var(--clr-accent);
-    --sub-button-text: var(--bg);
+    --sub-button-bg-hover: var(--clr-tertiary);
+    --sub-button-text: var(--bg-primary);
+
+    --progress-bar-bg: var(--bg-secondary);
+    --progress-bar-filler: var(--clr-primary);
+
+    /* components */
+
+    --checkbox-text: var(--text-primary);
+    --checkbox-checkmark: var(--text-primary);
+
+    --slider-track: rgba(var(--text-primary-rgb), .16);
+    --slider-ticks: rgba(var(--text-primary-rgb), .16);
+    --slider-ticks-empty: rgba(var(--text-primary-rgb), .08);
+    --slider-ticks-active: rgba(var(--text-primary-rgb), .48);
+    --slider-thumb: var(--clr-primary);
+    --slider-thumb-hover: var(--alt-tertiary);
 }

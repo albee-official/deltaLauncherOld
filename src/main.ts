@@ -129,7 +129,7 @@ function onFirstLaunch(afterupdate?: boolean) {
 // IPC
 
 function getRoot() {
-    let _path = path.join(app.getPath('appData'), '.delta');
+    let _path = path.join(app.getPath('appData'), '.delta-dev');
     fs.ensureDirSync(_path);
     return _path;
 }

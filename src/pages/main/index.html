@@ -23,14 +23,28 @@
 
     <link rel="stylesheet" href="./css/main-section.css">
     <link rel="stylesheet" href="./css/settings-section.css">
+    <link rel="stylesheet" href="./css//components/slider.css">
 
     <title>Delta</title>
     <script defer src="../../../dist/pages/main/js/renderer.js"></script>
 </head>
 <body class="reduced-motion">
+    <div id="ask-overlay-thing" class="overlay-thing">
+        <div class="overlay-container">
+            <h1>Выберите: жожо</h1>
+            <p></p>
+            <div id="ask-overlay-list" class="vertical-list">
+                <div class="select-button">купить мозг</div>
+                <div class="select-button clr">купить мозг</div>
+                <div class="select-button alt">купить мозг</div>
+            </div>
+        </div>
+    </div>
+
     <div id="select-overlay-thing" class="overlay-thing">
         <div class="overlay-container">
             <h1>Выберите: жожо</h1>
+            <p></p>
             <div id="select-overlay-list" class="list"></div>
         </div>
     </div>
@@ -40,6 +54,30 @@
             <h1>Я люблю: жожо</h1>
             <p>Фанаты жожо be like</p>
         </div>
+        <div class="overlay-loading">
+            <svg id="loading-logo" xmlns="http://www.w3.org/2000/svg" style="width: 128px;" width="277.951" height="277.94" viewBox="0 0 277.951 277.94">
+                <defs>
+                    <style>
+                        @keyframes loadingfade {
+                            0% {
+                                opacity: 1;
+                            }
+            
+                            50% {
+                                opacity: 0;
+                            }
+            
+                            100% {
+                                opacity: 1;
+                            }
+                        }
+                    </style>
+                </defs>
+                <path id="loadingpart3" data-name="loadingpart3" style="animation: loadingfade 2s .66s infinite" fill="var(--text-primary)" d="M0,277.94H0l28.849-50L216,177.82l61.932,25.645Z"/>
+                <path id="loadingpart2" data-name="loadingpart2" style="animation: loadingfade 2s .33s infinite" fill="var(--text-primary)" d="M220.261,203.473h0L158.33,177.82,102.78,81.6,102.77.017,220.26,203.47Z" transform="translate(57.69)"/>
+                <path id="loadingpart1" data-name="loadingpart1" style="animation: loadingfade 2s 0s infinite" fill="var(--text-primary)" d="M160.46,0V81.6l-47.03,81.47L57.69,178.01Z"/>
+            </svg>
+        </div>
     </div>
 
     <div id="bg" class="bg">
@@ -47,7 +85,7 @@
         <div id="bg-blur" class="filter"></div>
         <div class="img">
             <img id="bg-img" src="" alt=""/>
-            <video autoplay loop id="bg-video" src="" alt=""></video>
+            <video autoplay muted loop id="bg-video" src="" alt=""></video>
         </div>
     </div>
 
@@ -99,116 +137,118 @@
     <main>
         <div id="sections-container" class="sections">
             <section class="main toleft">
-                <div class="servers">
-                    <div class="server">
-                        <div class="header">
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.226 31.125">
-                                <g id="Group_59" data-name="Group 59" transform="translate(-105.258 -154.25)">
-                                  <path id="Path_417" data-name="Path 417" d="M146.484,285.1l-15.035,6.929-5.285-.764-3.407,3.113-17.5-5.991,9.678-6.975,1.882.491-.553,3.766,9.035,2.909,10.651-3.63-1.193-3.165,1.175-.672Z" transform="translate(0 -109.002)" fill="var(--fill-clr)"/>
-                                  <path id="Path_418" data-name="Path 418" d="M212.862,288.712l-8.4,2.864-7.054-2.271.426-2.568h4.081a2.976,2.976,0,0,0,5.669,0h4.536Z" transform="translate(-79.175 -113.836)" fill="var(--fill-clr)"/>
-                                  <path id="Path_419" data-name="Path 419" d="M215.145,159.476l-2.055,5.107,2.576,6.829h-3.893a2.976,2.976,0,0,0-5.836,0h-3.75l1.741-10.488,9.749-6.675,9.984.77,1.291,5.905-3.054-3.337Z" transform="translate(-83.284)" fill="var(--fill-clr)"/>
-                                  <circle id="Ellipse_383" data-name="Ellipse 383" cx="1.478" cy="1.478" r="1.478" transform="translate(124.092 170.516)" fill="var(--fill-clr)"/>
-                                  <circle id="Ellipse_384" data-name="Ellipse 384" cx="0.845" cy="0.845" r="0.845" transform="translate(124.725 171.149)" fill="var(--fill-clr)"/>
-                                </g>
-                            </svg>
-                            <div class="info">
-                                <h1>Magicae <span>[PvE]</span></h1>
-                                <p>Магическая сборка</p>
+                <div class="servers-wrapper">
+                    <div class="servers">
+                        <div class="server">
+                            <div class="header">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.226 31.125">
+                                    <g id="Group_59" data-name="Group 59" transform="translate(-105.258 -154.25)">
+                                      <path id="Path_417" data-name="Path 417" d="M146.484,285.1l-15.035,6.929-5.285-.764-3.407,3.113-17.5-5.991,9.678-6.975,1.882.491-.553,3.766,9.035,2.909,10.651-3.63-1.193-3.165,1.175-.672Z" transform="translate(0 -109.002)" fill="var(--fill-clr)"/>
+                                      <path id="Path_418" data-name="Path 418" d="M212.862,288.712l-8.4,2.864-7.054-2.271.426-2.568h4.081a2.976,2.976,0,0,0,5.669,0h4.536Z" transform="translate(-79.175 -113.836)" fill="var(--fill-clr)"/>
+                                      <path id="Path_419" data-name="Path 419" d="M215.145,159.476l-2.055,5.107,2.576,6.829h-3.893a2.976,2.976,0,0,0-5.836,0h-3.75l1.741-10.488,9.749-6.675,9.984.77,1.291,5.905-3.054-3.337Z" transform="translate(-83.284)" fill="var(--fill-clr)"/>
+                                      <circle id="Ellipse_383" data-name="Ellipse 383" cx="1.478" cy="1.478" r="1.478" transform="translate(124.092 170.516)" fill="var(--fill-clr)"/>
+                                      <circle id="Ellipse_384" data-name="Ellipse 384" cx="0.845" cy="0.845" r="0.845" transform="translate(124.725 171.149)" fill="var(--fill-clr)"/>
+                                    </g>
+                                </svg>
+                                <div class="info">
+                                    <h1>Magicae <span>[PvE]</span></h1>
+                                    <p>Магическая сборка</p>
+                                </div>
+                            </div>
+                            <div class="description">
+                                Игровая сборка магического направления на Minecraft версии 1.12.2. Ставит своей целью изучение магического мира и его элементов: эссенцию, эфир, кровавую магию и прочий волшебный мир.
+                            </div>
+                            <div class="footer">
+                                <div id="select-magicae" class="select">Выбрать</div>
+                                <div class="online">Онлайн: 24 / 32</div>
                             </div>
                         </div>
-                        <div class="description">
-                            Magicae - наполненная до краев модификация, окутывающая волшебный мир с элементами приключений. Он основан на системе прогресса, похожей на SevTech: Ages.
-                        </div>
-                        <div class="footer">
-                            <div id="select-magicae" class="select">Выбрать</div>
-                            <div class="online">Онлайн: 24 / 32</div>
-                        </div>
-                    </div>
-                    <div class="server">
-                        <div class="header">
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.228 40.29">
-                                <g id="Group_63" data-name="Group 63" transform="translate(-123.543 -127.135)">
-                                  <path id="Path_420" data-name="Path 420" d="M158.147,162.624l-3.357,3.357-1.019-.184a8.192,8.192,0,0,0-2.844,0l-1.092.2v1.517c-.046.018-.093.038-.139.058l-1.075-1.077-.914.641a8.407,8.407,0,0,0-1.1.918,8.25,8.25,0,0,0-.909,1.09l-.634.911,1.074,1.074c-.02.047-.04.093-.058.139h-1.517l-.2,1.092a8.074,8.074,0,0,0,0,2.844l.184,1.017-5.959,5.957c-.134-.123-.267-.25-.4-.382a13.877,13.877,0,0,1-1.563-1.86l2-2a10.911,10.911,0,0,1-1.452-3.5h-2.823a13.9,13.9,0,0,1,0-4.842h2.823a10.919,10.919,0,0,1,1.45-3.506l-2-1.995a14.118,14.118,0,0,1,1.563-1.863,13.972,13.972,0,0,1,1.862-1.562l2,2a10.945,10.945,0,0,1,3.5-1.452v-2.821a13.812,13.812,0,0,1,4.844,0v2.821a10.963,10.963,0,0,1,3.5,1.45l1.993-1.995a13.986,13.986,0,0,1,1.863,1.562C157.9,162.356,158.023,162.49,158.147,162.624Z" transform="translate(-8.971 -26.261)" fill="var(--fill-clr)"/>
-                                  <path id="Path_421" data-name="Path 421" d="M252.39,254.032a4.7,4.7,0,0,1-.626,1.508l.859.86a5.973,5.973,0,0,1-1.473,1.474l-.858-.858a4.717,4.717,0,0,1-1.51.624v1.215a6,6,0,0,1-2.084,0V257.64a4.726,4.726,0,0,1-1.508-.626l-.858.86a6,6,0,0,1-.8-.672,5.878,5.878,0,0,1-.587-.685l8.325-8.325a5.861,5.861,0,0,1,.685.587,6.089,6.089,0,0,1,.672.8l-.858.86a4.712,4.712,0,0,1,.624,1.508H253.6a6,6,0,0,1,0,2.084Z" transform="translate(-101.017 -102.419)" fill="var(--fill-clr)"/>
-                                  <path id="Path_422" data-name="Path 422" d="M193.652,177.945l-22.886,22.886a5.851,5.851,0,0,0-.981-1.595.712.712,0,0,0-.046-.057c-.085-.1-.173-.2-.267-.29a4.628,4.628,0,0,0-.422-.373.529.529,0,0,0-.048-.038,5.888,5.888,0,0,0-1.485-.871l5.916-5.916,2.058-2.056v0l14.924-14.924Z" transform="translate(-37.204 -40.25)" fill="var(--fill-clr)"/>
-                                  <path id="Path_423" data-name="Path 423" d="M307.814,138.818a6.865,6.865,0,1,1-1.966-11.013.019.019,0,0,1,.005.03l-4.529,4.529a2.285,2.285,0,0,0-.014,3.222,2.364,2.364,0,0,0,3.311-.046l4.469-4.469a.019.019,0,0,1,.03.005A6.8,6.8,0,0,1,307.814,138.818Z" transform="translate(-146.018 0)" fill="var(--fill-clr)"/>
-                                  <path id="Path_424" data-name="Path 424" d="M132.541,332.777a4.578,4.578,0,1,0-1.185,4.422A4.565,4.565,0,0,0,132.541,332.777Zm-2.8,2.8a2.289,2.289,0,1,1,0-3.237A2.29,2.29,0,0,1,129.737,335.582Z" transform="translate(0 -171.115)" fill="var(--fill-clr)"/>
-                                  <path id="Path_425" data-name="Path 425" d="M216.324,215.74l-7.733,7.733h-.128a6.689,6.689,0,0,1,0-2.375h1.381a5.368,5.368,0,0,1,.712-1.716l-.977-.977a6.842,6.842,0,0,1,.763-.914,7.1,7.1,0,0,1,.914-.765l.977.979a5.331,5.331,0,0,1,1.716-.712v-1.382a6.793,6.793,0,0,1,2.375,0Z" transform="translate(-71.757 -74.766)" fill="var(--fill-clr)" opacity="0.75"/>
-                                </g>
-                            </svg>                              
-                            <div class="info">
-                                <h1>Fabrica <span>[PvE]</span></h1>
-                                <p>Техническая сборка</p>
+                        <div class="server">
+                            <div class="header">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.228 40.29">
+                                    <g id="Group_63" data-name="Group 63" transform="translate(-123.543 -127.135)">
+                                      <path id="Path_420" data-name="Path 420" d="M158.147,162.624l-3.357,3.357-1.019-.184a8.192,8.192,0,0,0-2.844,0l-1.092.2v1.517c-.046.018-.093.038-.139.058l-1.075-1.077-.914.641a8.407,8.407,0,0,0-1.1.918,8.25,8.25,0,0,0-.909,1.09l-.634.911,1.074,1.074c-.02.047-.04.093-.058.139h-1.517l-.2,1.092a8.074,8.074,0,0,0,0,2.844l.184,1.017-5.959,5.957c-.134-.123-.267-.25-.4-.382a13.877,13.877,0,0,1-1.563-1.86l2-2a10.911,10.911,0,0,1-1.452-3.5h-2.823a13.9,13.9,0,0,1,0-4.842h2.823a10.919,10.919,0,0,1,1.45-3.506l-2-1.995a14.118,14.118,0,0,1,1.563-1.863,13.972,13.972,0,0,1,1.862-1.562l2,2a10.945,10.945,0,0,1,3.5-1.452v-2.821a13.812,13.812,0,0,1,4.844,0v2.821a10.963,10.963,0,0,1,3.5,1.45l1.993-1.995a13.986,13.986,0,0,1,1.863,1.562C157.9,162.356,158.023,162.49,158.147,162.624Z" transform="translate(-8.971 -26.261)" fill="var(--fill-clr)"/>
+                                      <path id="Path_421" data-name="Path 421" d="M252.39,254.032a4.7,4.7,0,0,1-.626,1.508l.859.86a5.973,5.973,0,0,1-1.473,1.474l-.858-.858a4.717,4.717,0,0,1-1.51.624v1.215a6,6,0,0,1-2.084,0V257.64a4.726,4.726,0,0,1-1.508-.626l-.858.86a6,6,0,0,1-.8-.672,5.878,5.878,0,0,1-.587-.685l8.325-8.325a5.861,5.861,0,0,1,.685.587,6.089,6.089,0,0,1,.672.8l-.858.86a4.712,4.712,0,0,1,.624,1.508H253.6a6,6,0,0,1,0,2.084Z" transform="translate(-101.017 -102.419)" fill="var(--fill-clr)"/>
+                                      <path id="Path_422" data-name="Path 422" d="M193.652,177.945l-22.886,22.886a5.851,5.851,0,0,0-.981-1.595.712.712,0,0,0-.046-.057c-.085-.1-.173-.2-.267-.29a4.628,4.628,0,0,0-.422-.373.529.529,0,0,0-.048-.038,5.888,5.888,0,0,0-1.485-.871l5.916-5.916,2.058-2.056v0l14.924-14.924Z" transform="translate(-37.204 -40.25)" fill="var(--fill-clr)"/>
+                                      <path id="Path_423" data-name="Path 423" d="M307.814,138.818a6.865,6.865,0,1,1-1.966-11.013.019.019,0,0,1,.005.03l-4.529,4.529a2.285,2.285,0,0,0-.014,3.222,2.364,2.364,0,0,0,3.311-.046l4.469-4.469a.019.019,0,0,1,.03.005A6.8,6.8,0,0,1,307.814,138.818Z" transform="translate(-146.018 0)" fill="var(--fill-clr)"/>
+                                      <path id="Path_424" data-name="Path 424" d="M132.541,332.777a4.578,4.578,0,1,0-1.185,4.422A4.565,4.565,0,0,0,132.541,332.777Zm-2.8,2.8a2.289,2.289,0,1,1,0-3.237A2.29,2.29,0,0,1,129.737,335.582Z" transform="translate(0 -171.115)" fill="var(--fill-clr)"/>
+                                      <path id="Path_425" data-name="Path 425" d="M216.324,215.74l-7.733,7.733h-.128a6.689,6.689,0,0,1,0-2.375h1.381a5.368,5.368,0,0,1,.712-1.716l-.977-.977a6.842,6.842,0,0,1,.763-.914,7.1,7.1,0,0,1,.914-.765l.977.979a5.331,5.331,0,0,1,1.716-.712v-1.382a6.793,6.793,0,0,1,2.375,0Z" transform="translate(-71.757 -74.766)" fill="var(--fill-clr)" opacity="0.75"/>
+                                    </g>
+                                </svg>                              
+                                <div class="info">
+                                    <h1>Fabrica <span>[PvE]</span></h1>
+                                    <p>Техническая сборка</p>
+                                </div>
+                            </div>
+                            <div class="description">
+                                Игровая сборка технического направления. Делает упор на технические процессы по типу: автоматизация, технологический прогресс и развитие.
+                            </div>
+                            <div class="footer">
+                                <div id="select-fabrica" class="select">Выбрать</div>
+                                <div class="online">Онлайн: 24 / 32</div>
                             </div>
                         </div>
-                        <div class="description">
-                            Magicae - наполненная до краев модификация, окутывающая волшебный мир с элементами приключений. Он основан на системе прогресса, похожей на SevTech: Ages.
-                        </div>
-                        <div class="footer">
-                            <div id="select-fabrica" class="select">Выбрать</div>
-                            <div class="online">Онлайн: 24 / 32</div>
-                        </div>
-                    </div>
-                    <div class="server">
-                        <div class="header">
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.883 41.008">
-                                <g id="Group_77" data-name="Group 77" transform="translate(-1089.739 -573.152)">
-                                  <path id="Path_426" data-name="Path 426" d="M1136.656,584.306l-4.873,7.5-1.077,1.658-1.077-1.658-2.9-4.465-2.79-4.53,5.384-9.656Z" transform="translate(-29.019 0)" fill="var(--fill-clr)"/>
-                                  <path id="Path_427" data-name="Path 427" d="M1189.42,641.384l-3.911,8.315-.777,1.65-4.688.008,1.044-1.658,4.063-6.462Z" transform="translate(-76.626 -57.897)" fill="var(--fill-clr)"/>
-                                  <g id="Group_64" data-name="Group 64" transform="translate(1105.672 573.922)" opacity="0.75">
-                                    <path id="Path_428" data-name="Path 428" d="M1202.872,586.028l-4.785,2.077-3.167-4.82,3.949-5.048Z" transform="translate(-1194.921 -578.236)" fill="var(--fill-clr)"/>
-                                  </g>
-                                  <g id="Group_65" data-name="Group 65" transform="translate(1089.739 584.924)" opacity="0.75">
-                                    <path id="Path_429" data-name="Path 429" d="M1100.016,659.408l-5.675.025-.9-1.683-3.7-6.878,5.923,1.574,3.316,5.3Z" transform="translate(-1089.739 -650.871)" fill="var(--fill-clr)"/>
-                                  </g>
-                                  <path id="Path_430" data-name="Path 430" d="M1167.425,681.909" transform="translate(-65.918 -92.283)" fill="var(--fill-clr)"/>
-                                  <path id="Path_431" data-name="Path 431" d="M1169.658,674.4" transform="translate(-67.813 -85.907)" fill="var(--fill-clr)"/>
-                                  <path id="Path_432" data-name="Path 432" d="M1169.658,674.4" transform="translate(-67.813 -85.907)" fill="var(--fill-clr)"/>
-                                  <rect id="Rectangle_1780" data-name="Rectangle 1780" width="10.1" height="3.367" transform="translate(1096.632 596.819)" fill="var(--fill-clr)"/>
-                                  <path id="Path_433" data-name="Path 433" d="M1116.678,700.037l1.222-2.773h2.054v3.747h-21.068v-3.747h.937l1.418,2.813Z" transform="translate(-7.762 -105.312)" fill="var(--fill-clr)"/>
-                                  <g id="Group_66" data-name="Group 66" transform="translate(1096.329 598.199)">
-                                    <path id="Path_434" data-name="Path 434" d="M1141.12,752.67h-7.575a.3.3,0,1,1,0-.606h7.575a2.224,2.224,0,0,0,2.222-2.222v-.6a2.225,2.225,0,0,0-2.222-2.222,2.831,2.831,0,0,1-2.828-2.828v-5.384a.3.3,0,1,1,.606,0V744.2a2.225,2.225,0,0,0,2.222,2.222,2.831,2.831,0,0,1,2.828,2.828v.6A2.831,2.831,0,0,1,1141.12,752.67Z" transform="translate(-1133.242 -738.51)" fill="var(--fill-clr)"/>
-                                  </g>
-                                  <path id="Rectangle_1781" data-name="Rectangle 1781" d="M0,0H.421a2.1,2.1,0,0,1,2.1,2.1v0a2.1,2.1,0,0,1-2.1,2.1H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(1096 609.952)" fill="var(--fill-clr)"/>
-                                  <rect id="Rectangle_1782" data-name="Rectangle 1782" width="1.262" height="0.842" transform="translate(1094.738 610.794)" fill="var(--fill-clr)"/>
-                                  <rect id="Rectangle_1783" data-name="Rectangle 1783" width="1.262" height="0.842" transform="translate(1094.738 612.477)" fill="var(--fill-clr)"/>
-                                </g>
-                            </svg>
-                            <div class="info">
-                                <h1>Statera <span>[PvE]</span></h1>
-                                <p>Смешанная сборка</p>
+                        <div class="server">
+                            <div class="header">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.883 41.008">
+                                    <g id="Group_77" data-name="Group 77" transform="translate(-1089.739 -573.152)">
+                                      <path id="Path_426" data-name="Path 426" d="M1136.656,584.306l-4.873,7.5-1.077,1.658-1.077-1.658-2.9-4.465-2.79-4.53,5.384-9.656Z" transform="translate(-29.019 0)" fill="var(--fill-clr)"/>
+                                      <path id="Path_427" data-name="Path 427" d="M1189.42,641.384l-3.911,8.315-.777,1.65-4.688.008,1.044-1.658,4.063-6.462Z" transform="translate(-76.626 -57.897)" fill="var(--fill-clr)"/>
+                                      <g id="Group_64" data-name="Group 64" transform="translate(1105.672 573.922)" opacity="0.75">
+                                        <path id="Path_428" data-name="Path 428" d="M1202.872,586.028l-4.785,2.077-3.167-4.82,3.949-5.048Z" transform="translate(-1194.921 -578.236)" fill="var(--fill-clr)"/>
+                                      </g>
+                                      <g id="Group_65" data-name="Group 65" transform="translate(1089.739 584.924)" opacity="0.75">
+                                        <path id="Path_429" data-name="Path 429" d="M1100.016,659.408l-5.675.025-.9-1.683-3.7-6.878,5.923,1.574,3.316,5.3Z" transform="translate(-1089.739 -650.871)" fill="var(--fill-clr)"/>
+                                      </g>
+                                      <path id="Path_430" data-name="Path 430" d="M1167.425,681.909" transform="translate(-65.918 -92.283)" fill="var(--fill-clr)"/>
+                                      <path id="Path_431" data-name="Path 431" d="M1169.658,674.4" transform="translate(-67.813 -85.907)" fill="var(--fill-clr)"/>
+                                      <path id="Path_432" data-name="Path 432" d="M1169.658,674.4" transform="translate(-67.813 -85.907)" fill="var(--fill-clr)"/>
+                                      <rect id="Rectangle_1780" data-name="Rectangle 1780" width="10.1" height="3.367" transform="translate(1096.632 596.819)" fill="var(--fill-clr)"/>
+                                      <path id="Path_433" data-name="Path 433" d="M1116.678,700.037l1.222-2.773h2.054v3.747h-21.068v-3.747h.937l1.418,2.813Z" transform="translate(-7.762 -105.312)" fill="var(--fill-clr)"/>
+                                      <g id="Group_66" data-name="Group 66" transform="translate(1096.329 598.199)">
+                                        <path id="Path_434" data-name="Path 434" d="M1141.12,752.67h-7.575a.3.3,0,1,1,0-.606h7.575a2.224,2.224,0,0,0,2.222-2.222v-.6a2.225,2.225,0,0,0-2.222-2.222,2.831,2.831,0,0,1-2.828-2.828v-5.384a.3.3,0,1,1,.606,0V744.2a2.225,2.225,0,0,0,2.222,2.222,2.831,2.831,0,0,1,2.828,2.828v.6A2.831,2.831,0,0,1,1141.12,752.67Z" transform="translate(-1133.242 -738.51)" fill="var(--fill-clr)"/>
+                                      </g>
+                                      <path id="Rectangle_1781" data-name="Rectangle 1781" d="M0,0H.421a2.1,2.1,0,0,1,2.1,2.1v0a2.1,2.1,0,0,1-2.1,2.1H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(1096 609.952)" fill="var(--fill-clr)"/>
+                                      <rect id="Rectangle_1782" data-name="Rectangle 1782" width="1.262" height="0.842" transform="translate(1094.738 610.794)" fill="var(--fill-clr)"/>
+                                      <rect id="Rectangle_1783" data-name="Rectangle 1783" width="1.262" height="0.842" transform="translate(1094.738 612.477)" fill="var(--fill-clr)"/>
+                                    </g>
+                                </svg>
+                                <div class="info">
+                                    <h1>Statera <span>[PvE]</span></h1>
+                                    <p>Смешанная сборка</p>
+                                </div>
+                            </div>
+                            <div class="description">
+                                Игровая сборка техно-магического направления. Делает упор на баланс между магией и технологией, включает в себя меньше крупных модификаций на каждую тематику.
+                            </div>
+                            <div class="footer">
+                                <div id="select-statera" class="select">Выбрать</div>
+                                <div class="online">Онлайн: 24 / 32</div>
                             </div>
                         </div>
-                        <div class="description">
-                            Magicae - наполненная до краев модификация, окутывающая волшебный мир с элементами приключений. Он основан на системе прогресса, похожей на SevTech: Ages.
-                        </div>
-                        <div class="footer">
-                            <div id="select-statera" class="select">Выбрать</div>
-                            <div class="online">Онлайн: 24 / 32</div>
-                        </div>
-                    </div>
-                    <div class="server">
-                        <div class="header">
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37.688 35.761">
-                                <g id="Group_75" data-name="Group 75" transform="translate(-124.723 -131.435)">
-                                  <path id="Path_435" data-name="Path 435" d="M220.831,227.381l6.319,5.8-4.256,16.185-5.157-14.5Z" transform="translate(-79.662 -82.173)" fill="var(--fill-clr)" opacity="0.5"/>
-                                  <path id="Path_436" data-name="Path 436" d="M255.576,202.938v3.32l-2.522,4.357-.8,1.384L248.993,209l-6.17-5.666.464-1.126.477-1.151.09-.219.707-.107,8.66,3.547Z" transform="translate(-101.149 -59.353)" fill="var(--fill-clr)"/>
-                                  <path id="Path_437" data-name="Path 437" d="M159.072,139.5v-.071l-3.629-2.076-4.817-.809,1.443,1.91-3.252-.143,5.61,3.745v.1l-2.443,1.4-8.418-3.447L131,142l-6.281-4.412,15.075-6.156,9.549,3.078,7.412-1.193,5.652,4.27Z" transform="translate(0)" fill="var(--fill-clr)"/>
-                                  <path id="Path_438" data-name="Path 438" d="M315.515,177.655l3.25,2.169v18.27l1.357,1.629,1.424-1.8V178.235l-3.015-1.725-2.345-.394,1.225,1.623Z" transform="translate(-163.405 -38.268)" fill="var(--fill-clr)" opacity="0.75"/>
-                                  <path id="Path_439" data-name="Path 439" d="M145.692,190.6l-3.82,9.243-4.188,10.134-7.8-21.453,5.235,3.676Z" transform="translate(-4.419 -48.893)" fill="var(--fill-clr)"/>
-                                </g>
-                            </svg>
-                            <div class="info">
-                                <h1>Insula <span>[PvE]</span></h1>
-                                <p>Скайблок сборка</p>
+                        <div class="server">
+                            <div class="header">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37.688 35.761">
+                                    <g id="Group_75" data-name="Group 75" transform="translate(-124.723 -131.435)">
+                                      <path id="Path_435" data-name="Path 435" d="M220.831,227.381l6.319,5.8-4.256,16.185-5.157-14.5Z" transform="translate(-79.662 -82.173)" fill="var(--fill-clr)" opacity="0.5"/>
+                                      <path id="Path_436" data-name="Path 436" d="M255.576,202.938v3.32l-2.522,4.357-.8,1.384L248.993,209l-6.17-5.666.464-1.126.477-1.151.09-.219.707-.107,8.66,3.547Z" transform="translate(-101.149 -59.353)" fill="var(--fill-clr)"/>
+                                      <path id="Path_437" data-name="Path 437" d="M159.072,139.5v-.071l-3.629-2.076-4.817-.809,1.443,1.91-3.252-.143,5.61,3.745v.1l-2.443,1.4-8.418-3.447L131,142l-6.281-4.412,15.075-6.156,9.549,3.078,7.412-1.193,5.652,4.27Z" transform="translate(0)" fill="var(--fill-clr)"/>
+                                      <path id="Path_438" data-name="Path 438" d="M315.515,177.655l3.25,2.169v18.27l1.357,1.629,1.424-1.8V178.235l-3.015-1.725-2.345-.394,1.225,1.623Z" transform="translate(-163.405 -38.268)" fill="var(--fill-clr)" opacity="0.75"/>
+                                      <path id="Path_439" data-name="Path 439" d="M145.692,190.6l-3.82,9.243-4.188,10.134-7.8-21.453,5.235,3.676Z" transform="translate(-4.419 -48.893)" fill="var(--fill-clr)"/>
+                                    </g>
+                                </svg>
+                                <div class="info">
+                                    <h1>Insula <span>[PvE]</span></h1>
+                                    <p>Скайблок сборка</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="description">
-                            Magicae - наполненная до краев модификация, окутывающая волшебный мир с элементами приключений. Он основан на системе прогресса, похожей на SevTech: Ages.
-                        </div>
-                        <div class="footer">
-                            <div id="select-insula" class="select">Выбрать</div>
-                            <div class="online">Онлайн: 24 / 32</div>
+                            <div class="description">
+                                Игровая сборка неопределённого направления. Делает упор на выживание на острове среди пустоты, включая как технологическое, так и магическое развития.
+                            </div>
+                            <div class="footer">
+                                <div id="select-insula" class="select">Выбрать</div>
+                                <div class="online">Онлайн: 24 / 32</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -273,28 +313,28 @@
                                 <h1>Настройки управления</h1>
                                 <div class="controls">
                                     <div class="k-v-pair">
-                                        <p class="k">Присесть</p><p class="v">LSHIFT</p>
+                                        <p class="k">Присесть</p><p id="key-crouch" class="v">LSHIFT</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Бег</p><p class="v">LCTRL</p>
+                                        <p class="k">Бег</p><p id="key-run" class="v">LCTRL</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Вперед</p><p class="v">W</p>
+                                        <p class="k">Вперед</p><p id="key-forward" class="v">W</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Назад</p><p class="v">S</p>
+                                        <p class="k">Назад</p><p id="key-back" class="v">S</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Вправо</p><p class="v">D</p>
+                                        <p class="k">Вправо</p><p id="key-right" class="v">D</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Влево</p><p class="v">A</p>
+                                        <p class="k">Влево</p><p id="key-left" class="v">A</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Приблизить</p><p class="v">R</p>
+                                        <p class="k">Приблизить</p><p id="key-zoom" class="v">R</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Квесты</p><p class="v">T</p>
+                                        <p class="k">Квесты</p><p id="key-quests" class="v">T</p>
                                     </div>
                                 </div>
                             </div>

@@ -1,6 +1,4 @@
 footer {
-    --footer-height: 80px;
-
     height: var(--footer-height);
     background: var(--footer-bg);
     color: var(--footer-text);
@@ -128,7 +126,7 @@ footer {
 }
 
 .main-button-container {
-    width: var(--side-bar-width);
+    width: var(--sidebar-width);
     height: 100%;
     position: relative;
     opacity: 1;
@@ -211,7 +209,7 @@ footer {
     position: absolute;
     bottom: 16px;
     left: 0;
-    width: var(--side-bar-width);
+    width: var(--sidebar-width);
     height: 64px;
 
     cursor: pointer;

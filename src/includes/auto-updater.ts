@@ -29,18 +29,26 @@ export class AutoUpdaterInterface {
 }
 
 // return true if "b" bigger than "a"
-function compareNumerical(a: string, b: string) {
+function compareNumerical(a: string, b: string, strict=true) {
     let a_values = a.split('.');
     let b_values = b.split('.');
     for (let i = 0; i < Math.max(a_values.length, b_values.length); i++) {
         if (a_values[i] == undefined) return true;
-        if (a_values[i] < b_values[i]) {
-            return true;
+        if (strict) {
+            if (a_values[i] < b_values[i]) {
+                return true;
+            }
+        } else {
+            if (a_values[i] <= b_values[i]) {
+                return true;
+            }
         }
     }
 
     return false;
 }
+
+let prefixes = ['dev', 'alpha', 'beta', 'prerelease']
 
 export class AutoUpdater {
     fetch: typeof fetch;
@@ -62,29 +70,58 @@ export class AutoUpdater {
 
     // return true if "b" bigger than "a"
     public compareVersions(a: string, b: string) {
-        let v_a = a.split('-');
-        let v_b = b.split('-');
-        if (v_a.length > 1 && v_b.length > 1) {
-            return compareNumerical(v_a[0], v_b[0]);
-        } else if (v_a.length > 1) {
-            return true;
-        } else if (v_b.length > 1) {
-            return false;
+        let ver_a = a.split('-');
+        let ver_b = b.split('-');
+
+        // log.info(ver_a, ver_b);
+
+        if (this.settingsStorage.settings.dev_mode) {
+            if (ver_a[0] == ver_b[0] && ver_a.length == 1) return false;
+            if (ver_a.length > 1 && ver_b.length > 1) {
+                if (compareNumerical(ver_a[0], ver_b[0], false)) {
+                    return prefixes.findIndex(el => el == ver_b[1]) > prefixes.findIndex(el => el == ver_a[1])
+                }
+            }
+
+            return compareNumerical(ver_a[0], ver_b[0]);
         } else {
-            return compareNumerical(v_a[0], v_b[0]);
+            if (ver_b.length > 1) return false;
+            if (ver_a.length > 1) return true;
+            return compareNumerical(ver_a[0], ver_b[0]);
         }
     }
 
     public async getLatestRelease(): Promise<Release> {
-        let res = await fetch(`https://api.github.com/repos/AlbeeTheLoli/deltaLauncher/releases/latest`).then(res => res.json());
-        return {
-            name: res.name,
-            url: res.assets[0].browser_download_url,
-        };
+        let res: Array<any> = await fetch(`https://api.github.com/repos/AlbeeTheLoli/deltaLauncher/releases`).then(res => res.json());
+
+        if (this.settingsStorage.settings.dev_mode) {
+            let i = res.reverse().findIndex((_el: any) => {log.info(app.getVersion(), _el.name, this.compareVersions(app.getVersion(), _el.name)); return this.compareVersions(app.getVersion(), _el.name)})
+            if (i == -1) i = 0;
+            return {
+                name: res[i].name,
+                url: res[i].assets[0].browser_download_url,
+            };
+        } else {
+            let i = res.findIndex((el: any) => el.name.split('-').length == 1)
+            log.info(i)
+            if (i == -1) {
+                return {
+                    name: res[0].name,
+                    url: res[0].assets[0].browser_download_url,
+                };
+            }
+
+            return {
+                name: res[i].name,
+                url: res[i].assets[0].browser_download_url,
+            };
+        }
     }
 
     public async checkForUpdates() {
         let release = await this.getLatestRelease();
+        console.log(release);
+        
         if (this.compareVersions(app.getVersion(), release.name)) {
             log.info('update is required. downloading');
 

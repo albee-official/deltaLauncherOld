@@ -19,10 +19,10 @@ body:not(.dev) .dev-only {
 
 body{
     font-family: 'Montserrat', sans-serif;
-    color: var(--text);
+    color: var(--text-primary);
     overflow: hidden;
 
-    background: rgba(var(--bg-rgb), 1);
+    background: rgba(var(--bg-primary-rgb), 1);
 
     animation: fadein .64s;
     /* transition: backdrop-filter .8s cubic-bezier(0.23, 1, 0.320, 1); */
@@ -104,13 +104,13 @@ input {
     justify-content: center;
     align-items: center;
 
-    background: rgba(var(--clr-rgb), 0);
+    background: rgba(var(--clr-primary-rgb), 0);
 
     transition: background-color .2s;
 }
 
 .app-frame > .exit:hover {
-    background: rgba(var(--clr-rgb), 1);
+    background: rgba(var(--clr-primary-rgb), 1);
 
     transition: background-color .2s;
 }
@@ -122,13 +122,13 @@ input {
     justify-content: center;
     align-items: center;
 
-    background: rgba(var(--text-rgb), 0);
+    background: rgba(var(--text-primary-rgb), 0);
 
     transition: background-color .2s;
 }
 
 .app-frame > .reload:hover {
-    background: rgba(var(--text-rgb), .16);
+    background: rgba(var(--text-primary-rgb), .16);
 
     transition: background-color .2s;
 }
@@ -140,13 +140,13 @@ input {
     justify-content: center;
     align-items: center;
 
-    background: rgba(var(--text-rgb), 0);
+    background: rgba(var(--text-primary-rgb), 0);
 
     transition: background-color .2s;
 }
 
 .app-frame > .minimize:hover {
-    background: rgba(var(--text-rgb), .08);
+    background: rgba(var(--text-primary-rgb), .08);
 
     transition: background-color .2s;
 }
@@ -235,7 +235,7 @@ input {
 .bg > .img {
     z-index: -1;
     opacity: 1;
-    background: rgba(var(--bg-rgb), 0);
+    background: rgba(var(--app-bg-rgb), 0);
 }
 
 .bg.plain > .img {
@@ -287,7 +287,6 @@ input {
     flex-direction: row-reverse;
     cursor: pointer;
 
-    color: var(--text);
     font-size: 15px;
     font-weight: 600;
     margin: 2px 0;
@@ -306,11 +305,15 @@ input {
     width: 0;
 }
 
+.checkbox > p {
+    color: var(--checkbox-text) !important;
+}
+
 .checkbox .checkmark{
     height: 12px;
     width: 12px;
     background: none;
-    border: var(--text) 2px solid;
+    border: var(--checkbox-checkmark) 2px solid !important;
     margin-right: 8px;
     margin-top: 1px;
     
@@ -324,7 +327,7 @@ input {
 }
 
 .checkbox .checkmark-fill{
-    background: var(--text);
+    background: var(--checkbox-checkmark) !important;
     opacity: 0;
     height: 12px;
     width: 12px;
@@ -339,14 +342,16 @@ input {
 /* Buttons */
 
 .select-button {
-    width: 164px;
+    min-width: 164px;
+    padding: 0 32px;
     height: 38px;
     display: grid;
     place-items: center;
+    user-select: none;
 
     cursor: pointer;
-    background: rgba(var(--text-rgb), 0);
-    border: rgba(var(--text-rgb), .16) 2px solid;
+    background: rgba(var(--text-primary-rgb), 0);
+    border: rgba(var(--text-primary-rgb), .16) 2px solid;
     font-size: 15px;
     font-weight: 600;
 
@@ -365,9 +370,28 @@ input {
 
 .select-button.small {
     font-size: 13px;
+    min-width: 128px;
 }
 
 .select-button:hover {
-    background: rgba(var(--text-rgb), .08);
-    border: rgba(var(--text-rgb), .24) 2px solid;
+    background: rgba(var(--text-primary-rgb), .08);
+    border: rgba(var(--text-primary-rgb), .24) 2px solid;
+}
+
+.select-button.clr {
+    border: rgba(var(--clr-primary-rgb), .16) 2px solid;
+}
+
+.select-button.clr:hover {
+    background: rgba(var(--clr-primary-rgb), 1);
+    border: rgba(var(--clr-primary-rgb), .24) 2px solid;
+}
+
+.select-button.alt {
+    border: rgba(var(--alt-primary-rgb), .16) 2px solid;
+}
+
+.select-button.alt:hover {
+    background: rgba(var(--alt-primary-rgb), 1);
+    border: rgba(var(--alt-primary-rgb), .24) 2px solid;
 }

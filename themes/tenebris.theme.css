@@ -7,41 +7,70 @@
 */
 
 :root {
-    --bg: #1C1924;
-    --bg-accent: #4B4753;
-    --clr: #67A4B9;
-    --clr-accent: #77b4c9;
+    --bg-primary: #1C1924;
+    --bg-secondary: #1a1722;
+    --bg-secondary-alt: #17151f;
+    --bg-tertiary: #221e2c;
+    --bg-tertiary-alt: #262231;
+    --bg-hover: var(--bg-secondary);
+    --bg-hover-alt: var(--bg-secondary-alt);
+
+    --text-primary: #FFFFFF;
+    --text-secondary: #d1d3df;
+    --text-secondary-alt: #c3c2cc;
+    --text-tertiary: #e0dee9;
+    --text-tertiary-alt: #FFFFFF;
+
+
+    --bg-primary-rgb: 28, 25, 36;
+    --bg-secondary-rgb: 26, 23, 34;
+    --bg-secondary-alt-rgb: 23, 21, 31;
+    --bg-tertiary-rgb: 34, 30, 44;
+    --bg-tertiary-alt-rgb: 38, 34, 49;
+    --bg-hover-rgb: var(--bg-secondary-rgb);
+    --bg-hover-alt-rgb: var(--bg-secondary-alt-rgb);
+
+    --text-primary-rgb: 255, 255, 255;
+    --text-secondary-rgb: 209, 211, 223;
+    --text-secondary-alt-rgb: 195, 194, 204;
+    --text-tertiary-rgb: 224, 222, 233;
+    --text-tertiary-alt-rgb: 255, 255, 255;
+
+
+
+    --clr-primary: #67A4B9;
+    --clr-tertiary: #77b4c9;
     --clr-secondary: #588ea0;
-    --text: #FFFFFF;
-    --text-accent: #E5E5E5;
 
-    --white: var(--text);                                   /** Brightest color */
-    --black: var(--bg);                                     /** Darkest color */
+    --alt-primary: #6773b9;
+    --alt-tertiary: #7783c9;
+    --alt-secondary: #586ba0;
 
-    --bg-rgb: 28, 25, 36;
-    --bg-accent-rgb: 75, 71, 83;
-    --clr-rgb: 103, 164, 185;
-    --clr-accent-rgb: 119, 180, 201;
+
+    --clr-primary-rgb: 103, 164, 185;
+    --clr-tertiary-rgb: 119, 180, 201;
     --clr-secondary-rgb: 88, 142, 160;
-    --text-rgb: 255, 255, 255;
-    --text-accent-rgb: 229, 229, 229;
+
+    --alt-primary-rgb: 103, 115, 185;
+    --alt-tertiary-rgb: 119, 131, 201;
+    --alt-secondary-rgb: 88, 107, 160;
 }
 
 header {
-    --profile-bg: var(--clr);
-    --profile-text: var(--text);
+    --header-profile-bg: var(--clr-primary);
+    --header-profile-text: var(--text-primary);
 }
 
 :root {
-    --app-icon-clr: var(--text);
+    --app-icon-clr: var(--text-primary);
 }
 
 main {
-    --sidebar-bg: rgba(var(--bg-rgb), .16);
-    --sidebar-text: rgba(var(--text-rgb), 1);
+    --sidebar-bg: rgba(var(--bg-primary-rgb), .16);
+    --sidebar-text: rgba(var(--text-primary-rgb), 1);
 }
 
 footer {
-    --main-button-text: var(--text);
-    --sub-button-text: var(--text);
+    --main-button-text: var(--text-primary);
+    --sub-button-text: var(--text-primary);
 }

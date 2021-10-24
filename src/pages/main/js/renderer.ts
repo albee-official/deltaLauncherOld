@@ -30,6 +30,62 @@ declare let min_setable_ram: number;
 declare let os: any;
 //#endregion
 
+// I manually wrote this and i regret doing it
+function ascii_to_dumbass(keycode: number) {
+    switch (keycode) {
+        //#region Alphabet
+        case 65: return 30; // a
+        case 66: return 48; // b
+        case 67: return 46; // c
+        case 68: return 32; // d
+        case 69: return 18; // e NICE
+        case 70: return 33; // f
+        case 71: return 34; // g
+        case 72: return 35; // h
+        case 73: return 23; // i
+        case 74: return 36; // j
+        case 75: return 37; // k
+        case 76: return 38; // l
+        case 77: return 50; // m
+        case 78: return 49; // n
+        case 79: return 24; // o
+        case 80: return 25; // p
+        case 81: return 16; // q
+        case 82: return 19; // r
+        case 83: return 31; // s
+        case 84: return 20; // t
+        case 85: return 22; // u
+        case 86: return 47; // v
+        case 87: return 17; // w
+        case 88: return 45; // x
+        case 89: return 21; // y
+        case 90: return 44; // z
+        //#endregion
+        //#region nums
+        case 48: return 11; // 0
+        case 49: return 2; // 1
+        case 50: return 3; // 2
+        case 51: return 4; // 3
+        case 52: return 5; // 4
+        case 53: return 6; // 5
+        case 54: return 7; // 6
+        case 55: return 8; // 7
+        case 56: return 9; // 8
+        case 57: return 10; // 9
+        //#endregion
+        //#region modifiers
+        case 16: return 42; // SHIFT
+        case 17: return 29; // CONTOLL
+        case 18: return 42; // ALT
+        case 18: return 42; // CAPS LOCK ( CAPITAL :) )
+        case 9: return 15; // TAB
+        case 192: return 41; // GRAVE ( ` )
+        case 32: return 57; // SPACE ( )
+        //#endregion
+        default: return 0;
+    }
+}
+
 //@ts-expect-error
 onbeforeload();
 console.log('hello from renderer :)');
@@ -264,43 +320,25 @@ class Overlay {
         return '';
     }
 
-    public show(title?: string, p?: string) {
+    public show(title?: string, p?: string, loading=false) {
         if (title) this.h1 = title;
         if (p) this.p = p;
+        if (loading) this.el.classList.add('ld');
         this.visible = true;
     }
 
     public hide() {
+        this.el.classList.remove('ld');
+        this.p = '';
+        this.h1 = '';
         this.visible = false;
     }
 }
 
-class SelectOverlay {
-    public el = document.getElementById('select-overlay-thing')
+class SelectOverlay extends Overlay {
+    public el = document.getElementById('select-overlay-thing') as HTMLDivElement
     public list_container = document.getElementById('select-overlay-list') as HTMLDivElement
     public h1_el = this.el?.querySelector('h1') as HTMLParagraphElement;
-
-    public _visible = false;
-
-    public set visible(to: boolean) {
-        if (to) {
-            this.el?.classList.add('open');
-        } else {
-            this.el?.classList.remove('open');
-        }
-        this._visible = to;
-    }
-
-    public get visible() { return this._visible; }
-
-    public set h1(to: string) {
-        if (this.h1_el) this.h1_el.innerText = to;
-    }
-
-    public get h1() {
-        if (this.h1_el) return this.h1_el.innerText;
-        return '';
-    }
 
     public showSelect(title: string, options: {}) {
         return new Promise((resolve, reject) => {
@@ -323,6 +361,37 @@ class SelectOverlay {
 
             this.el?.addEventListener('click', e => {
                 this.visible = false;
+                reject('focus lost');
+            });
+        })
+    }
+}
+
+class AskOverlay extends Overlay {
+    el = document.getElementById('ask-overlay-thing') as HTMLDivElement
+    list_container = document.getElementById('ask-overlay-list') as HTMLDivElement
+    h1_el = this.el?.querySelector('h1') as HTMLParagraphElement;
+    p_el = this.el?.querySelector('p') as HTMLParagraphElement;
+
+    public showSelect(title: string, options: {}, p?:string) {
+        return new Promise((resolve, reject) => {
+            this.show(title, p);
+
+            this.list_container.innerHTML = '';
+            let html = '';
+            for (const option of Object.values(options)) { html += `<div class="select-button${!(option as any).type ? '' : ' ' + (option as any).type}">${(option as any).body}</div>` }
+            this.list_container.innerHTML = html;
+
+            for (let i = 0; i < Object.keys(options).length; i++) {
+                this.list_container.children[i].addEventListener('click', () => {
+                    console.log('selected', Object.keys(options)[i]);
+                    this.hide();
+                    resolve(Object.keys(options)[i]);
+                });
+            }
+
+            this.el?.addEventListener('click', e => {
+                this.hide();
                 reject('focus lost');
             });
         })
@@ -616,11 +685,12 @@ class SelectButton {
     private _state: string;
     private _locked: boolean;
 
-    constructor (id: string) {
+    constructor (id: string, c_state='none') {
         this._locked = false;
         this._id = id;
         this._el = document.getElementById(id) as HTMLDivElement;
-        this._state = 'selected';
+        this._state = 'none';
+        this.state = c_state;
     }
 
     public set locked(to: boolean) {
@@ -637,6 +707,8 @@ class SelectButton {
     }
 
     public set state(to: string) {
+        console.log(to);
+        
         this._state = to;
         switch (this._state) {
             case 'none':
@@ -646,6 +718,11 @@ class SelectButton {
 
             case 'selected':
                 this._el.innerHTML = 'Выбрано';
+                this._el.classList.add('selected');
+                break;
+            
+            case 'download':
+                this._el.innerHTML = 'Скачать';
                 this._el.classList.add('selected');
                 break;
 
@@ -705,23 +782,96 @@ class Footer {
     }
 }
 
+class KeySelect {
+    public _id: string;
+    public el: HTMLDivElement;
+    public _param: any;
+    public _overlay: Overlay;
+
+    constructor (id: string, param: string, overlay: Overlay) {
+        this._id = id;
+        this.el = document.getElementById(id) as HTMLDivElement;
+        this._param = param;
+        this._overlay = overlay;
+
+        this.el.addEventListener('click', () => {this.select()})
+    }
+
+    public select() {
+        //@ts-expect-error
+        let setting = settingsInterface.settings.modpack_settings.controls[this._param];
+        //@ts-expect-error
+        console.log(this._param, settingsInterface.settings.modpack_settings.controls[this._param]);
+
+        this._overlay.show('Нажмите любую клавишу...', setting.key_name);
+
+        let input = document.createElement('input');
+        input.classList.add('invisible');
+        this._overlay.el.appendChild(input)
+        input.focus();
+        input.onblur = () => {
+            this._overlay.hide();
+            input.remove();
+        }
+
+        input.onkeydown = e => {
+            let name = e.key.toUpperCase();
+            let code = e.keyCode;
+
+            if (name == 'ESCAPE') {
+                code = -1;
+                name = 'NONE';
+            } else if (name == 'CONTROL') {
+                name = 'LCTRL';
+            } else if (name == 'SHIFT') {
+                name = 'LSHIFT';
+            }
+
+            console.log(code);
+
+            //@ts-expect-error
+            settingsInterface.settings.modpack_settings.controls[this._param].key_code = code;
+            //@ts-expect-error
+            settingsInterface.settings.modpack_settings.controls[this._param].minecraft_code = ascii_to_dumbass(code);
+            //@ts-expect-error
+            settingsInterface.settings.modpack_settings.controls[this._param].key_name = name;
+
+            this.el.innerText = name;
+
+            this._overlay.hide();
+        }
+    }
+}
+
 class UI {
     private _header = document.getElementById('info-header');
     readonly _buttons: any = {
-        magicae: new SelectButton('select-magicae'),
-        fabrica: new SelectButton('select-fabrica'),
-        statera: new SelectButton('select-statera'),
-        insula: new SelectButton('select-insula'),
+        magicae: new SelectButton('select-magicae', modpackManager.modpacks['magicae'].installed ? 'none' : 'download'),
+        fabrica: new SelectButton('select-fabrica', modpackManager.modpacks['fabrica'].installed ? 'none' : 'download'),
+        statera: new SelectButton('select-statera', modpackManager.modpacks['statera'].installed ? 'none' : 'download'),
+        insula: new SelectButton('select-insula', modpackManager.modpacks['insula'].installed ? 'none' : 'download'),
     };
     private _sub = document.getElementById('info-sub');
 
     public footer = new Footer();
     public select_overlay = new SelectOverlay();
+    public ask_overlay = new AskOverlay();
     public overlay = new Overlay();
     public main_button = new MainButton();
 
-    public memory_slider = new Slider(document.getElementById('memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.alocated_memory, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
-    public sidemenu_memory_slider = new Slider(document.getElementById('sidemenu-memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.alocated_memory, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
+    readonly key_select_buttons: any = {
+        crouch: new KeySelect('key-crouch', 'crouch', this.overlay),
+        run: new KeySelect('key-run', 'run', this.overlay),
+        forward: new KeySelect('key-forward', 'forward', this.overlay),
+        back: new KeySelect('key-back', 'back', this.overlay),
+        right: new KeySelect('key-right', 'right', this.overlay),
+        left: new KeySelect('key-left', 'left', this.overlay),
+        zoom: new KeySelect('key-zoom', 'zoom', this.overlay),
+        quests: new KeySelect('key-quests', 'quests', this.overlay),
+    }
+
+    public memory_slider = new Slider(document.getElementById('memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.allocated_memory, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
+    public sidemenu_memory_slider = new Slider(document.getElementById('sidemenu-memory-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.allocated_memory, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
     public optimization_slider = new Slider(document.getElementById('optimization-slider') as HTMLDivElement, settingsInterface.settings.modpack_settings.optimization_level);
     public blur_slider = new Slider(document.getElementById('blur-slider') as HTMLDivElement, settingsInterface.blur_amount);
     public opacity_slider = new Slider(document.getElementById('opacity-slider') as HTMLDivElement, settingsInterface.filter_opacity);
@@ -736,14 +886,14 @@ class UI {
         };
         updateModpackDirs();
 
-        setInterval(() => {
-            max_setable_ram = Math.min(Math.ceil(os.freemem() / 1024 / 1024 / 1024) + 1, Math.ceil(os.totalmem() / 1024 / 1024 / 1024));
-            if (!this.memory_slider.focused) this.memory_slider = new Slider(document.getElementById('memory-slider') as HTMLDivElement, this.memory_slider.value, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
-            if (!this.sidemenu_memory_slider.focused) this.sidemenu_memory_slider = new Slider(document.getElementById('sidemenu-memory-slider') as HTMLDivElement, this.sidemenu_memory_slider.value, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
-        }, 2000)
+        // setInterval(() => {
+        //     max_setable_ram = Math.min(Math.ceil(os.freemem() / 1024 / 1024 / 1024) + 1, Math.ceil(os.totalmem() / 1024 / 1024 / 1024));
+        //     if (!this.memory_slider.focused) this.memory_slider = new Slider(document.getElementById('memory-slider') as HTMLDivElement, this.memory_slider.value, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
+        //     if (!this.sidemenu_memory_slider.focused) this.sidemenu_memory_slider = new Slider(document.getElementById('sidemenu-memory-slider') as HTMLDivElement, this.sidemenu_memory_slider.value, min_setable_ram, Math.max(min_setable_ram, max_setable_ram), max_setable_ram - min_setable_ram < 6 ? 1 : 2);
+        // }, 2000)
 
         this.memory_slider.oninput = () => {
-            settingsInterface.settings.modpack_settings.alocated_memory = this.memory_slider.value
+            settingsInterface.settings.modpack_settings.allocated_memory = this.memory_slider.value
             this.sidemenu_memory_slider.value = this.memory_slider.value;
         };
         this.memory_slider.onchange = () => settingsInterface.save();
@@ -752,7 +902,7 @@ class UI {
         this.memory_slider.min_val = min_setable_ram;
 
         this.sidemenu_memory_slider.oninput = () => {
-            settingsInterface.settings.modpack_settings.alocated_memory = this.sidemenu_memory_slider.value
+            settingsInterface.settings.modpack_settings.allocated_memory = this.sidemenu_memory_slider.value
             this.memory_slider.value = this.sidemenu_memory_slider.value;
         }
         this.sidemenu_memory_slider.onchange = () => settingsInterface.save();
@@ -1004,8 +1154,9 @@ class UI {
     public get modpack() { return settingsInterface.settings.on_modpack }
 
     public set modpack(to) {
-        this._buttons[settingsInterface.settings.on_modpack].state = 'none';
-        this._buttons[to].state = 'selected';
+        this._buttons[settingsInterface.settings.on_modpack].state
+            = modpackManager.modpacks[settingsInterface.settings.on_modpack].installed ? 'none' : 'download';
+            this._buttons[to].state = 'selected';
         this.updateMainButtonState(to);
         settingsInterface.settings.on_modpack = to;
     }
@@ -1128,8 +1279,35 @@ async function main_button_click() {
 
         ui.can_select_modpack = false;
 
+        let optifine_lol = await ui.ask_overlay.showSelect(`Optifine может вызывать сбои, оставить?`, {
+            cancel: {
+                body: 'Отменить',
+            },
+            leave: {
+                body: 'Продолжить',
+                type: 'alt',
+            },
+            remove: {
+                body: 'Удалить и продолжить',
+                type: 'clr',
+            }
+        }, 'Вы можете продолжить игру, если вы хотите играть с шейдерами, однако мы не виноваты, если у вас что то сломается.');
+
+        switch (optifine_lol) {
+            case 'cancel':
+                return;
+
+            case 'leave':
+                console.log('launching with optifine, fine....');
+                break;
+
+            case 'remove':
+                console.log('removing optifine....');
+                break;
+        }
+
         console.log(`${modpack} installed. launching...`);
-        ui.overlay.show(`Запуск ${capitalizeFirstLetter(modpack)}...`, ' ')
+        ui.overlay.show(`Запуск ${capitalizeFirstLetter(modpack)}...`, 'Пожалуйста, не выключайте лаунчер.', true)
 
         ui.main_button.h1 = 'Запускается...';
         ui.main_button.locked = true;
@@ -1228,7 +1406,7 @@ ipcRenderer.on('modpack-downloaded', async (event, modpack) => {
 //#.region --- minecraft lifecycle ---
 
 async function launchModpack(modpack_name: string) {
-    let status = await modpackManager.launchModpack(modpack_name, 2, settingsInterface.settings.modpack_settings.alocated_memory, authInterface.logged_user.login, '123').catch(err => {
+    let status = await modpackManager.launchModpack(modpack_name, 2, settingsInterface.settings.modpack_settings.allocated_memory, authInterface.logged_user.login, '123').catch(err => {
         console.error(err);
     });
     return status;

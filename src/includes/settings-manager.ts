@@ -12,43 +12,55 @@ log.transports.file.format = '{h}:{i}:{s} > [{label}] {text}';
 const settings_pattern = {
     dev_mode: false,
     on_page: 0,
-    on_modpack: 'magicae',
+    on_modpack: "magicae",
     selected_user: -1,
     auto_go_to_server_thing: false,
-    version: '',
+    version: "",
     modpack_settings: {
-        alocated_memory: 4,
+        allocated_memory: 4,
         optimization_level: 2,
-        java_parameters: '',
+        java_parameters: "",
         use_builtin_java: true,
         show_console_output: false,
+        controls: {
+            crouch: { minecraft_key: "key_key.sneak", minecraft_code: 42, key_code: 12, key_name: "SHIFT" },
+            run: { minecraft_key: "key_key.sprint", minecraft_code: 29, key_code: 12, key_name: "CONTROL" },
+            forward: { minecraft_key: "key_key.forward", minecraft_code: 17, key_code: 87, key_name: "W" },
+            back: { minecraft_key: "key_key.back", minecraft_code: 31, key_code: 83, key_name: "S" },
+            left: { minecraft_key: "key_key.left", minecraft_code: 30, key_code: 12, key_name: "A" },
+            right: { minecraft_key: "key_key.right", minecraft_code: 32, key_code: 12, key_name: "D" },
+            zoom: { minecraft_key: "key_of.key.zoom", minecraft_code: 0, key_code: 0, key_name: "NONE" },
+            quests: { minecraft_key: "key_key.ftbquests.quests", minecraft_code: 20, key_code: 12, key_name: "T" },
+            excavate: { minecraft_key: "key_oreexcavation.key.excavate", minecraft_code: 34, key_code: 12, key_name: "G" },
+            shop: { minecraft_key: "key_key.ftbmoney.shop", minecraft_code: 35, key_code: 12, key_name: "H" },
+        },
     },
     appearance: {
         reduced_motion: false,
-        bg: '',
-        theme: '',
-        filter_opacity: 80,
-        blur_amount: 0, 
+        bg: "",
+        theme: "",
+        filter_opacity: 60,
+        blur_amount: 0,
         muted: true,
     },
     modpacks: {
         libs: {
-            path: '%ROOT%/libs'
+            path: "%ROOT%/libs",
         },
         magicae: {
-            path: '%ROOT%/modpacks',
+            path: "%ROOT%/modpacks",
         },
         fabrica: {
-            path: '%ROOT%/modpacks',
+            path: "%ROOT%/modpacks",
         },
         statera: {
-            path: '%ROOT%/modpacks',
+            path: "%ROOT%/modpacks",
         },
         insula: {
-            path: '%ROOT%/modpacks',
+            path: "%ROOT%/modpacks",
         },
     },
-}
+};
 
 interface theme {
     name: string,

@@ -56,7 +56,7 @@ body:not(.login-open) .app-frame {
 
 .logo-container > .sub > * {
     margin: 2px 0;
-    color: var(--text);
+    color: var(--text-primary);
     opacity: .16;
     font-size: 14px;
     font-weight: 700;
@@ -115,7 +115,7 @@ body.login-open .right {
 
 .login > p {
     -webkit-app-region: no-drag;
-    color: var(--bg-accent);
+    color: var(--bg-primary-accent);
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 48px;
@@ -123,18 +123,18 @@ body.login-open .right {
 
 .login > p > a {
     -webkit-app-region: no-drag;
-    color: var(--clr);
+    color: var(--clr-primary);
     font-size: 14px;
     font-weight: 700;
 }
 
 .login > p > a:hover {
-    color: var(--clr-accent);
+    color: var(--clr-tertiary);
 }
 
 .input {
     -webkit-app-region: no-drag;
-    color: var(--text);
+    color: var(--text-primary);
     width: 100%;
     margin-bottom: 32px;
 }
@@ -151,7 +151,7 @@ body.login-open .right {
 }
 
 .input > input {
-    color: var(--text);
+    color: var(--text-primary);
     font-family: 'Montserrat', sans-serif;
 
     width: 100%;
@@ -168,7 +168,7 @@ body.login-open .right {
 }
 
 .input > input::placeholder {
-    color: rgba(var(--text-rgb), .16);
+    color: rgba(var(--text-primary-rgb), .16);
     font-size: 14px;
     font-weight: 700;
 }
@@ -177,13 +177,13 @@ body.login-open .right {
     width: 100%;
     height: 3px;
 
-    background: rgba(var(--bg-accent-rgb), .32);
+    background: rgba(var(--bg-tertiary-rgb), .32);
 }
 
 .input-underline > .input-underline-filler {
     width: 0%;
     height: 100%;
-    background: rgba(var(--clr-rgb), 1);
+    background: rgba(var(--clr-primary-rgb), 1);
 
     transition: width .32s cubic-bezier(0.23, 1, 0.320, 1);
 }
@@ -195,11 +195,11 @@ body.login-open .right {
 }
 
 .input:focus-within > .input-underline {
-    background: rgba(var(--bg-accent-rgb), 1);
+    background: rgba(var(--bg-tertiary-rgb), 1);
 }
 
 .input.full > .input-underline {
-    background: rgba(var(--bg-accent-rgb), 1);
+    background: rgba(var(--bg-tertiary-rgb), 1);
 }
 
 .input:focus-within > .input-underline > .input-underline-filler {
@@ -216,7 +216,7 @@ body.login-open .right {
 .buttons > p {
     font-size: 15px;
     font-weight: 700;
-    color: var(--text);
+    color: var(--text-primary);
     opacity: .48;
     cursor: pointer;
 
@@ -246,7 +246,7 @@ body.login-open .right {
     width: 100%;
     height: 100%;
 
-    color: var(--text);
+    color: var(--text-primary);
 
     display: flex;
     align-items: center;
@@ -257,14 +257,14 @@ body.login-open .right {
     font-size: 14px;
     font-weight: 700;
     border: none;
-    background: rgba(var(--text-rgb), 0);
-    border: rgba(var(--text-rgb), .24) 2px solid;
+    background: rgba(var(--text-primary-rgb), 0);
+    border: rgba(var(--text-primary-rgb), .24) 2px solid;
 
     transition: all .16s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
 .submit:hover > input {
-    color: var(--text);
-    background: rgba(var(--text-rgb), .08);
-    border: rgba(var(--text-rgb), .24) 2px solid;
+    color: var(--text-primary);
+    background: rgba(var(--text-primary-rgb), .08);
+    border: rgba(var(--text-primary-rgb), .24) 2px solid;
 }
