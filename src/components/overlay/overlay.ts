@@ -93,7 +93,7 @@ class AskOverlay extends Overlay {
 
             this.list_container.innerHTML = '';
             let html = '';
-            for (const option of Object.values(options)) { html += `<div class="select-button${!(option as any).type ? '' : ' ' + (option as any).type}">${(option as any).body}</div>` }
+            for (const option of Object.values(options)) { html += `<div class="button${!(option as any).type ? '' : ' ' + (option as any).type}">${(option as any).body}</div>` }
             this.list_container.innerHTML = html;
 
             for (let i = 0; i < Object.keys(options).length; i++) {

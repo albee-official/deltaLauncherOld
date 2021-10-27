@@ -251,7 +251,7 @@ body:not(.video) .setting *.video-only {
     opacity: .32;
 }
 
-.themes > .theme > .button {
+.themes > .theme > .btn {
     width: 96px;
     height: 100%;
     display: flex;

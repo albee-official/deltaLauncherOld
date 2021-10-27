@@ -700,8 +700,8 @@ class UI {
                     <h1>Albee</h1>
                     <p>v1.0</p>
                 </div>
-                <div class="button">
-                    <div id="select-def-theme" class="select-button small">Выбрать</div>
+                <div class="btn">
+                    <div id="select-def-theme" class="button small">Выбрать</div>
                 </div>
             </div>`;
             for (let theme_name in settingsInterface.themes) {
@@ -715,8 +715,8 @@ class UI {
                         <h1>${theme.author}</h1>
                         <p>v${theme.version}</p>
                     </div>
-                    <div class="button">
-                        <div class="select-button small">Выбрать</div>
+                    <div class="btn">
+                        <div class="button small">Выбрать</div>
                     </div>
                 </div>`;
             }
