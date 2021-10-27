@@ -1,0 +1,119 @@
+.overlay-thing {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(var(--bg-secondary-alt-rgb), .8);
+    backdrop-filter: blur(128px);
+    z-index: 10;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 64px;
+    padding-right: 256px;
+    justify-content: space-between;
+    pointer-events: none;
+
+    transition: all .64s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.overlay-container {
+    position: relative;
+    left: -128px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+
+    transition: all .64s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.overlay-loading {
+    position: relative;
+    opacity: 0;
+    left: 128px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+
+    transition: all .64s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.overlay-container h1 {
+    color: rgba(var(--text-primary-rgb), 1);
+    font-weight: bold;
+    font-size: 32px;
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.overlay-container p {
+    color: rgba(var(--text-primary-rgb), .48);
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.overlay-container .list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.overlay-container .list .el {
+    position: relative;
+    cursor: pointer;
+    color: rgba(var(--text-primary-rgb), .48);
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    margin-bottom: 12px;
+
+    transition: color .32s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.overlay-container .list .el:hover {
+    color: rgba(var(--text-primary-rgb), 1);
+}
+
+.overlay-container .vertical-list {
+    display: flex;
+}
+
+.overlay-container .vertical-list > * {
+    margin-right: 32px;
+}
+
+.overlay-thing.open {
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+
+.overlay-thing.open .overlay-container {
+    left: 0;
+}
+
+.overlay-thing.ld > * {
+    -webkit-user-drag: no-drag;
+}
+
+.overlay-thing.ld.open > * {
+    -webkit-user-drag: drag;
+}
+
+.overlay-thing.ld {
+    -webkit-user-drag: no-drag;
+}
+
+.overlay-thing.ld.open {
+    -webkit-user-drag: drag;
+}
+
+.overlay-thing.ld.open .overlay-loading {
+    -webkit-user-drag: drag;
+    opacity: 1;
+    left: 0;
+}

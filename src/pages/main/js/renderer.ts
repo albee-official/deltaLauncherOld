@@ -28,6 +28,14 @@ declare let gc: any;
 declare let max_setable_ram: number;
 declare let min_setable_ram: number;
 declare let os: any;
+
+import type __Slider from '../../../components/slider/slider';
+declare class Slider extends __Slider {};
+
+import type { Overlay as __Overlay, SelectOverlay as __SelectOverlay, AskOverlay as __AskOverlay } from '../../../components/overlay/overlay';
+declare class Overlay extends __Overlay {};
+declare class SelectOverlay extends __SelectOverlay {};
+declare class AskOverlay extends __AskOverlay {};
 //#endregion
 
 // I manually wrote this and i regret doing it
@@ -101,301 +109,16 @@ if (settingsInterface.settings.dev_mode) {
     if (version_span) version_span.innerHTML = `${version}`;
 }
 
+let profile_picture_img = document.getElementById('profile-picture-img') as HTMLImageElement;
+profile_picture_img.src = `http://localhost:3000/api/get/profile-picture?id=${authInterface.logged_user.id}`;
+
+let profile_login_el = document.getElementById('profile-login-el') as HTMLHRElement;
+profile_login_el.innerText = authInterface.logged_user.login;
+
 enum sections {
     MAIN,
     SETTINGS,
     ACCOUNT,
-}
-
-class Slider {
-    el: HTMLDivElement;
-    input: HTMLInputElement;
-
-    id: string;
-    min: number;
-    max: number;
-    step: number;
-    unit: string;
-    step_values: string[];
-    free: boolean;
-    value_step: number;
-
-    max_val: number;
-    min_val: number;
-
-    focused: boolean;
-
-    private _index = 0;
-
-    constructor (slider: HTMLDivElement, value?: number, min?: number, max?:number, value_step?: number) { 
-        this.el = slider;
-
-        this.id = slider.id;
-        this.min = min || parseInt(slider.dataset.min as string);
-        this.max = max || parseInt(slider.dataset.max as string);
-        this.step = parseInt(slider.dataset.step as string) || -1;
-        this.unit = (slider.dataset.unit as string) || '';
-        this.value_step = value_step || parseInt(slider.dataset.spread as string) || 1;
-        this.step_values = (slider.dataset.values as string || '').toString().split(';');
-        this.free = slider.dataset.free == 'true'
-
-        this.max_val = this.max;
-        this.min_val = this.min;
-
-        this.focused = false;
-
-        let html = `
-            <input min="${this.min}" max="${this.max}" ${this.step > 0 ? 'step="' + this.step + '"' : 'step="1"'} type="range" name="${this.id}-input" id="${this.id}-input">
-            <div class="stops">
-        `;
-
-        if (this.free) {
-            html += `
-                <div class="stop only-value">
-                    <div class="value">
-                        ${this.min}${this.unit}
-                    </div>
-                    <div></div>
-                </div>
-                <div class="stop only-value">
-                    <div class="value">
-                        ${this.max}${this.unit}
-                    </div>
-                    <div></div>
-                </div>
-                <div class="stop pointer" style="position: absolute;">
-                    <div></div>
-                    <div class="value">
-                        ${this.min}${this.unit}
-                    </div>
-                </div>
-            `;
-        } else {
-            let j = 0;
-            if (this.step_values.length > 1) {
-                for (let i = this.min; i <= this.max; i += this.step) {
-                    if (j % this.value_step == 0) {
-                        html += `
-                            <div class="stop">
-                                <div class="line"></div>
-                                <div class="value">
-                                    ${this.step_values[j]}
-                                </div>
-                            </div>
-                        `
-                    } else {
-                        html += `
-                            <div class="stop empty">
-                                <div class="line"></div>
-                            </div>
-                        `
-                    }
-                    j++;
-                }
-            } else {
-                for (let i = this.min; i <= this.max; i += this.step) {
-                    if (j % this.value_step == 0) {
-                        html += `
-                            <div class="stop">
-                                <div class="line"></div>
-                                <div class="value">
-                                    ${i}${this.unit}
-                                </div>
-                            </div>
-                        `
-                    } else {
-                        html += `
-                            <div class="stop empty">
-                                <div class="line"></div>
-                            </div>
-                        `
-                    }
-                    j++;
-                }
-            }
-        }
-
-        html += `</div>`
-        slider.innerHTML = html;
-
-        let slider_input = slider.children[0] as HTMLInputElement;
-        this.input = slider_input;
-
-        if (value != undefined) this.value = value;        
-
-        if (!this.free) {
-            this._index = (parseInt(slider_input.value) - this.min) / this.step;
-            slider_input.addEventListener('input', () => {
-                this.value = Math.min(Math.max(this.min_val, this.value), this.max_val);
-                slider.children[1].children[this._index].classList.remove('active');
-                this._index = (parseInt(slider_input.value) - this.min) / this.step;
-                slider.children[1].children[this._index].classList.add('active');
-            });
-
-            this.el.children[1].children[(parseInt(this.input.value) - this.min) / this.step].classList.add('active');
-        } else {
-            let pointer = slider.children[1].children[2] as HTMLDivElement;
-            slider_input.addEventListener('input', () => {
-                this.value = Math.min(Math.max(this.min_val, this.value), this.max_val);
-                pointer.style.left = `${(parseFloat(slider_input.value) / this.max) * slider.clientWidth}px`;
-                pointer.children[1].innerHTML = `${slider_input.value}${this.unit}`;
-            });
-
-            pointer.style.left = `${(parseFloat(slider_input.value) / this.max) * slider.clientWidth}px`;
-            pointer.children[1].innerHTML = `${slider_input.value}${this.unit}`;
-        }
-        slider_input.onmouseenter = () => {
-            this.focused = true;
-        }
-        slider_input.onmouseleave = () => {
-            this.focused = false;
-        }
-    }
-
-    public set value(to: number) {
-        this.input.value = to.toString();
-
-        if (!this.free) {
-            this.el.children[1].children[this._index].classList.remove('active');
-            this._index = (parseInt(this.input.value) - this.min) / this.step;
-            this.el.children[1].children[this._index].classList.add('active');
-        } else {
-            let pointer = this.el.children[1].children[2] as HTMLDivElement;
-            pointer.style.left = `${(parseFloat(this.input.value) / this.max) * this.el.clientWidth}$xp`;
-            pointer.children[1].innerHTML = `${this.input.value}${this.unit}`;
-        }
-    }
-
-    public get value() {
-        return parseFloat(this.input.value);
-    }
-
-    public set oninput(to: any) {
-        this.input.oninput = to;
-    }
-
-    public set onchange(to: any) {
-        this.input.onchange = to;
-    }
-
-    public update() {
-        if (this.input.oninput) this.input.oninput(new Event('input'));
-        if (this.input.onchange) this.input.onchange(new Event('change'));
-    }
-}
-
-class Overlay {
-    public el = document.getElementById('overlay-thing') as HTMLDivElement
-    public h1_el = this.el?.querySelector('h1') as HTMLParagraphElement;
-    public p_el = this.el?.querySelector('p') as HTMLParagraphElement;
-
-    public _visible = false;
-
-    public set visible(to: boolean) {
-        if (to) {
-            this.el?.classList.add('open');
-        } else {
-            this.el?.classList.remove('open');
-        }
-        this._visible = to;
-    }
-
-    public get visible() { return this._visible; }
-
-    public set h1(to: string) {
-        if (this.h1_el) this.h1_el.innerText = to;
-    }
-
-    public get h1() {
-        if (this.h1_el) return this.h1_el.innerText;
-        return '';
-    }
-
-    public set p(to: string) {
-        if (this.p_el) this.p_el.innerText = to;
-    }
-
-    public get p() {
-        if (this.p_el) return this.p_el.innerText;
-        return '';
-    }
-
-    public show(title?: string, p?: string, loading=false) {
-        if (title) this.h1 = title;
-        if (p) this.p = p;
-        if (loading) this.el.classList.add('ld');
-        this.visible = true;
-    }
-
-    public hide() {
-        this.el.classList.remove('ld');
-        this.p = '';
-        this.h1 = '';
-        this.visible = false;
-    }
-}
-
-class SelectOverlay extends Overlay {
-    public el = document.getElementById('select-overlay-thing') as HTMLDivElement
-    public list_container = document.getElementById('select-overlay-list') as HTMLDivElement
-    public h1_el = this.el?.querySelector('h1') as HTMLParagraphElement;
-
-    public showSelect(title: string, options: {}) {
-        return new Promise((resolve, reject) => {
-            this.visible = true;
-
-            this.h1 = title;
-
-            this.list_container.innerHTML = '';
-            let html = '';
-            for (const option of Object.values(options)) { html += `<div class="el">${option}</div>` }
-            this.list_container.innerHTML = html;
-
-            for (let i = 0; i < Object.keys(options).length; i++) {
-                this.list_container.children[i].addEventListener('click', () => {
-                    console.log('selected', Object.values(options)[i]);
-                    this.visible = false;
-                    resolve(Object.keys(options)[i]);
-                });
-            }
-
-            this.el?.addEventListener('click', e => {
-                this.visible = false;
-                reject('focus lost');
-            });
-        })
-    }
-}
-
-class AskOverlay extends Overlay {
-    el = document.getElementById('ask-overlay-thing') as HTMLDivElement
-    list_container = document.getElementById('ask-overlay-list') as HTMLDivElement
-    h1_el = this.el?.querySelector('h1') as HTMLParagraphElement;
-    p_el = this.el?.querySelector('p') as HTMLParagraphElement;
-
-    public showSelect(title: string, options: {}, p?:string) {
-        return new Promise((resolve, reject) => {
-            this.show(title, p);
-
-            this.list_container.innerHTML = '';
-            let html = '';
-            for (const option of Object.values(options)) { html += `<div class="select-button${!(option as any).type ? '' : ' ' + (option as any).type}">${(option as any).body}</div>` }
-            this.list_container.innerHTML = html;
-
-            for (let i = 0; i < Object.keys(options).length; i++) {
-                this.list_container.children[i].addEventListener('click', () => {
-                    console.log('selected', Object.keys(options)[i]);
-                    this.hide();
-                    resolve(Object.keys(options)[i]);
-                });
-            }
-
-            this.el?.addEventListener('click', e => {
-                this.hide();
-                reject('focus lost');
-            });
-        })
-    }
 }
 
 class MainButton {
@@ -723,7 +446,7 @@ class SelectButton {
             
             case 'download':
                 this._el.innerHTML = 'Скачать';
-                this._el.classList.add('selected');
+                this._el.classList.remove('selected');
                 break;
 
             default:
@@ -1259,12 +982,6 @@ document.getElementById('select-insula')?.addEventListener('click', () => {
 
 ui.footer.h1 = `Выбрано: ${CapitalizeFirstLetter(ui.modpack)}`;
 //#endregion
-
-let profile_picture_img = document.getElementById('profile-picture-img') as HTMLImageElement;
-profile_picture_img.src = `http://localhost:3000/api/get/profile-picture?id=${authInterface.logged_user.id}`;
-
-let profile_login_el = document.getElementById('profile-login-el') as HTMLHRElement;
-profile_login_el.innerText = authInterface.logged_user.login;
 
 //#region PLAY BUTTON -------------------------------
 

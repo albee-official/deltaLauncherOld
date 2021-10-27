@@ -341,7 +341,7 @@ input {
 
 /* Buttons */
 
-.select-button {
+.button {
     min-width: 164px;
     padding: 0 32px;
     height: 38px;
@@ -359,39 +359,39 @@ input {
                 opacity .16s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.select-button.selected {
+.button.selected {
     opacity: .64;
 }
 
-.select-button.locked {
+.button.locked {
     opacity: .32;
     cursor: not-allowed;
 }
 
-.select-button.small {
+.button.small {
     font-size: 13px;
     min-width: 128px;
 }
 
-.select-button:hover {
+.button:hover {
     background: rgba(var(--text-primary-rgb), .08);
     border: rgba(var(--text-primary-rgb), .24) 2px solid;
 }
 
-.select-button.clr {
+.button.clr {
     border: rgba(var(--clr-primary-rgb), .16) 2px solid;
 }
 
-.select-button.clr:hover {
+.button.clr:hover {
     background: rgba(var(--clr-primary-rgb), 1);
     border: rgba(var(--clr-primary-rgb), .24) 2px solid;
 }
 
-.select-button.alt {
+.button.alt {
     border: rgba(var(--alt-primary-rgb), .16) 2px solid;
 }
 
-.select-button.alt:hover {
+.button.alt:hover {
     background: rgba(var(--alt-primary-rgb), 1);
     border: rgba(var(--alt-primary-rgb), .24) 2px solid;
 }

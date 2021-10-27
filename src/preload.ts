@@ -194,3 +194,16 @@ window.CapitalizeFirstLetter = (string: string) => {
 
 //#endregion
 //. ------------------
+//#region  //. Components --------------------------------------------
+import Slider from './components/slider/slider'
+//@ts-expect-error
+window.Slider = Slider;
+
+import { Overlay, SelectOverlay, AskOverlay} from './components/overlay/overlay'
+//@ts-expect-error
+window.Overlay = Overlay;
+//@ts-expect-error
+window.SelectOverlay = SelectOverlay;
+//@ts-expect-error
+window.AskOverlay = AskOverlay;
+///#endregion
