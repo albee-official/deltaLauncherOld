@@ -482,6 +482,9 @@ export class ModpackManager {
                 reject('already launched');
                 return;
             }
+
+            log.info(`[MODPACK] <${modpack_name}> checking libs...`);
+            await this.moveLibs(modpack_name);
     
             log.info(`[MODPACK] <${modpack_name}> launching...`);
     
