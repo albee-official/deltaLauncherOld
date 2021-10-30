@@ -475,17 +475,16 @@ export class ModpackManager {
         let json = JSON.parse(fs.readFileSync(path.join(pth, 'versions', 'Forge-1.12.2', 'Forge-1.12.2.json')).toString())
         let paths: string[] = [];
         for (const lib_obj of json.libraries) {
-            //* For Forge in-json list.
-            // if (lib_obj.classifies != undefined) {
-            //     let platform = os.platform();
-            //     let _pth = '';
+            if (lib_obj.classifies != undefined) {
+                let platform = os.platform();
+                let _pth = '';
 
-            //     if (platform == 'win32' && lib_obj.classifies['windows']) _pth = path.join(pth, 'libraries', lib_obj.classifies['windows'].path);
-            //     if (platform == 'darwin' && lib_obj.classifies['osx']) _pth = path.join(pth, 'libraries', lib_obj.classifies['osx'].path);
-            //     if (platform == 'linux' && lib_obj.classifies['linux']) _pth = path.join(pth, 'libraries', lib_obj.classifies['linux'].path);
+                if (platform == 'win32' && lib_obj.classifies['windows']) _pth = path.join(pth, 'libraries', lib_obj.classifies['windows'].path);
+                if (platform == 'darwin' && lib_obj.classifies['osx']) _pth = path.join(pth, 'libraries', lib_obj.classifies['osx'].path);
+                if (platform == 'linux' && lib_obj.classifies['linux']) _pth = path.join(pth, 'libraries', lib_obj.classifies['linux'].path);
 
-            //     if (await fs.pathExists(_pth)) paths.push(_pth)
-            // }
+                if (await fs.pathExists(_pth)) paths.push(_pth)
+            }
 
             if (lib_obj.artifact != undefined) {
                 let _pth = path.join(pth, 'libraries', lib_obj.artifact.path);
@@ -518,12 +517,7 @@ export class ModpackManager {
 
             let java_path = await this.get_latest_java_version_path(modpack_name);
 
-            let base_command = `-Dos.name=Windows 10 -Dos.version=10.0 -Djava.library.path=${libs_dir}\\versions\\1.12.2-forge-14.23.5.2855\\natives -cp ${libs_paths} --Xmn${min_ram * 1024}M -Xmx${max_ram * 1024}M -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true -Djava.net.preferIPv4Stack=true -Dminecraft.applet.TargetDirectory=${game_dir} net.minecraft.launchwrapper.Launch --username ${username} --version 1.12.2-forge-14.23.5.2855 --gameDir ${game_dir} --assetsDir ${libs_dir}\\assets --assetIndex 1.12 --uuid 123 --accessToken null --userType mojang --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width 925 --height 530`
-
-            //let base_command = `-Dos.name="Windows 10" -Dos.version="10.0" -Xmn${min_ram * 1024}M -Xmx${max_ram * 1024}M -Djava.library.path="${libs_dir}\\versions\\forge-14.23.5.2855\\natives" -cp ${libs_paths} -Dminecraft.applet.TargetDirectory=${game_dir} -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true net.minecraft.launchwrapper.Launch --username ${username} --version Forge-1.12.2 --gameDir ${game_dir} --assetsDir ${libs_dir}\\assets --assetIndex 1.12 --uuid ${uuid} --accessToken null --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width 925 --height 530`;
-
-            // if (this._settingsStorage.settings.dev_mode) base_command += ' -Dmixin.dumpTargetOnFailure=true';
-            //! JVM EXCEPTION: Could not create the Java Virtual Machine
+            let base_command = `-Dos.name="Windows 10" -Dos.version="10.0" -Djava.library.path="${libs_dir}\\versions\\1.12.2-forge-14.23.5.2855\\natives" -cp "${libs_paths}" -Xmn${min_ram * 1024}M -Xmx${max_ram * 1024}M -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true -Djava.net.preferIPv4Stack=true -Dminecraft.applet.TargetDirectory="${game_dir}" net.minecraft.launchwrapper.Launch --username ${username} --version 1.12.2-forge-14.23.5.2855 --gameDir "${game_dir}" --assetsDir "${libs_dir}\\assets" --assetIndex 1.12 --uuid ${uuid} --accessToken null --userType mojang --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width 925 --height 530`
             base_command = this.integrate_java_parameters(base_command);
             let cd_path = game_dir;
             let final_command = `${game_dir[0]}:&&cd "${cd_path}"&&"${java_path}" ${base_command}`;
@@ -576,9 +570,9 @@ export class ModpackManager {
     private __found_paths: string[] = [];
     public findAllFiles(pth: string, looking_for: string): Promise<string[]> {
         this.__found_paths = [];
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
-                this.findAllFiles_rec(pth, looking_for, 64);
+                await this.findAllFiles_rec(pth, looking_for, 64);
                 resolve(this.__found_paths);
             } catch (err) {
                 reject(err)
@@ -587,25 +581,27 @@ export class ModpackManager {
     }
 
     private findAllFiles_rec(pth: string, looking_for: string, steps: number) {
-        if (steps <= 0) return;
-        let ext = path.extname(pth);
-        if (ext == looking_for) {
-            this.__found_paths.push(pth);
-            return;
+        return new Promise(async (resolve, _) => {
+            if (steps <= 0) resolve(undefined);
+            let ext = path.extname(pth);
+            if (ext == looking_for) {
+                this.__found_paths.push(pth);
+                resolve(undefined);
 
-        }
-
-        try {
-            let files = fs.readdirSync(`${pth}`)
-            if (files.length < 1) return;
-            for (const _pth of files) {
-                this.findAllFiles_rec(path.join(pth, _pth), looking_for, steps - 1)
             }
-        } catch (err) {
-            return;
-        }
 
-        return;
+            try {
+                let files = fs.readdirSync(`${pth}`)
+                if (files.length < 1) resolve(undefined);
+                for (const _pth of files) {
+                    await this.findAllFiles_rec(path.join(pth, _pth), looking_for, steps - 1)
+                }
+            } catch (err) {
+                resolve(undefined);
+            }
+
+            resolve(undefined);
+        })
     }
 
     private async get_latest_java_version_path(modpack_name: string): Promise<string> {
