@@ -17,6 +17,7 @@ app.on('ready', () => {
 });
 
 app.commandLine.appendSwitch("js-flags", "--expose_gc --max-old-space-size=256");
+
 // app.allowRendererProcessReuse = false;
 
 function appReady() {
@@ -69,12 +70,12 @@ function createMainWindow() {
             },
             show: false,
         })
-    
+
         win.loadFile('./src/pages/main/index.html');
         win.on('ready-to-show', async () => {
             resolve(win);
         });
-    
+
         win.webContents.on("devtools-opened", (err: string) => {
             win.webContents.send("devtools-opened");
             log.info("console opened");
@@ -150,6 +151,6 @@ ipcMain.on('open-start-window', async (event) => {
     BrowserWindow.getAllWindows()[1].destroy();
 })
 
-ipcMain.on('get-window', (event) => {    
+ipcMain.on('get-window', (event) => {
     event.reply('window-id', event.sender.id)
 })

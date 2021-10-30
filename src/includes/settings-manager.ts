@@ -18,7 +18,7 @@ const settings_pattern = {
     version: "",
     modpack_settings: {
         allocated_memory: 4,
-        optimization_level: 2,
+        optimization_level: 3,
         java_parameters: "",
         use_builtin_java: true,
         show_console_output: false,
@@ -82,13 +82,13 @@ export class SettingsStorage {
     public first_launch = false;
     public after_update = false;
 
-    public constructor (remote: typeof rmt, root: string) {
+    public constructor(remote: typeof rmt, root: string) {
         log.info('init');
 
         this._root = root;
 
         //. Get settings
-        
+
         this._settings_path = path.join(this._root, 'settings.json');
         fs.ensureFileSync(this._settings_path);
 
@@ -96,7 +96,7 @@ export class SettingsStorage {
         try {
             let raw = fs.readFileSync(this._settings_path).toString();
             if (raw) settings = JSON.parse(raw);
-                
+
         } catch (err) {
             log.info('error occured while trying to read settings');
             console.error('', err);
@@ -146,7 +146,7 @@ export class SettingsStorage {
                 } catch (err) {
                     log.info(`error while parsing '${theme_name}'`);
                     log.info(`make sure your theme fits the pattern:\n\t@name: ''\n\t@author: ''\n\t@version: ''\n\t@description: ''\n\t@default-bg: ''\n`);
-                    
+
                     console.warn(err);
                 }
             }
@@ -188,7 +188,7 @@ export class SettingsInterface {
     public first_launch: boolean;
     public after_update: boolean;
 
-    public constructor (remote: typeof rmt, ipcRenderer: typeof ipc) {
+    public constructor(remote: typeof rmt, ipcRenderer: typeof ipc) {
         log.info('manager init');
         let storage = remote.getGlobal('settingsStorage');
         this._root = storage._root;
@@ -200,15 +200,15 @@ export class SettingsInterface {
         this.after_update = storage.after_update;
     }
 
-    public get events () { return this._events; }
-    public set events(_) {}
+    public get events() { return this._events; }
+    public set events(_) { }
 
     public get root() {
         fs.ensureDirSync(this._root)
         return path.normalize(this._root);
     }
 
-    public set root(_) {}
+    public set root(_) { }
 
     public get settings() {
         fs.ensureFileSync(this._settings_path);
@@ -231,7 +231,7 @@ export class SettingsInterface {
     public saveSync() {
         remote.getGlobal('settingsStorage').saveSync();
     }
-    
+
     //#region Appearance
 
     public get bg() {
@@ -240,7 +240,7 @@ export class SettingsInterface {
         } else {
             return path.normalize(this._settings.appearance.bg);
         }
-        
+
     }
 
     public set filter_opacity(to: number) {
@@ -273,7 +273,7 @@ export class SettingsInterface {
                 bg_el.parentElement?.parentElement?.classList.add('plain');
             }
         } else if (to != undefined && to != '') {
-            let ext = path.extname(to);   
+            let ext = path.extname(to);
             if (ext == '.png' || ext == '.jpeg' || ext == '.jpg' || ext == '.gif') {
                 log.info('applying image bg', to);
                 let bg_el = document.getElementById('bg-img') as HTMLImageElement;
@@ -302,7 +302,7 @@ export class SettingsInterface {
                     }
                 }
             }
-            
+
             this._settings.appearance.bg = to;
         } else if (to == '') {
             log.info(`setting default bg for '${this._settings.appearance.theme}'`);
@@ -338,7 +338,7 @@ export class SettingsInterface {
                     bg_el.parentElement?.parentElement?.classList.add('plain');
                 }
             } else if (to != undefined && to != '') {
-                let ext = path.extname(to);   
+                let ext = path.extname(to);
                 if (ext == '.png' || ext == '.jpeg' || ext == '.jpg' || ext == '.gif') {
                     log.info('applying image bg', to);
                     let bg_el = document.getElementById('bg-img') as HTMLImageElement;
@@ -367,7 +367,7 @@ export class SettingsInterface {
                         }
                     }
                 }
-                
+
                 this._settings.appearance.bg = to;
             } else if (to == '') {
                 log.info(`setting default bg for '${this._settings.appearance.theme}'`);
@@ -383,12 +383,12 @@ export class SettingsInterface {
                             dflt = '../../res/bg-light.jpg';
                         }
                     }
-    
+
                     bg_el.src = dflt;
                     this._settings.appearance.bg = to;
                 }
             }
-    
+
             this._events.emit('bg-loaded');
             resolve(true);
         });
@@ -398,7 +398,7 @@ export class SettingsInterface {
         return this._themes_path;
     }
 
-    public set themes_path(_: any) {}
+    public set themes_path(_: any) { }
 
     public get themes() {
         return this._themes;
@@ -407,7 +407,7 @@ export class SettingsInterface {
     public get theme() {
         return this._settings.appearance.theme;
     }
-    
+
     public set theme(to) {
         if (this._themes[to] != undefined) {
             log.info('applying theme', this._themes[to]);
@@ -415,7 +415,7 @@ export class SettingsInterface {
             if (theme_link) {
                 theme_link.setAttribute('href', this._themes[to].path)
             }
-            
+
             this._settings.appearance.theme = to;
             this.bg = this.bg;
         } else if (to == '') {
@@ -448,7 +448,7 @@ export class SettingsInterface {
                 if (theme_link) {
                     theme_link.setAttribute('href', this._themes[to].path)
                 }
-                
+
                 this._settings.appearance.theme = to;
             } else if (to == '') {
                 log.info('setting default theme');
@@ -457,7 +457,7 @@ export class SettingsInterface {
                 reject('no-theme');
                 return;
             }
-    
+
             this._events.emit('theme-loaded');
             resolve(true);
         });

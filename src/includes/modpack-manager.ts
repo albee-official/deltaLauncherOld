@@ -22,6 +22,9 @@ function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// WIP: Remember to add graphics manager to modpacks.
+//      Subdirectories typed below.
+
 // Subdirectory for graphics: ./.essentials/_SETTINGS
 //! Don't touch .source.json and .versions.json it's for legal purposes
 enum GRAPHICS_LEVELS {

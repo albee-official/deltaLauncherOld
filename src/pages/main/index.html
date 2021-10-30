@@ -257,8 +257,8 @@
                 </div>
                 <div class="sidemenu opened">
                     <h1>Выделение памяти</h1>
-                    <div id="sidemenu-memory-slider" data-min="2" data-max="16" data-step="1" data-unit="Гб" data-spread="2" class="slider"></div>
-                    <h1>Дополнительные моды</h1>
+                    <div id="sidemenu-memory-slider" data-min="2" data-max="16" data-step="1" data-unit="GB" data-spread="2" class="slider"></div>
+                    <h1>Дополнительные установки</h1>
                     <label data-name="inventory-tweaks" class="checkbox">
                         <input type="checkbox">
                         <p class="checkbox-text">Inventory Tweaks</p>
@@ -298,18 +298,18 @@
                         <div class="category-items">
                             <div class="setting">
                                 <h1>Выделение памяти</h1>
-                                <div id="memory-slider" data-min="2" data-max="16" data-step="1" data-unit="Гб" data-spread="2" class="slider"></div>
+                                <div id="memory-slider" data-min="2" data-max="16" data-step="1" data-unit="GB" data-spread="2" class="slider"></div>
                                 <div class="tip">
-                                    <h1>Внимение!</h1>
-                                    <p>Значения ниже 6 Гигабайтов могут вызывать лаги во время игры.</p>
+                                    <h1>Обратите внимание.</h1>
+                                    <p>Выделяйте игре памяти дабы ваши настройки соответствовали минимальным системным требованиям.</p>
                                 </div>
                             </div>
                             <div class="setting">
-                                <h1>Степень оптимизации</h1>
-                                <div id="optimization-slider" data-min="1" data-max="5" data-step="1" data-values="Минимальная;Низкая;Средняя;Высокая;Максимальная" class="slider"></div>
+                                <h1>Настройки графики</h1>
+                                <div id="optimization-slider" data-min="1" data-max="5" data-step="1" data-values="Минимальные;Низкие;Средние;Высокие;Максимальные" class="slider"></div>
                                 <div class="tip">
-                                    <h1>Важно!</h1>
-                                    <p>При данном уровне графики, игра может выглядеть ужасно, а местами и не правильно.</p>
+                                    <h1>Обратите внимание.</h1>
+                                    <p>При выборе данных настроек графики игра теряет свои визуальные качества.</p>
                                 </div>
                             </div>
                             <div class="setting">
@@ -350,14 +350,14 @@
                                 </div>
                             </div>
                             <div class="setting dev-only">
-                                <h1>Параметры запуска Java</h1>
-                                <input type="text" placeholder="Не указанны">
+                                <h1>Параметры запуска JVM</h1>
+                                <input type="text" placeholder="Не указаны">
                                 <div class="tip">
                                     <p>Неправильные параметры могут повлечь проблемы с запуском и нестабильность игры в целом. Не советуем писать сюда что либо просто так.</p>
                                 </div>
                             </div>
                             <div class="setting">
-                                <h1>Дополнительные моды</h1>
+                                <h1>Дополнительные установки</h1>
                                 <div class="addons">
                                     <label data-name="inventory-tweaks" class="checkbox">
                                         <input type="checkbox">
@@ -440,13 +440,13 @@
                                 <p id="reset-bg" class="just-button">Сбросить</p>
                                 <div class="tip">
                                     <h1>Поддерживаемые форматы: png, jpg, jpeg, gif, mp4, mov</h1>
-                                    <p>Установка видео как заднего фона может кушать много мощностей видеокарты.</p>
+                                    <p>При использовании видео-файлов на заднем плане лаунчер может потреблять дополнительные мощности видеокарты.</p>
                                 </div>
                                 <div class="big-gap"></div>
                                 <h2 class="video-only">Настройки видео</h2>
                                 <label data-name="bg-muted" class="checkbox video-only">
                                     <input id="bg-muted-cb" type="checkbox">
-                                    <p class="checkbox-text">Заглушить задний фон</p>
+                                    <p class="checkbox-text">Приглушить задний фон</p>
                                     <div class="checkmark">
                                         <div class="checkmark-fill"></div>
                                     </div>
@@ -458,15 +458,15 @@
                                 <div id="themes-container" class="themes">
                                     <div class="theme">
                                         <div class="left">
-                                            <h1>Default</h1>
-                                            <p>Standart look of delta</p>
+                                            <h1>Стандартная</h1>
+                                            <p>Обычный вид лаунчера.</p>
                                         </div>
                                         <div class="right">
                                             <h1>Albee</h1>
                                             <p>v1.0</p>
                                         </div>
                                         <div class="btn">
-                                            <div id="select-def-theme" class="button small">Выбрать</div>
+                                            <div id="select-def-theme" class="button small">Выбрано</div>
                                         </div>
                                     </div>
                                 </div>
@@ -496,7 +496,7 @@
                                 </label>
                                 <label data-name="use-builtin-java" class="checkbox">
                                     <input id="use-builtin-java" type="checkbox">
-                                    <p class="checkbox-text">Использовать встроенную Java</p>
+                                    <p class="checkbox-text">Использовать встроенную JVM</p>
                                     <div class="checkmark">
                                         <div class="checkmark-fill"></div>
                                     </div>
@@ -517,7 +517,7 @@
                 </div>
             </section>
             <section class="account toright">
-                <h1>uwu senpai baka</h1>
+                <h1>В разработке</h1>
             </section>
         </div>
     </main>
@@ -543,7 +543,7 @@
             <div class="main-button">
                 <div id="main-button" class="info">
                     <h1>Играть</h1>
-                    <p>Автозаход на сервер выключен</p>
+                    <p>Автозаход на сервер отключен</p>
                 </div>
                 <div id="open-other-buttons" class="open-other-buttons">
                     <svg xmlns="http://www.w3.org/2000/svg" width="10.854" height="6.426" viewBox="0 0 10.854 6.426">

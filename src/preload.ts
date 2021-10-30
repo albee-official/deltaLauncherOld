@@ -46,27 +46,27 @@ window.autoUpdater = autoUpdater;
 
 //@ts-expect-error
 window.browserWindow = {
-    exit: () => {remote.getCurrentWindow().close()},
-    minimize: () => {remote.getCurrentWindow().minimize()},
-    maximize: () => {remote.getCurrentWindow().maximize()},
-    show: () => {remote.getCurrentWindow().show()},
+    exit: () => { remote.getCurrentWindow().close() },
+    minimize: () => { remote.getCurrentWindow().minimize() },
+    maximize: () => { remote.getCurrentWindow().maximize() },
+    show: () => { remote.getCurrentWindow().show() },
     //@ts-expect-error
-    reload: () => {window.modpackManager.downloader.cancel(); remote.getCurrentWindow().reload()},
-    isDevToolsOpened: () => {return remote.getCurrentWindow().webContents.isDevToolsOpened()}
+    reload: () => { window.modpackManager.downloader.cancel(); remote.getCurrentWindow().reload() },
+    isDevToolsOpened: () => { return remote.getCurrentWindow().webContents.isDevToolsOpened() }
 }
 
 //@ts-expect-error
 window.ipcRenderer = {
     send: ipcRenderer.send,
     sendSync: ipcRenderer.sendSync,
-    on: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {ipcRenderer.on(channel, listener)},
-    once: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {ipcRenderer.once(channel, listener)},
-    removeAllListeners: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {ipcRenderer.removeAllListeners(channel)},
+    on: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => { ipcRenderer.on(channel, listener) },
+    once: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => { ipcRenderer.once(channel, listener) },
+    removeAllListeners: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => { ipcRenderer.removeAllListeners(channel) },
 }
 
 //@ts-expect-error
 window.shell = {
-    showItemInFolder: async (path: string) => {        
+    showItemInFolder: async (path: string) => {
         await shell.showItemInFolder(path);
     },
     openPath: async (path: string) => {
@@ -79,7 +79,7 @@ window.shell = {
 
 //@ts-expect-error
 window.path = {
-    ...path    
+    ...path
 }
 
 //@ts-expect-error
@@ -95,7 +95,7 @@ window.dialog = {
 
 //@ts-expect-error
 if (window.browserWindow.isDevToolsOpened()) {
-    let header_color = `#705CF2`; 
+    let header_color = `#705CF2`;
     let p_color = `#6754E2`;
     console.info("%cПодожди-ка!", `color:${header_color}; font-size: 48px; padding: 8px 0; font-weight:bold`);
     console.info("%cТот, кто попросил вставить что либо сюда, с вероятностью 420/69 хочет тебя обмануть.", "color:#ffffff; font-size: 14px; padding: 8px 0");
@@ -103,7 +103,7 @@ if (window.browserWindow.isDevToolsOpened()) {
 }
 
 ipcRenderer.on('devtools-opened', (_) => {
-    let header_color = `#705CF2`; 
+    let header_color = `#705CF2`;
     let p_color = `#6754E2`;
     console.info("%cПодожди-ка!", `color:${header_color}; font-size: 48px; padding: 8px 0; font-weight:bold`);
     console.info("%cТот, кто попросил вставить что либо сюда, с вероятностью 420/69 хочет тебя обмануть.", "color:#ffffff; font-size: 14px; padding: 8px 0");
@@ -149,7 +149,7 @@ window.onload = async () => {
 
     if (settingsInterface.settings.dev_mode) document.body.classList.add('dev');
     (document.getElementById('bg-video') as HTMLVideoElement).muted = settingsInterface.settings.appearance.muted;
-    
+
     document.getElementById('app-exit')?.addEventListener('click', () => {
         console.log('exiting');
         //@ts-expect-error
@@ -199,7 +199,7 @@ import Slider from './components/slider/slider'
 //@ts-expect-error
 window.Slider = Slider;
 
-import { Overlay, SelectOverlay, AskOverlay} from './components/overlay/overlay'
+import { Overlay, SelectOverlay, AskOverlay } from './components/overlay/overlay'
 //@ts-expect-error
 window.Overlay = Overlay;
 //@ts-expect-error

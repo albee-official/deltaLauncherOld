@@ -30,12 +30,12 @@ declare let min_setable_ram: number;
 declare let os: any;
 
 import type __Slider from '../../../components/slider/slider';
-declare class Slider extends __Slider {};
+declare class Slider extends __Slider { };
 
 import type { Overlay as __Overlay, SelectOverlay as __SelectOverlay, AskOverlay as __AskOverlay } from '../../../components/overlay/overlay';
-declare class Overlay extends __Overlay {};
-declare class SelectOverlay extends __SelectOverlay {};
-declare class AskOverlay extends __AskOverlay {};
+declare class Overlay extends __Overlay { };
+declare class SelectOverlay extends __SelectOverlay { };
+declare class AskOverlay extends __AskOverlay { };
 //#endregion
 
 // I manually wrote this and i regret doing it
@@ -134,7 +134,7 @@ class MainButton {
     private _state = 'play';
     private _locked = false;
 
-    constructor () {
+    constructor() {
         this.state = 'play';
         this.locked = false;
     }
@@ -142,12 +142,12 @@ class MainButton {
     public set sub_buttons(to: any[]) {
         this._sub_buttons = to;
         this.container_el.innerHTML = ``;
-        
+
         let html = '';
-            for (let i = 0; i < to.length; i++) {
-                const el = to[i];
-                if (el.toggle) {
-                    html += `<div style="--order: ${i}" class="sub-button toggle">
+        for (let i = 0; i < to.length; i++) {
+            const el = to[i];
+            if (el.toggle) {
+                html += `<div style="--order: ${i}" class="sub-button toggle">
                         <div class="info">
                             <h1>${el.title}</h1>
                         </div>
@@ -155,16 +155,16 @@ class MainButton {
                             Да
                         </div>
                     </div>`
-                } else {
-                    html += `<div style="--order: ${i}" class="sub-button">
+            } else {
+                html += `<div style="--order: ${i}" class="sub-button">
                         <div class="info">
                             <h1>${el.title}</h1>
                         </div>
                     </div>`
-                }
             }
+        }
 
-            html += `<div class="main-button">
+        html += `<div class="main-button">
                 <div id="main-button" class="info">
                     <h1>${this.h1}</h1>
                     <p>${this.p}</p>
@@ -176,32 +176,44 @@ class MainButton {
                 </div>
             </div>`;
 
-            this.container_el.innerHTML += html;
+        this.container_el.innerHTML += html;
 
-            let sub_butttons = document.querySelectorAll('.sub-button');
+        let sub_butttons = document.querySelectorAll('.sub-button');
 
-            let btns = document.getElementById('main-button-container') as HTMLDivElement;
-            (document.getElementById('open-other-buttons')  as HTMLDivElement).addEventListener('mouseenter', () => {            
-                btns.classList.add('show-sub');
-            });
+        let btns = document.getElementById('main-button-container') as HTMLDivElement;
+        (document.getElementById('open-other-buttons') as HTMLDivElement).addEventListener('mouseenter', () => {
+            btns.classList.add('show-sub');
+        });
 
-            btns.addEventListener('mouseleave', () => {
-                btns.classList.remove('show-sub');
-            });
+        btns.addEventListener('mouseleave', () => {
+            btns.classList.remove('show-sub');
+        });
 
-            (document.getElementById('main-button') as HTMLDivElement).addEventListener('mouseenter', () => {
-                btns.classList.remove('show-sub');
-            });
+        (document.getElementById('main-button') as HTMLDivElement).addEventListener('mouseenter', () => {
+            btns.classList.remove('show-sub');
+        });
 
-            for (let i = 0; i < sub_butttons.length; i++) {
-                let btn = sub_butttons[i] as HTMLDivElement;
-                if (!btn.classList.contains('toggle')) {
-                    btn.addEventListener('click', () => {
-                        to[i].onclick();
-                    })
+        for (let i = 0; i < sub_butttons.length; i++) {
+            let btn = sub_butttons[i] as HTMLDivElement;
+            if (!btn.classList.contains('toggle')) {
+                btn.addEventListener('click', () => {
+                    to[i].onclick();
+                })
+            } else {
+                let btn_child = btn.children[1];
+                if (to[i].checked) {
+                    //@ts-expect-error
+                    btn_child.dataset.state = 'true';
+                    btn_child.innerHTML = 'Да';
                 } else {
-                    let btn_child = btn.children[1];
-                    if (to[i].checked) {
+                    //@ts-expect-error
+                    btn_child.dataset.state = 'false';
+                    btn_child.innerHTML = 'Нет';
+                }
+
+                btn.addEventListener('click', () => {
+                    //@ts-expect-error
+                    if (btn_child.dataset.state == 'false') {
                         //@ts-expect-error
                         btn_child.dataset.state = 'true';
                         btn_child.innerHTML = 'Да';
@@ -210,23 +222,11 @@ class MainButton {
                         btn_child.dataset.state = 'false';
                         btn_child.innerHTML = 'Нет';
                     }
-
-                    btn.addEventListener('click', () => {
-                        //@ts-expect-error
-                        if (btn_child.dataset.state == 'false') {
-                            //@ts-expect-error
-                            btn_child.dataset.state = 'true';
-                            btn_child.innerHTML = 'Да';
-                        } else {
-                            //@ts-expect-error
-                            btn_child.dataset.state = 'false';
-                            btn_child.innerHTML = 'Нет';
-                        }
-                        //@ts-expect-error
-                        to[i].onclick(btn_child.dataset.state == 'true');
-                    })
-                }
+                    //@ts-expect-error
+                    to[i].onclick(btn_child.dataset.state == 'true');
+                })
             }
+        }
 
         this.el = document.getElementById('main-button') as HTMLDivElement
         this.container_el = this.el.parentElement?.parentElement as HTMLDivElement
@@ -318,7 +318,7 @@ class MainButton {
             case 'launched':
                 this.locked = true;
                 this.h1 = 'Запущена';
-                this.p = 'Сборка уже запущена';
+                this.p = 'Вы уже играете на данной сборке';
                 this.sub_buttons = [];
                 break;
 
@@ -369,7 +369,7 @@ class MainButton {
                 this.p = 'Не выключайте лаунчер';
                 this.sub_buttons = [];
                 break;
-            
+
             case 'paused':
                 this.locked = false;
                 this.h1 = 'Возобновить';
@@ -408,7 +408,7 @@ class SelectButton {
     private _state: string;
     private _locked: boolean;
 
-    constructor (id: string, c_state='none') {
+    constructor(id: string, c_state = 'none') {
         this._locked = false;
         this._id = id;
         this._el = document.getElementById(id) as HTMLDivElement;
@@ -431,7 +431,7 @@ class SelectButton {
 
     public set state(to: string) {
         console.log(to);
-        
+
         this._state = to;
         switch (this._state) {
             case 'none':
@@ -443,7 +443,7 @@ class SelectButton {
                 this._el.innerHTML = 'Выбрано';
                 this._el.classList.add('selected');
                 break;
-            
+
             case 'download':
                 this._el.innerHTML = 'Скачать';
                 this._el.classList.remove('selected');
@@ -511,13 +511,13 @@ class KeySelect {
     public _param: any;
     public _overlay: Overlay;
 
-    constructor (id: string, param: string, overlay: Overlay) {
+    constructor(id: string, param: string, overlay: Overlay) {
         this._id = id;
         this.el = document.getElementById(id) as HTMLDivElement;
         this._param = param;
         this._overlay = overlay;
 
-        this.el.addEventListener('click', () => {this.select()})
+        this.el.addEventListener('click', () => { this.select() })
     }
 
     public select() {
@@ -599,7 +599,7 @@ class UI {
     public blur_slider = new Slider(document.getElementById('blur-slider') as HTMLDivElement, settingsInterface.blur_amount);
     public opacity_slider = new Slider(document.getElementById('opacity-slider') as HTMLDivElement, settingsInterface.filter_opacity);
 
-    constructor () {
+    constructor() {
         async function updateModpackDirs() {
             (document.getElementById('libs-dir') as HTMLParagraphElement).innerText = await modpackManager.ensureLibsDir();
             (document.getElementById('magicae-dir') as HTMLParagraphElement).innerText = await modpackManager.ensureModpackDir('magicae');
@@ -647,15 +647,15 @@ class UI {
 
         async function showSelectModpack(modpack: string) {
             let options = {
-                title : "Выберите папку", 
+                title: "Выберите папку",
                 properties: ['openDirectory']
-               }
-               
+            }
+
             let file = await dialog.showOpenDialog(options)
             if (file.canceled) return;
 
             console.log(file.filePaths[0]);
-            
+
             //@ts-expect-error
             settingsInterface.settings.modpacks[modpack].path = path.normalize(file.filePaths[0]);
             settingsInterface.save();
@@ -681,14 +681,14 @@ class UI {
             }
         }
 
-        (document.getElementById('magicae-dir') as HTMLParagraphElement).addEventListener('click', (e) => {modpackHandler(e, 'magicae')});
-        (document.getElementById('fabrica-dir') as HTMLParagraphElement).addEventListener('click', (e) => {modpackHandler(e, 'fabrica')});
-        (document.getElementById('statera-dir') as HTMLParagraphElement).addEventListener('click', (e) => {modpackHandler(e, 'statera')});
-        (document.getElementById('insula-dir') as HTMLParagraphElement).addEventListener('click', (e) => {modpackHandler(e, 'insula')});
+        (document.getElementById('magicae-dir') as HTMLParagraphElement).addEventListener('click', (e) => { modpackHandler(e, 'magicae') });
+        (document.getElementById('fabrica-dir') as HTMLParagraphElement).addEventListener('click', (e) => { modpackHandler(e, 'fabrica') });
+        (document.getElementById('statera-dir') as HTMLParagraphElement).addEventListener('click', (e) => { modpackHandler(e, 'statera') });
+        (document.getElementById('insula-dir') as HTMLParagraphElement).addEventListener('click', (e) => { modpackHandler(e, 'insula') });
 
         this.footer.p = 'Разработчик';
 
-        function displayThemes() {            
+        function displayThemes() {
             let themes_html = '';
             if (themes_container) themes_container.innerHTML = `<div class="theme">
                 <div class="left">
@@ -736,7 +736,7 @@ class UI {
                 const ussr = authInterface.users[k];
                 users = {
                     ...users,
-                    [ussr.id]: ussr.login, 
+                    [ussr.id]: ussr.login,
                 }
             }
 
@@ -778,7 +778,7 @@ class UI {
             settingsInterface.settings.modpack_settings.show_console_output = !settingsInterface.settings.modpack_settings.show_console_output;
             settingsInterface.save();
         });
-        
+
         (document.getElementById('use-builtin-java') as HTMLInputElement).checked = settingsInterface.settings.modpack_settings.use_builtin_java;
         document.getElementById('use-builtin-java')?.addEventListener('click', () => {
             settingsInterface.settings.modpack_settings.use_builtin_java = !settingsInterface.settings.modpack_settings.use_builtin_java;
@@ -799,7 +799,7 @@ class UI {
             displayThemes();
         });
 
-        document.getElementById('select-def-theme')?.addEventListener('click', () => { 
+        document.getElementById('select-def-theme')?.addEventListener('click', () => {
             settingsInterface.theme = '';
             settingsInterface.save();
         });
@@ -817,18 +817,18 @@ class UI {
 
         document.getElementById('change-bg')?.addEventListener('click', async () => {
             let options = {
-                title : "Выберите задний фон", 
-                filters :[
-                    {name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'ogg', 'mov']},
+                title: "Выберите задний фон",
+                filters: [
+                    { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'ogg', 'mov'] },
                 ],
                 properties: ['openFile']
-               }
-               
+            }
+
             let file = await dialog.showOpenDialog(options)
             if (file.canceled) return;
 
             console.log(file.filePaths[0]);
-            
+
             settingsInterface.bg = path.normalize(file.filePaths[0]);
             settingsInterface.save();
 
@@ -878,12 +878,12 @@ class UI {
     public set modpack(to) {
         this._buttons[settingsInterface.settings.on_modpack].state
             = modpackManager.modpacks[settingsInterface.settings.on_modpack].installed ? 'none' : 'download';
-            this._buttons[to].state = 'selected';
+        this._buttons[to].state = 'selected';
         this.updateMainButtonState(to);
         settingsInterface.settings.on_modpack = to;
     }
 
-    public updateMainButtonState(modpack=this.modpack) {
+    public updateMainButtonState(modpack = this.modpack) {
         if (Object.keys(modpackManager.launched_modpacks).includes(modpack) && modpackManager.launched_modpacks[modpack] != undefined) {
             this.main_button.state = 'launched';
         } else if (modpackManager.modpacks[modpack].installed) {
@@ -921,7 +921,7 @@ function openSection(_section: sections) {
 
         section_elements[section].classList.remove('toleft');
         section_elements[section].classList.remove('toright');
-        
+
         nav_elements[section].classList.add('active');
 
         for (let i = section + 1; i < section_elements.length; i++) {
@@ -1046,7 +1046,7 @@ async function main_button_click() {
         ui.footer.p = `Ожидание ответа сервера${LOADING_SPAN}`;
 
         downloading = true;
-        
+
         ui.main_button.state = 'download'
         let downloaded = modpackManager.downloadModpack(modpack);
 
@@ -1133,16 +1133,16 @@ ipcRenderer.on('modpack-launched', (event, modpack_name) => {
     ui.can_select_modpack = true;
 })
 
-ipcRenderer.on('modpack-data', (event, {modpack_name, data}) => {
+ipcRenderer.on('modpack-data', (event, { modpack_name, data }) => {
     console.log(`[MODPACK] <${modpack_name}> ${data}`);
 })
 
-ipcRenderer.on('modpack-exit', (event, {modpack_name, code, signal}) => {
+ipcRenderer.on('modpack-exit', (event, { modpack_name, code, signal }) => {
     console.log(`[MODPACK] <${modpack_name}> modpack exited with code ${code} - ${signal}`);
     ui.updateMainButtonState();
 })
 
-ipcRenderer.on('modpack-error', (event, {modpack_name, error}) => {
+ipcRenderer.on('modpack-error', (event, { modpack_name, error }) => {
     console.log(`[MODPACK] <${modpack_name}> ${error}`);
     ui.updateMainButtonState();
 })
