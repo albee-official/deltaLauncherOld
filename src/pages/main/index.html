@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,6 +30,7 @@
     <title>Delta</title>
     <script defer src="../../../dist/pages/main/js/renderer.js"></script>
 </head>
+
 <body class="reduced-motion">
     <div id="ask-overlay-thing" class="overlay-thing">
         <div class="overlay-container">
@@ -85,7 +87,7 @@
         <div id="bg-opacity" class="color"></div>
         <div id="bg-blur" class="filter"></div>
         <div class="img">
-            <img id="bg-img" src="" alt=""/>
+            <img id="bg-img" src="" alt="" />
             <video autoplay muted loop id="bg-video" src="" alt=""></video>
         </div>
     </div>
@@ -98,7 +100,7 @@
                   <line id="Line_40" data-name="Line 40" x2="10" transform="translate(0 11)" fill="none" stroke="var(--app-icon-clr)" stroke-linecap="round" stroke-width="2"/>
                   <line id="Line_41" data-name="Line 41" x2="10" fill="none"/>
                 </g>
-            </svg>              
+            </svg>
         </div>
         <div id="app-reload" class="reload">
             <svg xmlns="http://www.w3.org/2000/svg" width="11.99" height="11.713" viewBox="0 0 11.99 11.713">
@@ -175,7 +177,7 @@
                                       <path id="Path_424" data-name="Path 424" d="M132.541,332.777a4.578,4.578,0,1,0-1.185,4.422A4.565,4.565,0,0,0,132.541,332.777Zm-2.8,2.8a2.289,2.289,0,1,1,0-3.237A2.29,2.29,0,0,1,129.737,335.582Z" transform="translate(0 -171.115)" fill="var(--fill-clr)"/>
                                       <path id="Path_425" data-name="Path 425" d="M216.324,215.74l-7.733,7.733h-.128a6.689,6.689,0,0,1,0-2.375h1.381a5.368,5.368,0,0,1,.712-1.716l-.977-.977a6.842,6.842,0,0,1,.763-.914,7.1,7.1,0,0,1,.914-.765l.977.979a5.331,5.331,0,0,1,1.716-.712v-1.382a6.793,6.793,0,0,1,2.375,0Z" transform="translate(-71.757 -74.766)" fill="var(--fill-clr)" opacity="0.75"/>
                                     </g>
-                                </svg>                              
+                                </svg>
                                 <div class="info">
                                     <h1>Fabrica <span>[PvE]</span></h1>
                                     <p>Техническая сборка</p>
@@ -280,7 +282,7 @@
                     </label>
                     <label data-name="optifine" class="checkbox">
                         <input type="checkbox">
-                        <p class="checkbox-text">Optifines</p>
+                        <p class="checkbox-text">OptiFine</p>
                         <div class="checkmark">
                             <div class="checkmark-fill"></div>
                         </div>
@@ -314,28 +316,36 @@
                                 <h1>Настройки управления</h1>
                                 <div class="controls">
                                     <div class="k-v-pair">
-                                        <p class="k">Присесть</p><p id="key-crouch" class="v">LSHIFT</p>
+                                        <p class="k">Присесть</p>
+                                        <p id="key-crouch" class="v">LSHIFT</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Бег</p><p id="key-run" class="v">LCTRL</p>
+                                        <p class="k">Бег</p>
+                                        <p id="key-run" class="v">LCTRL</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Вперед</p><p id="key-forward" class="v">W</p>
+                                        <p class="k">Вперед</p>
+                                        <p id="key-forward" class="v">W</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Назад</p><p id="key-back" class="v">S</p>
+                                        <p class="k">Назад</p>
+                                        <p id="key-back" class="v">S</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Вправо</p><p id="key-right" class="v">D</p>
+                                        <p class="k">Вправо</p>
+                                        <p id="key-right" class="v">D</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Влево</p><p id="key-left" class="v">A</p>
+                                        <p class="k">Влево</p>
+                                        <p id="key-left" class="v">A</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Приблизить</p><p id="key-zoom" class="v">R</p>
+                                        <p class="k">Приблизить</p>
+                                        <p id="key-zoom" class="v">R</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Квесты</p><p id="key-quests" class="v">T</p>
+                                        <p class="k">Квесты</p>
+                                        <p id="key-quests" class="v">T</p>
                                     </div>
                                 </div>
                             </div>
@@ -372,7 +382,7 @@
                                     </label>
                                     <label data-name="optifine" class="checkbox">
                                         <input type="checkbox">
-                                        <p class="checkbox-text">Optifines</p>
+                                        <p class="checkbox-text">OptiFine</p>
                                         <div class="checkmark">
                                             <div class="checkmark-fill"></div>
                                         </div>
@@ -383,19 +393,24 @@
                                 <h1>Директории сборок</h1>
                                 <div id="modpack-dirs" class="modpack-dirs">
                                     <div class="k-v-pair">
-                                        <p class="k">Библиотеки</p><p id="libs-dir" class="v">C:/Users/Albee/.delta/libs</p>
+                                        <p class="k">Библиотеки</p>
+                                        <p id="libs-dir" class="v">C:/Users/Albee/.delta/libs</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Magicae</p><p id="magicae-dir" class="v">C:/Users/Albee/.delta/modpacks/magicae</p>
+                                        <p class="k">Magicae</p>
+                                        <p id="magicae-dir" class="v">C:/Users/Albee/.delta/modpacks/magicae</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Fabrica</p><p id="fabrica-dir" class="v">C:/Users/Albee/.delta/modpacks/fabrica</p>
+                                        <p class="k">Fabrica</p>
+                                        <p id="fabrica-dir" class="v">C:/Users/Albee/.delta/modpacks/fabrica</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Statera</p><p id="statera-dir" class="v">C:/Users/Albee/.delta/modpacks/statera</p>
+                                        <p class="k">Statera</p>
+                                        <p id="statera-dir" class="v">C:/Users/Albee/.delta/modpacks/statera</p>
                                     </div>
                                     <div class="k-v-pair">
-                                        <p class="k">Insula</p><p id="insula-dir" class="v">C:/Users/Albee/.delta/modpacks/insula</p>
+                                        <p class="k">Insula</p>
+                                        <p id="insula-dir" class="v">C:/Users/Albee/.delta/modpacks/insula</p>
                                     </div>
                                 </div>
                             </div>
@@ -533,10 +548,11 @@
                 <div id="open-other-buttons" class="open-other-buttons">
                     <svg xmlns="http://www.w3.org/2000/svg" width="10.854" height="6.426" viewBox="0 0 10.854 6.426">
                         <path id="Path_397" data-name="Path 397" d="M0,0,4.012,4.012,8.025,0" transform="translate(9.44 5.012) rotate(180)" fill="none" stroke="var(--fill)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                    </svg>                      
+                    </svg>
                 </div>
             </div>
         </div>
     </footer>
 </body>
+
 </html>
