@@ -399,8 +399,8 @@ export class ModpackManager {
         BrowserWindow.getAllWindows()[0]?.webContents.send('unzipping-finished');
         if (await fs.pathExists(path.join(folder, 'modpack.zip'))) await fs.unlink(path.join(folder, 'modpack.zip'));
 
-        BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-start');
-        await this.moveLibs(modpack_name);
+        // BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-start');
+        // await this.moveLibs(modpack_name);
         BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-downloaded', modpack_name);
     }
 
@@ -472,32 +472,56 @@ export class ModpackManager {
         return;
     }
 
+    public async getLibsPathsFromJson(): Promise<string[]> {
+        let pth = await this.ensureLibsDir('1.12');
+        let json = JSON.parse(fs.readFileSync(path.join(pth, 'versions', 'Forge-1.12.2', 'Forge-1.12.2.json')).toString())
+        let paths: string[] = [];
+        for (const lib_obj of json.libraries) {
+            // if (lib_obj.classifies != undefined) {
+            //     let platform = os.platform();
+            //     let _pth = '';
+
+            //     if (platform == 'win32' && lib_obj.classifies['windows']) _pth = path.join(pth, 'libraries', lib_obj.classifies['windows'].path);
+            //     if (platform == 'darwin' && lib_obj.classifies['osx']) _pth = path.join(pth, 'libraries', lib_obj.classifies['osx'].path);
+            //     if (platform == 'linux' && lib_obj.classifies['linux']) _pth = path.join(pth, 'libraries', lib_obj.classifies['linux'].path);
+
+            //     if (await fs.pathExists(_pth)) paths.push(_pth)
+            // }
+
+            if (lib_obj.artifact != undefined) {
+                let _pth = path.join(pth, 'libraries', lib_obj.artifact.path);
+                if (await fs.pathExists(_pth)) paths.push(_pth)
+            }
+        }
+
+        return paths;
+    }
+
     os_version = os.release().split(".")[0];
     launched_modpacks: {
         [key: string]: {process: ChildProcess},
     } = {};
-    public async launchModpack(modpack_name: string, min_rem: number, max_rem: number, username: string, uuid: string): Promise<string> {
-        return new Promise(async (resolve, reject) => {
+    public async launchModpack(modpack_name: string, min_ram: number, max_ram: number, username: string, uuid: string): Promise<string> {
+        return new Promise(async (_resolve, reject) => {
             if (Object.keys(this.launched_modpacks).includes(modpack_name) && this.launched_modpacks[modpack_name] != undefined) {
                 reject('already launched');
                 return;
             }
-
-            log.info(`[MODPACK] <${modpack_name}> checking libs...`);
-            await this.moveLibs(modpack_name);
     
             log.info(`[MODPACK] <${modpack_name}> launching...`);
-    
+
             let game_dir = await this.ensureModpackDir(modpack_name);
-            let args = `-Djava.net.preferIPv4Stack=true -Dos.name="Windows ${this.os_version}" -Dos.version=${
-                os.release().split(".")[0] + "." + os.release().split(".")[1]
-            } -Xmn${min_rem * 1024}M -Xmx${max_rem * 1024}M -Djava.library.path=${game_dir}\\versions\\Forge-1.12.2\\natives -cp ${game_dir}\\libraries\\net\\minecraftforge\\forge\\1.12.2-14.23.5.2855\\forge-1.12.2-14.23.5.2855.jar;${game_dir}\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar;${game_dir}\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;${game_dir}\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;${game_dir}\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;${game_dir}\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;${game_dir}\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;${game_dir}\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;${game_dir}\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar;${game_dir}\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar;${game_dir}\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;${game_dir}\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;${game_dir}\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;${game_dir}\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;${game_dir}\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;${game_dir}\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;${game_dir}\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;${game_dir}\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;${game_dir}\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;${game_dir}\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;${game_dir}\\libraries\\org\\tlauncher\\patchy\\1.2.3\\patchy-1.2.3.jar;${game_dir}\\libraries\\oshi-project\\oshi-core\\1.1\\oshi-core-1.1.jar;${game_dir}\\libraries\\net\\java\\dev\\jna\\jna\\4.4.0\\jna-4.4.0.jar;${game_dir}\\libraries\\net\\java\\dev\\jna\\platform\\3.4.0\\platform-3.4.0.jar;${game_dir}\\libraries\\com\\ibm\\icu\\icu4j-core-mojang\\51.2\\icu4j-core-mojang-51.2.jar;${game_dir}\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;${game_dir}\\libraries\\com\\paulscode\\codecjorbis\\20101023\\codecjorbis-20101023.jar;${game_dir}\\libraries\\com\\paulscode\\codecwav\\20101023\\codecwav-20101023.jar;${game_dir}\\libraries\\com\\paulscode\\libraryjavasound\\20101123\\libraryjavasound-20101123.jar;${game_dir}\\libraries\\com\\paulscode\\librarylwjglopenal\\20100824\\librarylwjglopenal-20100824.jar;${game_dir}\\libraries\\com\\paulscode\\soundsystem\\20120107\\soundsystem-20120107.jar;${game_dir}\\libraries\\io\\netty\\netty-all\\4.1.9.Final\\netty-all-4.1.9.Final.jar;${game_dir}\\libraries\\com\\google\\guava\\guava\\21.0\\guava-21.0.jar;${game_dir}\\libraries\\org\\apache\\commons\\commons-lang3\\3.5\\commons-lang3-3.5.jar;${game_dir}\\libraries\\commons-io\\commons-io\\2.5\\commons-io-2.5.jar;${game_dir}\\libraries\\commons-codec\\commons-codec\\1.10\\commons-codec-1.10.jar;${game_dir}\\libraries\\net\\java\\jinput\\jinput\\2.0.5\\jinput-2.0.5.jar;${game_dir}\\libraries\\net\\java\\jutils\\jutils\\1.0.0\\jutils-1.0.0.jar;${game_dir}\\libraries\\com\\google\\code\\gson\\gson\\2.8.0\\gson-2.8.0.jar;${game_dir}\\libraries\\com\\mojang\\authlib\\1.5.25\\authlib-1.5.25.jar;${game_dir}\\libraries\\com\\mojang\\realms\\1.10.22\\realms-1.10.22.jar;${game_dir}\\libraries\\org\\apache\\commons\\commons-compress\\1.8.1\\commons-compress-1.8.1.jar;${game_dir}\\libraries\\org\\apache\\httpcomponents\\httpclient\\4.3.3\\httpclient-4.3.3.jar;${game_dir}\\libraries\\commons-logging\\commons-logging\\1.1.3\\commons-logging-1.1.3.jar;${game_dir}\\libraries\\org\\apache\\httpcomponents\\httpcore\\4.3.2\\httpcore-4.3.2.jar;${game_dir}\\libraries\\it\\unimi\\dsi\\fastutil\\7.1.0\\fastutil-7.1.0.jar;${game_dir}\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.8.1\\log4j-api-2.8.1.jar;${game_dir}\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.8.1\\log4j-core-2.8.1.jar;${game_dir}\\libraries\\org\\lwjgl\\lwjgl\\lwjgl\\2.9.4-nightly-20150209\\lwjgl-2.9.4-nightly-20150209.jar;${game_dir}\\libraries\\org\\lwjgl\\lwjgl\\lwjgl_util\\2.9.4-nightly-20150209\\lwjgl_util-2.9.4-nightly-20150209.jar;${game_dir}\\libraries\\com\\mojang\\text2speech\\1.10.3\\text2speech-1.10.3.jar;${game_dir}\\versions\\Forge-1.12.2\\Forge-1.12.2.jar -Dminecraft.applet.TargetDirectory="${game_dir}" -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true net.minecraft.launchwrapper.Launch --username ${username} --version Forge-1.12.2 --gameDir ${game_dir} --assetsDir ${game_dir}\\assets --assetIndex 1.12 --uuid ${uuid} --accessToken null --userType mojang --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width 925 --height 530`;
-    
-            if (this._settingsStorage.settings.dev_mode) args += ' -Dmixin.dumpTargetOnFailure=true';
-            args = this.integrate_java_parameters(args);
-            let cd_path = game_dir;
+            let libs_dir = await this.ensureLibsDir('1.12');
+            // let libs_paths = await (await this.getLibsPathsFromJson()).join(';') + `;${libs_dir}\\versions\\Forge-1.12.2\\Forge-1.12.2.jar`;
+            let libs_paths = `${libs_dir}\\libraries\\net\\minecraftforge\\forge\\1.12.2-14.23.5.2855\\forge-1.12.2-14.23.5.2855.jar;${libs_dir}\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar;${libs_dir}\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;${libs_dir}\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;${libs_dir}\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;${libs_dir}\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar;${libs_dir}\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;${libs_dir}\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;${libs_dir}\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;${libs_dir}\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;${libs_dir}\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;${libs_dir}\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;${libs_dir}\\libraries\\org\\tlauncher\\patchy\\1.2.3\\patchy-1.2.3.jar;${libs_dir}\\libraries\\oshi-project\\oshi-core\\1.1\\oshi-core-1.1.jar;${libs_dir}\\libraries\\net\\java\\dev\\jna\\jna\\4.4.0\\jna-4.4.0.jar;${libs_dir}\\libraries\\net\\java\\dev\\jna\\platform\\3.4.0\\platform-3.4.0.jar;${libs_dir}\\libraries\\com\\ibm\\icu\\icu4j-core-mojang\\51.2\\icu4j-core-mojang-51.2.jar;${libs_dir}\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;${libs_dir}\\libraries\\com\\paulscode\\codecjorbis\\20101023\\codecjorbis-20101023.jar;${libs_dir}\\libraries\\com\\paulscode\\codecwav\\20101023\\codecwav-20101023.jar;${libs_dir}\\libraries\\com\\paulscode\\libraryjavasound\\20101123\\libraryjavasound-20101123.jar;${libs_dir}\\libraries\\com\\paulscode\\librarylwjglopenal\\20100824\\librarylwjglopenal-20100824.jar;${libs_dir}\\libraries\\com\\paulscode\\soundsystem\\20120107\\soundsystem-20120107.jar;${libs_dir}\\libraries\\io\\netty\\netty-all\\4.1.9.Final\\netty-all-4.1.9.Final.jar;${libs_dir}\\libraries\\com\\google\\guava\\guava\\21.0\\guava-21.0.jar;${libs_dir}\\libraries\\org\\apache\\commons\\commons-lang3\\3.5\\commons-lang3-3.5.jar;${libs_dir}\\libraries\\commons-io\\commons-io\\2.5\\commons-io-2.5.jar;${libs_dir}\\libraries\\commons-codec\\commons-codec\\1.10\\commons-codec-1.10.jar;${libs_dir}\\libraries\\net\\java\\jinput\\jinput\\2.0.5\\jinput-2.0.5.jar;${libs_dir}\\libraries\\net\\java\\jutils\\jutils\\1.0.0\\jutils-1.0.0.jar;${libs_dir}\\libraries\\com\\google\\code\\gson\\gson\\2.8.0\\gson-2.8.0.jar;${libs_dir}\\libraries\\com\\mojang\\authlib\\1.5.25\\authlib-1.5.25.jar;${libs_dir}\\libraries\\com\\mojang\\realms\\1.10.22\\realms-1.10.22.jar;${libs_dir}\\libraries\\org\\apache\\commons\\commons-compress\\1.8.1\\commons-compress-1.8.1.jar;${libs_dir}\\libraries\\org\\apache\\httpcomponents\\httpclient\\4.3.3\\httpclient-4.3.3.jar;${libs_dir}\\libraries\\commons-logging\\commons-logging\\1.1.3\\commons-logging-1.1.3.jar;${libs_dir}\\libraries\\org\\apache\\httpcomponents\\httpcore\\4.3.2\\httpcore-4.3.2.jar;${libs_dir}\\libraries\\it\\unimi\\dsi\\fastutil\\7.1.0\\fastutil-7.1.0.jar;${libs_dir}\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.8.1\\log4j-api-2.8.1.jar;${libs_dir}\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.8.1\\log4j-core-2.8.1.jar;${libs_dir}\\libraries\\org\\lwjgl\\lwjgl\\lwjgl\\2.9.4-nightly-20150209\\lwjgl-2.9.4-nightly-20150209.jar;${libs_dir}\\libraries\\org\\lwjgl\\lwjgl\\lwjgl_util\\2.9.4-nightly-20150209\\lwjgl_util-2.9.4-nightly-20150209.jar;${libs_dir}\\libraries\\com\\mojang\\text2speech\\1.10.3\\text2speech-1.10.3.jar;${libs_dir}\\versions\\Forge-1.12.2\\Forge-1.12.2.jar`;
             let java_path = await this.get_latest_java_version_path(modpack_name);
-            let final_command = `${game_dir[0]}:&&cd "${cd_path}"&&"${java_path}" ${args}`;
+    
+            let base_command = `-Dos.name="Windows 10" -Dos.version="10.0" -Xmn${min_ram * 1024}M -Xmx${max_ram * 1024}M -Djava.library.path="${libs_dir}\\versions\\Forge-1.12.2\\natives" -cp ${libs_paths} -Dminecraft.applet.TargetDirectory=${game_dir} -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true net.minecraft.launchwrapper.Launch --username ${username} --version Forge-1.12.2 --gameDir ${game_dir} --assetsDir ${libs_dir}\\assets --assetIndex 1.12 --uuid ${uuid} --accessToken null --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width 925 --height 530`;
+    
+            // if (this._settingsStorage.settings.dev_mode) base_command += ' -Dmixin.dumpTargetOnFailure=true';
+            base_command = this.integrate_java_parameters(base_command);
+            let cd_path = game_dir;
+            let final_command = `${game_dir[0]}:&&cd "${cd_path}"&&"${java_path}" ${base_command}`;
     
             log.info(`[MODPACK] <${modpack_name}> final command: ${final_command}`);
     
@@ -508,7 +532,7 @@ export class ModpackManager {
                 log.info(`[MODPACK] <${modpack_name}> exit`, code, signal);
                 delete this.launched_modpacks[modpack_name]
                 BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-exit', {modpack_name, code, signal});
-                resolve('exited');
+                _resolve('exited');
                 return;
             })
     
@@ -516,7 +540,7 @@ export class ModpackManager {
                 log.error(`[MODPACK] <${modpack_name}> error`, error);
                 delete this.launched_modpacks[modpack_name]
                 BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-error', {modpack_name, error});
-                resolve('error');
+                _resolve('error');
                 return;
             })
 
@@ -530,7 +554,7 @@ export class ModpackManager {
                     if (data.toString().split("Starts to replace vanilla recipe ingredients with ore ingredients.").length > 1) {
                         window_opened = true;
                         BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-launched', modpack_name);
-                        resolve('launched');
+                        _resolve('launched');
                     }
                 }
             })
@@ -542,6 +566,41 @@ export class ModpackManager {
                 }
             }
         })
+    }
+
+    private __found_paths: string[] = [];
+    public findAllFiles(pth: string, looking_for: string): Promise<string[]> {
+        this.__found_paths = [];
+        return new Promise((resolve, reject) => {
+            try {
+                this.findAllFiles_rec(pth, looking_for, 64);
+                resolve(this.__found_paths);
+            } catch (err) {
+                reject(err)
+            }
+        })
+    }
+
+    private findAllFiles_rec(pth: string, looking_for: string, steps: number) {
+        if (steps <= 0) return;
+        let ext = path.extname(pth);
+        if (ext == looking_for) {
+            this.__found_paths.push(pth);
+            return;
+
+        }
+
+        try {
+            let files = fs.readdirSync(`${pth}`)
+            if (files.length < 1) return;
+            for (const _pth of files) {
+                this.findAllFiles_rec(path.join(pth, _pth), looking_for, steps - 1)
+            }
+        } catch (err) {
+            return;
+        }
+
+        return;
     }
 
     private async get_latest_java_version_path(modpack_name: string): Promise<string> {

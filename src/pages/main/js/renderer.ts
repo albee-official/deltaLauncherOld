@@ -682,7 +682,6 @@ class UI {
         }
 
         (document.getElementById('magicae-dir') as HTMLParagraphElement).addEventListener('click', (e) => {modpackHandler(e, 'magicae')});
-        (document.getElementById('magicae-dir') as HTMLParagraphElement).addEventListener('lef', (e) => {modpackHandler(e, 'magicae')});
         (document.getElementById('fabrica-dir') as HTMLParagraphElement).addEventListener('click', (e) => {modpackHandler(e, 'fabrica')});
         (document.getElementById('statera-dir') as HTMLParagraphElement).addEventListener('click', (e) => {modpackHandler(e, 'statera')});
         (document.getElementById('insula-dir') as HTMLParagraphElement).addEventListener('click', (e) => {modpackHandler(e, 'insula')});
