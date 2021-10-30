@@ -22,12 +22,14 @@ function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// Subdirectory for graphics: ./.essentials/_SETTINGS
+//! Don't touch .source.json and .versions.json it's for legal purposes
 enum GRAPHICS_LEVELS {
-    LOW,
-    MINOR,
-    DEFAULT,
-    HIGH,
-    ULTRA
+    LOW, // new directory: -> _MIN
+    MINOR, // ->  _LOW 
+    DEFAULT, // -> _DEFAULT
+    HIGH, // -> _HIGH
+    ULTRA // _ULTRA
 }
 
 export class ModpackManager {
@@ -41,9 +43,9 @@ export class ModpackManager {
 
     public downloader: Downloader;
 
-    public constructor (remote: typeof rmt, root: string, settingsStorage: SettingsStorage) {
+    public constructor(remote: typeof rmt, root: string, settingsStorage: SettingsStorage) {
         log.info('init');
-        
+
         this._settingsStorage = settingsStorage;
         this._root = root;
         this.ensureRoot();
@@ -126,13 +128,13 @@ export class ModpackManager {
         return this._root;
     }
 
-    public set root(_) {}
+    public set root(_) { }
 
     public get modpacks() { return this._modpacks; }
-    public set modpacks(_: any) {}
+    public set modpacks(_: any) { }
 
     public get libs() { return this._libs; }
-    public set libs(_: any) {}
+    public set libs(_: any) { }
 
     public modpackInstalledSync(modpack: string) {
         let pth = this._modpacks[modpack].path;
@@ -163,9 +165,9 @@ export class ModpackManager {
                     && fs.pathExistsSync(pth + '\\assets')
                     && fs.pathExistsSync(pth + '\\libraries')
                     && fs.pathExistsSync(pth + '\\versions')) && (
-                       fs.pathExistsSync(modpack_pth + '\\assets')
-                    && fs.pathExistsSync(modpack_pth + '\\libraries')
-                    && fs.pathExistsSync(modpack_pth + '\\versions')));
+                        fs.pathExistsSync(modpack_pth + '\\assets')
+                        && fs.pathExistsSync(modpack_pth + '\\libraries')
+                        && fs.pathExistsSync(modpack_pth + '\\versions')));
             } else {
                 return (fs.readdirSync(pth).length > 0
                     && fs.pathExistsSync(pth + '\\assets')
@@ -227,7 +229,7 @@ export class ModpackManager {
 
         const res = JSON.parse((await fs.readFile(pth)).toString());
         if (!res.version) res.version = 'v0.0.0.0';
-        return res; 
+        return res;
     }
 
     public async setInfo(item: string, to: any, version?: string) {
@@ -246,31 +248,31 @@ export class ModpackManager {
 
     public async getLatestLinkToModpack(modpack_name: string) {
         return new Promise((resolve, reject) => {
-            nodeFetch(`https://api.github.com/repos/Avandelta/${capitalizeFirstLetter(modpack_name)}/tags`, {
+            nodeFetch(`https://api.github.com/repos/Ektadelta/${capitalizeFirstLetter(modpack_name)}/tags`, {
                 method: 'GET',
             }).then(res => res.json()).then(res => {
                 if (res[0].zipball_url) {
                     log.info(res[0].name);
                     resolve(res[0].name);
                 }
-            }).catch(err => {log.error(err)})
+            }).catch(err => { log.error(err) })
         }).then(res => {
-            return `https://github.com/Avandelta/${capitalizeFirstLetter(modpack_name)}/releases/download/${res}/${capitalizeFirstLetter(modpack_name)}-${res}.zip`
+            return `https://github.com/Ektadelta/${capitalizeFirstLetter(modpack_name)}/releases/download/${res}/${capitalizeFirstLetter(modpack_name)}-${res}.zip`
         })
     }
 
     public async getLatestLinkToLibs() {
         return new Promise((resolve, reject) => {
-            nodeFetch(`https://api.github.com/repos/Avandelta/Libraries/tags`, {
+            nodeFetch(`https://api.github.com/repos/Ektadelta/Encore/tags`, {
                 method: 'GET',
             }).then(res => res.json()).then(res => {
                 if (res[0].zipball_url) {
                     log.info(res[0].name);
                     resolve(res[0].name);
                 }
-            }).catch(err => {log.error(err)})
+            }).catch(err => { log.error(err) })
         }).then(res => {
-            return `https://github.com/Avandelta/Libraries/releases/download/${res}/Libraries-${res}.zip`
+            return `https://github.com/Ektadelta/Encore/releases/download/${res}/Libraries-${res}.zip`
         })
     }
 
@@ -286,12 +288,10 @@ export class ModpackManager {
         if (await fs.pathExists(pth))
             fs.readdir(pth, (err, files) => {
                 files.forEach(file => {
-                    if (file.toString().split('.').length > 1 && file.toString() != '.mixin.out' && file.toString() != '.git')
-                    {
+                    if (file.toString().split('.').length > 1 && file.toString() != '.mixin.out' && file.toString() != '.git') {
                         if (fs.pathExistsSync(path.join(pth, file))) fs.unlinkSync(path.join(pth, file));
                     }
-                    else
-                    {
+                    else {
                         if (fs.pathExistsSync(path.join(pth, file))) rimraf.sync(path.join(pth, file));
                     }
                 })
@@ -303,19 +303,17 @@ export class ModpackManager {
         if (await fs.pathExists(pth))
             fs.readdir(pth, (err, files) => {
                 files.forEach(file => {
-                    if (file.toString().split('.').length > 1 && file.toString() != '.mixin.out' && file.toString() != '.git')
-                    {
+                    if (file.toString().split('.').length > 1 && file.toString() != '.mixin.out' && file.toString() != '.git') {
                         if (fs.pathExistsSync(path.join(pth, file))) fs.unlinkSync(path.join(pth, file));
                     }
-                    else
-                    {
+                    else {
                         if (fs.pathExistsSync(path.join(pth, file))) rimraf.sync(path.join(pth, file));
                     }
                 })
             })
     }
 
-    public async downloadLibs(modpack_name: string, force_download=false) {
+    public async downloadLibs(modpack_name: string, force_download = false) {
         let version = this.modpacks[modpack_name].libs_version;
         let folder = await this.ensureLibsDir(version);
         await this.clearLibsDir(version);
@@ -325,7 +323,7 @@ export class ModpackManager {
             BrowserWindow.getAllWindows()[0]?.webContents.send('download-started', 'libs');
             this._libs[version].link = await this.getLatestLinkToLibs();
             let downloaded_path = await this.downloader.download(
-                folder, 
+                folder,
                 this.libs[version].link,
                 'libs.zip',
                 8,
@@ -354,13 +352,13 @@ export class ModpackManager {
 
             if (await fs.pathExists(path.join(folder, 'libs.zip'))) await fs.unlink(path.join(folder, 'libs.zip'))
             BrowserWindow.getAllWindows()[0]?.webContents.send('libs-downloaded');
-          } catch (err) {
+        } catch (err) {
             log.error('[MODPACK] <libs> Error occured while unpacking libraries...');
             return false;
-          }
+        }
     }
 
-    public async downloadModpack(modpack_name: string, force_download=false) {
+    public async downloadModpack(modpack_name: string, force_download = false) {
 
         if (await this.libsIntalled('1.12')) {
             log.info('[MODPACK] libs are installed')
@@ -378,7 +376,7 @@ export class ModpackManager {
             this._modpacks[modpack_name].link = await this.getLatestLinkToModpack(modpack_name);
             BrowserWindow.getAllWindows()[0]?.webContents.send('download-started', modpack_name);
             let downloaded_path = await this.downloader.download(
-                folder, 
+                folder,
                 this.modpacks[modpack_name].link,
                 'modpack.zip',
                 8,
@@ -409,10 +407,10 @@ export class ModpackManager {
         try {
             await extract(path.join(folder, 'modpack.zip'), { dir: folder })
             log.info('[MODPACK] success');
-          } catch (err) {
+        } catch (err) {
             log.error('Error occured while unpacking modpack...');
             return false;
-          }
+        }
     }
 
     public async moveLibs(modpack_name: string) {
@@ -423,14 +421,14 @@ export class ModpackManager {
         log.info('[MODPACK] Moving: libraries...');
         if (!(await fs.pathExists(modpack_path + '\\libraries'))) {
             await fs.ensureDir(modpack_path + '\\libraries');
-            await copyWithProgress(path.join(this.libs[libs_version].path, 'libraries'), path.join(modpack_path, 'libraries'), 
+            await copyWithProgress(path.join(this.libs[libs_version].path, 'libraries'), path.join(modpack_path, 'libraries'),
                 (progress: any) => {
                     BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-progress', {
                         percent: progress.progress * 30
                     });
                 },
                 250,
-            );   
+            );
         }
         BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-progress', {
             percent: 30
@@ -439,14 +437,14 @@ export class ModpackManager {
         log.info('[MODPACK] Moving: assets...');
         if (!(await fs.pathExists(modpack_path + '\\assets'))) {
             await fs.ensureDir(modpack_path + '\\assets');
-            await copyWithProgress(path.join(this.libs[libs_version].path, 'assets'), path.join(modpack_path, 'assets'), 
+            await copyWithProgress(path.join(this.libs[libs_version].path, 'assets'), path.join(modpack_path, 'assets'),
                 (progress: any) => {
                     BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-progress', {
                         percent: 30 + (progress.progress * 35)
                     });
                 },
                 250,
-            );   
+            );
         }
 
         BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-progress', {
@@ -456,14 +454,14 @@ export class ModpackManager {
         log.info('[MODPACK] Moving: versions...');
         if (!(await fs.pathExists(modpack_path + '\\versions'))) {
             await fs.ensureDir(modpack_path + '\\versions');
-            await copyWithProgress(path.join(this.libs[libs_version].path, 'versions'), path.join(modpack_path, 'versions'), 
+            await copyWithProgress(path.join(this.libs[libs_version].path, 'versions'), path.join(modpack_path, 'versions'),
                 (progress: any) => {
                     BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-progress', {
                         percent: 65 + (progress.progress * 35)
                     });
                 },
                 250,
-            );   
+            );
         }
 
         BrowserWindow.getAllWindows()[0]?.webContents.send('moving-libs-progress', {
@@ -477,6 +475,7 @@ export class ModpackManager {
         let json = JSON.parse(fs.readFileSync(path.join(pth, 'versions', 'Forge-1.12.2', 'Forge-1.12.2.json')).toString())
         let paths: string[] = [];
         for (const lib_obj of json.libraries) {
+            //* For Forge in-json list.
             // if (lib_obj.classifies != undefined) {
             //     let platform = os.platform();
             //     let _pth = '';
@@ -499,7 +498,7 @@ export class ModpackManager {
 
     os_version = os.release().split(".")[0];
     launched_modpacks: {
-        [key: string]: {process: ChildProcess},
+        [key: string]: { process: ChildProcess },
     } = {};
     public async launchModpack(modpack_name: string, min_ram: number, max_ram: number, username: string, uuid: string): Promise<string> {
         return new Promise(async (_resolve, reject) => {
@@ -507,48 +506,54 @@ export class ModpackManager {
                 reject('already launched');
                 return;
             }
-    
+
             log.info(`[MODPACK] <${modpack_name}> launching...`);
 
             let game_dir = await this.ensureModpackDir(modpack_name);
             let libs_dir = await this.ensureLibsDir('1.12');
-            // let libs_paths = await (await this.getLibsPathsFromJson()).join(';') + `;${libs_dir}\\versions\\Forge-1.12.2\\Forge-1.12.2.jar`;
-            let libs_paths = `${libs_dir}\\libraries\\net\\minecraftforge\\forge\\1.12.2-14.23.5.2855\\forge-1.12.2-14.23.5.2855.jar;${libs_dir}\\libraries\\org\\ow2\\asm\\asm-debug-all\\5.2\\asm-debug-all-5.2.jar;${libs_dir}\\libraries\\net\\minecraft\\launchwrapper\\1.12\\launchwrapper-1.12.jar;${libs_dir}\\libraries\\org\\jline\\jline\\3.5.1\\jline-3.5.1.jar;${libs_dir}\\libraries\\com\\typesafe\\akka\\akka-actor_2.11\\2.3.3\\akka-actor_2.11-2.3.3.jar;${libs_dir}\\libraries\\com\\typesafe\\config\\1.2.1\\config-1.2.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-actors-migration_2.11\\1.1.0\\scala-actors-migration_2.11-1.1.0.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-compiler\\2.11.1\\scala-compiler-2.11.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\plugins\\scala-continuations-library_2.11\\1.0.2_mc\\scala-continuations-library_2.11-1.0.2_mc.jar;${libs_dir}\\libraries\\org\\scala-lang\\plugins\\scala-continuations-plugin_2.11.1\\1.0.2_mc\\scala-continuations-plugin_2.11.1-1.0.2_mc.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-library\\2.11.1\\scala-library-2.11.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-parser-combinators_2.11\\1.0.1\\scala-parser-combinators_2.11-1.0.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-reflect\\2.11.1\\scala-reflect-2.11.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-swing_2.11\\1.0.1\\scala-swing_2.11-1.0.1.jar;${libs_dir}\\libraries\\org\\scala-lang\\scala-xml_2.11\\1.0.2\\scala-xml_2.11-1.0.2.jar;${libs_dir}\\libraries\\lzma\\lzma\\0.0.1\\lzma-0.0.1.jar;${libs_dir}\\libraries\\java3d\\vecmath\\1.5.2\\vecmath-1.5.2.jar;${libs_dir}\\libraries\\net\\sf\\trove4j\\trove4j\\3.0.3\\trove4j-3.0.3.jar;${libs_dir}\\libraries\\org\\apache\\maven\\maven-artifact\\3.5.3\\maven-artifact-3.5.3.jar;${libs_dir}\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;${libs_dir}\\libraries\\org\\tlauncher\\patchy\\1.2.3\\patchy-1.2.3.jar;${libs_dir}\\libraries\\oshi-project\\oshi-core\\1.1\\oshi-core-1.1.jar;${libs_dir}\\libraries\\net\\java\\dev\\jna\\jna\\4.4.0\\jna-4.4.0.jar;${libs_dir}\\libraries\\net\\java\\dev\\jna\\platform\\3.4.0\\platform-3.4.0.jar;${libs_dir}\\libraries\\com\\ibm\\icu\\icu4j-core-mojang\\51.2\\icu4j-core-mojang-51.2.jar;${libs_dir}\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.3\\jopt-simple-5.0.3.jar;${libs_dir}\\libraries\\com\\paulscode\\codecjorbis\\20101023\\codecjorbis-20101023.jar;${libs_dir}\\libraries\\com\\paulscode\\codecwav\\20101023\\codecwav-20101023.jar;${libs_dir}\\libraries\\com\\paulscode\\libraryjavasound\\20101123\\libraryjavasound-20101123.jar;${libs_dir}\\libraries\\com\\paulscode\\librarylwjglopenal\\20100824\\librarylwjglopenal-20100824.jar;${libs_dir}\\libraries\\com\\paulscode\\soundsystem\\20120107\\soundsystem-20120107.jar;${libs_dir}\\libraries\\io\\netty\\netty-all\\4.1.9.Final\\netty-all-4.1.9.Final.jar;${libs_dir}\\libraries\\com\\google\\guava\\guava\\21.0\\guava-21.0.jar;${libs_dir}\\libraries\\org\\apache\\commons\\commons-lang3\\3.5\\commons-lang3-3.5.jar;${libs_dir}\\libraries\\commons-io\\commons-io\\2.5\\commons-io-2.5.jar;${libs_dir}\\libraries\\commons-codec\\commons-codec\\1.10\\commons-codec-1.10.jar;${libs_dir}\\libraries\\net\\java\\jinput\\jinput\\2.0.5\\jinput-2.0.5.jar;${libs_dir}\\libraries\\net\\java\\jutils\\jutils\\1.0.0\\jutils-1.0.0.jar;${libs_dir}\\libraries\\com\\google\\code\\gson\\gson\\2.8.0\\gson-2.8.0.jar;${libs_dir}\\libraries\\com\\mojang\\authlib\\1.5.25\\authlib-1.5.25.jar;${libs_dir}\\libraries\\com\\mojang\\realms\\1.10.22\\realms-1.10.22.jar;${libs_dir}\\libraries\\org\\apache\\commons\\commons-compress\\1.8.1\\commons-compress-1.8.1.jar;${libs_dir}\\libraries\\org\\apache\\httpcomponents\\httpclient\\4.3.3\\httpclient-4.3.3.jar;${libs_dir}\\libraries\\commons-logging\\commons-logging\\1.1.3\\commons-logging-1.1.3.jar;${libs_dir}\\libraries\\org\\apache\\httpcomponents\\httpcore\\4.3.2\\httpcore-4.3.2.jar;${libs_dir}\\libraries\\it\\unimi\\dsi\\fastutil\\7.1.0\\fastutil-7.1.0.jar;${libs_dir}\\libraries\\org\\apache\\logging\\log4j\\log4j-api\\2.8.1\\log4j-api-2.8.1.jar;${libs_dir}\\libraries\\org\\apache\\logging\\log4j\\log4j-core\\2.8.1\\log4j-core-2.8.1.jar;${libs_dir}\\libraries\\org\\lwjgl\\lwjgl\\lwjgl\\2.9.4-nightly-20150209\\lwjgl-2.9.4-nightly-20150209.jar;${libs_dir}\\libraries\\org\\lwjgl\\lwjgl\\lwjgl_util\\2.9.4-nightly-20150209\\lwjgl_util-2.9.4-nightly-20150209.jar;${libs_dir}\\libraries\\com\\mojang\\text2speech\\1.10.3\\text2speech-1.10.3.jar;${libs_dir}\\versions\\Forge-1.12.2\\Forge-1.12.2.jar`;
+
+            let libs_paths = await (await this.findAllFiles(libs_dir, '.jar')).join(';');
+
+            console.log("LAUNCHING CODE:")
+
             let java_path = await this.get_latest_java_version_path(modpack_name);
-    
-            let base_command = `-Dos.name="Windows 10" -Dos.version="10.0" -Xmn${min_ram * 1024}M -Xmx${max_ram * 1024}M -Djava.library.path="${libs_dir}\\versions\\Forge-1.12.2\\natives" -cp ${libs_paths} -Dminecraft.applet.TargetDirectory=${game_dir} -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true net.minecraft.launchwrapper.Launch --username ${username} --version Forge-1.12.2 --gameDir ${game_dir} --assetsDir ${libs_dir}\\assets --assetIndex 1.12 --uuid ${uuid} --accessToken null --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width 925 --height 530`;
-    
+
+            let base_command = `-Dos.name=Windows 10 -Dos.version=10.0 -Djava.library.path=${libs_dir}\\versions\\1.12.2-forge-14.23.5.2855\\natives -cp ${libs_paths} --Xmn${min_ram * 1024}M -Xmx${max_ram * 1024}M -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true -Djava.net.preferIPv4Stack=true -Dminecraft.applet.TargetDirectory=${game_dir} net.minecraft.launchwrapper.Launch --username ${username} --version 1.12.2-forge-14.23.5.2855 --gameDir ${game_dir} --assetsDir ${libs_dir}\\assets --assetIndex 1.12 --uuid 123 --accessToken null --userType mojang --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width 925 --height 530`
+
+            //let base_command = `-Dos.name="Windows 10" -Dos.version="10.0" -Xmn${min_ram * 1024}M -Xmx${max_ram * 1024}M -Djava.library.path="${libs_dir}\\versions\\forge-14.23.5.2855\\natives" -cp ${libs_paths} -Dminecraft.applet.TargetDirectory=${game_dir} -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true net.minecraft.launchwrapper.Launch --username ${username} --version Forge-1.12.2 --gameDir ${game_dir} --assetsDir ${libs_dir}\\assets --assetIndex 1.12 --uuid ${uuid} --accessToken null --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width 925 --height 530`;
+
             // if (this._settingsStorage.settings.dev_mode) base_command += ' -Dmixin.dumpTargetOnFailure=true';
+            //! JVM EXCEPTION: Could not create the Java Virtual Machine
             base_command = this.integrate_java_parameters(base_command);
             let cd_path = game_dir;
             let final_command = `${game_dir[0]}:&&cd "${cd_path}"&&"${java_path}" ${base_command}`;
-    
+
             log.info(`[MODPACK] <${modpack_name}> final command: ${final_command}`);
-    
-            let process = spawn(final_command, [], {windowsHide: true, shell: true})
-    
+
+            let process = spawn(final_command, [], { windowsHide: true, shell: true })
+
             let window_opened = false;
             process.on('exit', (code, signal) => {
                 log.info(`[MODPACK] <${modpack_name}> exit`, code, signal);
                 delete this.launched_modpacks[modpack_name]
-                BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-exit', {modpack_name, code, signal});
+                BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-exit', { modpack_name, code, signal });
                 _resolve('exited');
                 return;
             })
-    
+
             process.on('error', error => {
                 log.error(`[MODPACK] <${modpack_name}> error`, error);
                 delete this.launched_modpacks[modpack_name]
-                BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-error', {modpack_name, error});
+                BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-error', { modpack_name, error });
                 _resolve('error');
                 return;
             })
 
             if (this._settingsStorage.settings.modpack_settings.show_console_output)
                 process.stdout.on('data', (data) => {
-                    BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-data', {modpack_name, data: data.toString()});
+                    BrowserWindow.getAllWindows()[0]?.webContents.send('modpack-data', { modpack_name, data: data.toString() });
                 })
-    
+
             process.stdout.on('data', (data) => {
                 if (!window_opened) {
                     if (data.toString().split("Starts to replace vanilla recipe ingredients with ore ingredients.").length > 1) {
@@ -558,7 +563,7 @@ export class ModpackManager {
                     }
                 }
             })
-    
+
             this.launched_modpacks = {
                 ...this.launched_modpacks,
                 [modpack_name]: {
@@ -615,7 +620,7 @@ export class ModpackManager {
                 log.info(`[MODPACK] <${modpack_name}> Using builtin x86-java: ${path_to_java}`);
                 return path_to_java;
             }
-        } 
+        }
 
         log.info(`[LAUNCH] Using installed java: ${installed_java}`);
         return installed_java;
@@ -648,10 +653,10 @@ export class ModpackManager {
         let pars = settings.modpack_settings.java_parameters;
         if (pars == '') return command;
         let pars_arr = pars.split(" ");
-    
+
         for (let parameter of pars_arr) {
             if (parameter.charAt(0) != "-") continue;
-    
+
             if (parameter.includes("-Xmx")) {
                 let par_prototype = `-Xmx${settings.modpack_settings.allocated_memory * 1024}M`;
                 command = command.replace(par_prototype, parameter);
@@ -668,8 +673,8 @@ export class ModpackManager {
                 command += " " + parameter;
             }
         }
-    
+
         return command;
     }
-    
+
 }
