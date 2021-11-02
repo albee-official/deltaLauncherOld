@@ -19,18 +19,18 @@ interface Release {
 export class AutoUpdaterInterface {
     private _getGlobal: typeof rmt.getGlobal;
 
-    public constructor (remote: typeof rmt, ipcRenderer: typeof ipcR) {
+    public constructor(remote: typeof rmt, ipcRenderer: typeof ipcR) {
         this._getGlobal = remote.getGlobal;
     }
 
     async getLatestRelease() { return await this._getGlobal('autoUpdater').getLatestRelease(); }
     async checkForUpdates() { return await this._getGlobal('autoUpdater').checkForUpdates(); }
     compareVersions(a: string, b: string) { return this._getGlobal('autoUpdater').compareVersions(a, b); }
-    compareNumerical(a: string, b: string, strict=true) { return compareNumerical(a, b, strict); }
+    compareNumerical(a: string, b: string, strict = true) { return compareNumerical(a, b, strict); }
 }
 
 // return true if "b" bigger than "a"
-function compareNumerical(a: string, b: string, strict=true) {
+function compareNumerical(a: string, b: string, strict = true) {
     let a_values = a.split('.');
     let b_values = b.split('.');
     if (!strict && a == b) return true;
@@ -54,7 +54,7 @@ export class AutoUpdater {
     downloader = new Downloader();
     location: string;
 
-    constructor (_ipcMain: IpcMain, _root: string, _settingsStorage: SettingsStorage) {
+    constructor(_ipcMain: IpcMain, _root: string, _settingsStorage: SettingsStorage) {
         log.info('init');
 
         this.root = _root;
@@ -93,10 +93,10 @@ export class AutoUpdater {
     }
 
     public async getLatestRelease(): Promise<Release> {
-        let res: Array<any> = await fetch(`https://api.github.com/repos/AlbeeTheLoli/deltaLauncher/releases`).then(res => res.json());
+        let res: Array<any> = await fetch(`https://api.github.com/repos/AlbeeTheLoli/deltaLauncherOld/releases`).then(res => res.json());
 
         if (this.settingsStorage.settings.dev_mode) {
-            let i = res.reverse().findIndex((_el: any) => {log.info(app.getVersion(), _el.name, this.compareVersions(app.getVersion(), _el.name)); return this.compareVersions(app.getVersion(), _el.name)})
+            let i = res.reverse().findIndex((_el: any) => { log.info(app.getVersion(), _el.name, this.compareVersions(app.getVersion(), _el.name)); return this.compareVersions(app.getVersion(), _el.name) })
             if (i == -1) i = 0;
             return {
                 name: res[i].name,
@@ -122,7 +122,7 @@ export class AutoUpdater {
     public async checkForUpdates() {
         let release = await this.getLatestRelease();
         console.log(release);
-        
+
         if (this.compareVersions(app.getVersion(), release.name)) {
             log.info('update is required. downloading');
 
@@ -142,7 +142,7 @@ export class AutoUpdater {
 
         let downloaded_path = await this.downloader.download(this.location, release.url, 'updater.exe', 8, progress => {
             log.info(progress);
-            BrowserWindow.getAllWindows()[0].webContents.send('update-progress', {...release, progress});
+            BrowserWindow.getAllWindows()[0].webContents.send('update-progress', { ...release, progress });
         });
 
         log.info(`downloaded version '${release.name}' to '${this.location}' from '${release.url}'`);
