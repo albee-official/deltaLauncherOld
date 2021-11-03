@@ -94,6 +94,248 @@ function ascii_to_dumbass(keycode: number) {
     }
 }
 
+function ASCIItoLWJGL(kbPos: number) {
+
+    switch (kbPos) {
+        case 27:
+            return 1; /* ESCAPE */
+
+        case 49:
+            return 2; /* NUMBER: 1 */
+
+        case 50:
+            return 3; /* NUMBER: 2 */
+
+        case 51:
+            return 4; /* NUMBER: 3 */
+
+        case 52:
+            return 5; /* NUMBER: 4 */
+
+        case 53:
+            return 6; /* NUMBER: 5 */
+
+        case 54:
+            return 7; /* NUMBER: 6 */
+
+        case 55:
+            return 8; /* NUMBER: 7 */
+
+        case 56:
+            return 9; /* NUMBER: 8 */
+
+        case 57:
+            return 10; /* NUMBER: 9 */
+
+        case 58:
+            return 11; /* NUMBER: 0 */
+
+        case 189:
+            return 12; /* MINUS */
+
+        case 187:
+            return 13; /* EQUALS */
+
+        case 8:
+            return 14; /* BACKSPACE */
+
+        case 9:
+            return 15; /* TAB */
+
+        case 81:
+            return 16; /* Q */
+
+        case 87:
+            return 17; /* W */
+
+        case 69:
+            return 18; /* E */
+
+        case 82:
+            return 19; /* R */
+
+        case 84:
+            return 20; /* T */
+
+        case 89:
+            return 21; /* Y */
+
+        case 85:
+            return 22; /* U */
+
+        case 73:
+            return 23; /* I */
+
+        case 79:
+            return 24; /* O */
+
+        case 80:
+            return 25; /* P */
+
+        case 219:
+            return 26; /* LBRACKET */
+
+        case 221:
+            return 27; /* RBRACKET */
+
+        case 13:
+            return 28; /* RETURN */
+
+        case 17:
+            return 29; /* LCONTROL */
+
+        case 65:
+            return 30; /* A */
+
+        case 83:
+            return 31; /* S */
+
+        case 68:
+            return 32; /* D */
+
+        case 70:
+            return 33; /* F */
+
+        case 71:
+            return 34; /* G */
+
+        case 72:
+            return 35; /* H */
+
+        case 74:
+            return 36; /* J */
+
+        case 75:
+            return 37; /* K */
+
+        case 76:
+            return 38; /* L */
+
+        case 186:
+            return 39; /* SEMICOLON */
+
+        case 222:
+            return 40; /* APOSTROPHE */
+
+        case 96:
+            return 41; /* GRAVE */
+
+        case 16:
+            return 42; /* LSHIFT */
+
+        case 220:
+            return 43; /* BACKSLASH */
+
+        case 90:
+            return 44; /* Z */
+
+        case 88:
+            return 45; /* X */
+
+        case 67:
+            return 46; /* C */
+
+        case 86:
+            return 47; /* V */
+
+        case 66:
+            return 48; /* B */
+
+        case 78:
+            return 49; /* N */
+
+        case 77:
+            return 50; /* M */
+
+        case 188:
+            return 51; /* COMMA */
+
+        case 190:
+            return 52; /* PERIOD */
+
+        case 191:
+            return 53; /* SLASH */
+
+        case 42:
+            return 55; /* MULTIPLY */
+
+        case 18:
+            return 56; /* LMENU */
+
+        case 32:
+            return 57; /* SPACE */
+
+        case 20:
+            return 58; /* CAPITAL */
+
+        case 112:
+            return 59; /* F1 */
+
+        case 113:
+            return 60; /* F2 */
+
+        case 114:
+            return 61; /* F3 */
+
+        case 115:
+            return 62; /* F4 */
+
+        case 116:
+            return 63; /* F5 */
+
+        case 117:
+            return 64; /* F6 */
+
+        case 118:
+            return 65; /* F7 */
+
+        case 119:
+            return 66; /* F8 */
+
+        case 120:
+            return 67; /* F9 */
+
+        case 121:
+            return 68; /* F10 */
+
+        case 144:
+            return 69; /* NUMLOCK */
+
+        case 145:
+            return 70; /* SCROLL */
+
+        case 45:
+            return 74; /* SUBSTRACT */
+
+        case 43:
+            return 78; /* ADD */
+
+        case 46:
+            return 83; /* DECIMAL */
+
+        case 122:
+            return 87; /* F11 */
+
+        case 123:
+            return 88; /* F12 */
+
+        case 94:
+            return 144; /* CIRCUMFLEX */
+
+        case 64:
+            return 145; /* AT */
+
+        case 58:
+            return 146; /* COLON */
+
+        case 95:
+            return 147; /* UNDERLINE */
+
+        default:
+            return 0; /* NONE */
+    }
+}
+
 //@ts-expect-error
 onbeforeload();
 console.log('hello from renderer :)');
@@ -172,7 +414,7 @@ class MainButton {
                 <div id="open-other-buttons" class="open-other-buttons">
                     <svg xmlns="http://www.w3.org/2000/svg" width="10.854" height="6.426" viewBox="0 0 10.854 6.426">
                         <path id="Path_397" data-name="Path 397" d="M0,0,4.012,4.012,8.025,0" transform="translate(9.44 5.012) rotate(180)" fill="none" stroke="var(--fill)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-                    </svg>                      
+                    </svg>
                 </div>
             </div>`;
 
@@ -555,7 +797,7 @@ class KeySelect {
             //@ts-expect-error
             settingsInterface.settings.modpack_settings.controls[this._param].key_code = code;
             //@ts-expect-error
-            settingsInterface.settings.modpack_settings.controls[this._param].minecraft_code = ascii_to_dumbass(code);
+            settingsInterface.settings.modpack_settings.controls[this._param].minecraft_code = ASCIItoLWJGL(code);
             //@ts-expect-error
             settingsInterface.settings.modpack_settings.controls[this._param].key_name = name;
 
@@ -786,7 +1028,7 @@ class UI {
         });
 
         document.getElementById('open-themes-list')?.addEventListener('click', () => {
-            shell.openExternal(`https://github.com/AlbeeTheLoli/deltaLauncher/tree/main/themes`);
+            shell.openExternal(`https://github.com/AlbeeTheLoli/deltaLauncherOld/tree/main/themes`);
         });
 
         document.getElementById('open-themes-folder')?.addEventListener('click', () => {
