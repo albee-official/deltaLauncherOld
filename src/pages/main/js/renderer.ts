@@ -38,62 +38,6 @@ declare class SelectOverlay extends __SelectOverlay { };
 declare class AskOverlay extends __AskOverlay { };
 //#endregion
 
-// I manually wrote this and i regret doing it
-function ascii_to_dumbass(keycode: number) {
-    switch (keycode) {
-        //#region Alphabet
-        case 65: return 30; // a
-        case 66: return 48; // b
-        case 67: return 46; // c
-        case 68: return 32; // d
-        case 69: return 18; // e NICE
-        case 70: return 33; // f
-        case 71: return 34; // g
-        case 72: return 35; // h
-        case 73: return 23; // i
-        case 74: return 36; // j
-        case 75: return 37; // k
-        case 76: return 38; // l
-        case 77: return 50; // m
-        case 78: return 49; // n
-        case 79: return 24; // o
-        case 80: return 25; // p
-        case 81: return 16; // q
-        case 82: return 19; // r
-        case 83: return 31; // s
-        case 84: return 20; // t
-        case 85: return 22; // u
-        case 86: return 47; // v
-        case 87: return 17; // w
-        case 88: return 45; // x
-        case 89: return 21; // y
-        case 90: return 44; // z
-        //#endregion
-        //#region nums
-        case 48: return 11; // 0
-        case 49: return 2; // 1
-        case 50: return 3; // 2
-        case 51: return 4; // 3
-        case 52: return 5; // 4
-        case 53: return 6; // 5
-        case 54: return 7; // 6
-        case 55: return 8; // 7
-        case 56: return 9; // 8
-        case 57: return 10; // 9
-        //#endregion
-        //#region modifiers
-        case 16: return 42; // SHIFT
-        case 17: return 29; // CONTOLL
-        case 18: return 42; // ALT
-        case 18: return 42; // CAPS LOCK ( CAPITAL :) )
-        case 9: return 15; // TAB
-        case 192: return 41; // GRAVE ( ` )
-        case 32: return 57; // SPACE ( )
-        //#endregion
-        default: return 0;
-    }
-}
-
 function ASCIItoLWJGL(kbPos: number) {
 
     switch (kbPos) {
