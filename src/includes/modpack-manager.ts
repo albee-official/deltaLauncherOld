@@ -275,7 +275,7 @@ export class ModpackManager {
                 }
             }).catch(err => { log.error(err) })
         }).then(res => {
-            return `https://github.com/Ektadelta/Encore/releases/download/${res}/Libraries-${res}.zip`
+            return `https://github.com/Ektadelta/Encore/releases/download/${res}/Encore-${res}.zip`
         })
     }
 
