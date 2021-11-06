@@ -11,6 +11,7 @@ import { spawn, ChildProcess } from 'child_process';
 import { Downloader } from './downloader';
 
 const mergeFiles = require('merge-files');
+const electron = require('electron')
 
 import logger from 'electron-log';
 const log = logger.create('modpack');
@@ -514,13 +515,21 @@ export class ModpackManager {
             let game_dir = await this.ensureModpackDir(modpack_name);
             let libs_dir = await this.ensureLibsDir('1.12');
 
+            //! ATTENTION:
+            //! CREATE OR REIMPLEMENT PARAMS OF SCREEN'S WIDTH AND HEIGHT TO A BETTER VIEW!
+
+            let width = electron.screen.getPrimaryDisplay().bounds.width;
+            let height = electron.screen.getPrimaryDisplay().bounds.height;
+
+            //! May create a checkbox in additional settings group for a fullscreen MC.
+
             let libs_paths = await (await this.findAllFiles(libs_dir, '.jar')).join(';');
 
             console.log("LAUNCHING CODE:")
 
             let java_path = await this.get_latest_java_version_path(modpack_name);
 
-            let base_command = `-Dos.name="Windows 10" -Dos.version="10.0" -Djava.library.path="${libs_dir}\\versions\\1.12.2-forge-14.23.5.2855\\natives" -cp "${libs_paths}" -Xmn${min_ram * 1024}M -Xmx${max_ram * 1024}M -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true -Djava.net.preferIPv4Stack=true -Dminecraft.applet.TargetDirectory="${game_dir}" net.minecraft.launchwrapper.Launch --username ${username} --version 1.12.2-forge-14.23.5.2855 --gameDir "${game_dir}" --assetsDir "${libs_dir}\\assets" --assetIndex 1.12 --uuid ${uuid} --accessToken null --userType mojang --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width 925 --height 530`
+            let base_command = `-Dos.name="Windows 10" -Dos.version="10.0" -Djava.library.path="${libs_dir}\\versions\\1.12.2-forge-14.23.5.2855\\natives" -cp "${libs_paths}" -Xmn${min_ram * 1024}M -Xmx${max_ram * 1024}M -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true -Djava.net.preferIPv4Stack=true -Dminecraft.applet.TargetDirectory="${game_dir}" net.minecraft.launchwrapper.Launch --username ${username} --version 1.12.2-forge-14.23.5.2855 --gameDir "${game_dir}" --assetsDir "${libs_dir}\\assets" --assetIndex 1.12 --uuid ${uuid} --accessToken null --userType mojang --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker --versionType Forge --width ${width} --height ${height}`
             base_command = this.integrate_java_parameters(base_command);
             let cd_path = game_dir;
             let final_command = `${game_dir[0]}:&&cd "${cd_path}"&&"${java_path}" ${base_command}`;
